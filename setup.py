@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='datasets_information_access',
+    name='datasets_text',
     version='0.0.1',
     description='Information Access datasets',
     author='Benjamin Piwowarski',
@@ -23,7 +23,7 @@ setup(
     ],
     entry_points={
         'datasets.repositories': [
-            'information-access = datasets_information_access:Repository'
+            'text = datasets_text:Repository'
         ]
 
     }

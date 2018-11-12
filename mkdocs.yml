@@ -1,0 +1,26 @@
+# Configuration
+
+site_name: Datasets
+site_description: datasets A dataset manager
+theme: readthedocs
+
+# Main pages
+nav:
+  - Home: index.md
+
+# Automatic page generation for datasets
+plugins:
+  - datasets
+  - search
+  
+# Theme
+theme:
+    name: material
+    feature:
+        tabs: true
+    palette:
+        primary: 'indigo'
+        accent: 'indigo'
+    font:
+        text: 'Roboto'
+        code: 'Roboto Mono'
