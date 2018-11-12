@@ -1,7 +1,6 @@
 # Configuration
 
-site_name: Datasets
-site_description: datasets A dataset manager
+site_name: Text Datasets
 theme: readthedocs
 
 # Main pages
@@ -10,7 +9,8 @@ nav:
 
 # Automatic page generation for datasets
 plugins:
-  - datasets
+  - datasets: 
+        repository: text
   - search
   
 # Theme
