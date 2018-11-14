@@ -2,6 +2,7 @@
 
 site_name: Text Datasets
 theme: readthedocs
+repo_url: https://github.com/bpiwowar/datamaestro_text
 
 # Main pages
 nav:
