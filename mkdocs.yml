@@ -9,7 +9,7 @@ nav:
 
 # Automatic page generation for datasets
 plugins:
-  - datasets: 
+  - datamaestro: 
         repository: text
   - search
   
