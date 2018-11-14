@@ -1,6 +1,6 @@
-import datasets
+import datamaestro
 
-class Repository(datasets.Repository):
+class Repository(datamaestro.Repository):
     AUTHOR = """Benjamin Piwowarski <benjamin@piwowarski.fr>"""
     DESCRIPTION = """Text datasets repository"""
     NAMESPACE = """text"""

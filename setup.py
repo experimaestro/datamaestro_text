@@ -1,15 +1,17 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='datasets_text',
-    version='0.0.1',
-    description='Information Access datasets',
+    name='datamaestro_text',
+    version='0.1',
+    description='Text related datasets',
     author='Benjamin Piwowarski',
     author_email='benjamin@piwowarski.fr',
+    url='https://github.com/bpiwowar/datamaestro_texts',
     license='MIT',
     python_requires='>=3.5',
+    packages=["datamaestro_text"],
     install_requires=[
-        'datasets'
+        'datamaestro'
     ],
     classifiers=[
         'Intended Audience :: Developers',
@@ -22,8 +24,8 @@ setup(
         'Programming Language :: Python :: 3.7'
     ],
     entry_points={
-        'datasets.repositories': [
-            'text = datasets_text:Repository'
+        'datamaestro.repositories': [
+            'text = datamaestro_text:Repository'
         ]
 
     }
