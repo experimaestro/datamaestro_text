@@ -5,4 +5,4 @@ This [datasets](https://github.com/bpiwowar/datasets) plugin covers text-related
 - Information Retrieval
 - Natural Language Processing tasks
 
-The list of available datasets and usage instruction can be found in the [documentation](http://bpiwowar.github.io/datasets-text/).
+The list of available datasets and usage instruction can be found in the [documentation](http://bpiwowar.github.io/datamaestro_text/).
