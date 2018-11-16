@@ -33,11 +33,11 @@ handler:
   documents/list: {type: ds.gov.nist.tipster}
 ...
 ---
-ap90:
-  description: Associated Press document collection (1990)
-  pattern: ^AP90.*$
-  handler: 
-    documents/list: {type: ds.gov.nist.tipster}
+id: ap90
+description: Associated Press document collection (1990)
+pattern: ^AP90.*$
+handler: 
+  documents/list: {type: ds.gov.nist.tipster}
 ...
 ---
 # Department of Energy

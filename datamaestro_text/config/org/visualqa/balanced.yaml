@@ -8,13 +8,13 @@ data:
       handler: /single:File
       list:
         train/annotation:
-          handler: /single:Filesingle/archive
+          handler: /single:Archive
           url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Train_mscoco.zip
         train/question:
-          handler: /single:Filesingle/archive
+          handler: /single:Archive
           url: http://visualqa.org/data/mscoco/vqa/v2_Questions_Train_mscoco.zip
         validation/annotation:
-          handler: /single:Filesingle/archive
+          handler: /single:Archive
           url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Val_mscoco.zip
   abstract:
     name: Balanced Abstract Images

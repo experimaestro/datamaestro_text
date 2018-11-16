@@ -1,3 +1,4 @@
+name: MovieLens 20M
 homepage: http://grouplens.org/datasets/movielens/20m/
 description: |
   Stable benchmark dataset. 20 million ratings and 465,000 tag applications 

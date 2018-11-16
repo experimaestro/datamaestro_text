@@ -20,7 +20,7 @@ statistics:
 ...
 ---
 
-09b:
+id: 09b
 description: The ClueWeb09-B dataset, a subsample from ClueWeb09
 url: https://lemurproject.org/clueweb09/
 
