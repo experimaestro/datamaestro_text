@@ -28,7 +28,7 @@ data:
     properties:
       parts: [desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.51-100.gz"
       transforms:
         - gunzip
@@ -39,7 +39,7 @@ data:
     name: "TREC 1 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz"
 
   1992: !dataset .1
@@ -60,7 +60,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.101-150.gz"
       transforms:
         - /gunzip
@@ -71,7 +71,7 @@ data:
     name: "TREC 2 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.101-150.disk1.disk2.parts1-5.tar.gz"
 
   1993: !dataset .2
@@ -92,7 +92,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.151-200.gz"
       transforms:
         - /gunzip
@@ -101,7 +101,7 @@ data:
     name: "TREC 3 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.151-200.201-250.disks1-3.all.tar.gz"
       transforms:
         - [ /filter, { pattern: "^(1\\d\\d|200)\\s" }]
@@ -136,7 +136,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.201-250.gz"
       transforms:
         - /gunzip
@@ -145,7 +145,7 @@ data:
     name: "TREC 4 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.201-250.disk2.disk3.parts1-5.tar.gz"
 
   1995: !dataset .4
@@ -174,7 +174,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.251-300.gz"
       transforms:
         - /gunzip
@@ -183,7 +183,7 @@ data:
     name: "TREC 5 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.251-300.parts1-5.tar.gz"
 
   1996: !dataset .5
@@ -210,7 +210,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.301-350.gz"
       transforms:
         - /gunzip
@@ -219,7 +219,7 @@ data:
     name: "TREC 6 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.trec6.adhoc.parts1-5.tar.gz"
 
   1997: !dataset ".6"
@@ -247,7 +247,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.351-400.gz"
       transforms:
         - /gunzip
@@ -256,7 +256,7 @@ data:
     name: "TREC 7 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.trec7.adhoc.parts1-5.tar.gz"
 
   1998: !dataset ".7"
@@ -277,7 +277,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.401-450.gz"
       transforms:
         - /gunzip
@@ -286,7 +286,7 @@ data:
     name: "TREC 8 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/qrels_eng/qrels.trec8.adhoc.parts1-5.tar.gz"
 
   1999: !dataset .8
@@ -304,7 +304,7 @@ data:
     name: "TREC Robust 2004 topics"
     handler: trec.adhoc/topics
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/robust/04.testset.gz"
       transforms: [ /gunzip ]
 
@@ -312,7 +312,7 @@ data:
     name: "TREC Robust 2004 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/robust/qrels.robust2004.txt"
 
   "robust.2004":
@@ -330,14 +330,14 @@ data:
     name: "TREC Robust 2005 topics"
     handler: trec.adhoc/topics
     download:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: "http://trec.nist.gov/data/robust/05/05.50.topics.txt"
 
   "robust.2005.qrels":
     name: "TREC Robust 2005 relevance assessments"
     handler: trec.adhoc/assessments
     download:
-      handler: /single/archive
+      handler: /single:Filesingle/archive
       url: "http://trec.nist.gov/data/robust/05/TREC2005.qrels.txt"
 
   robust.2005:

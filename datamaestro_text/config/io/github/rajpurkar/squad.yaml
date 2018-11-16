@@ -20,11 +20,11 @@ data:
     links:
       paper: http://arxiv.org/abs/1806.03822
     download:
-      handler: /multiple/Simple
+      handler: /single:File
       list:
         train:  
-          handler: /single/File
+          handler: datamaestro.single:File
           url: https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
         dev: 
-          handler: /single/File
+          handler: datamaestro.single:File
           url: https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json

@@ -45,17 +45,17 @@ description: |
     ![https://cs.stanford.edu/people/ranjaykrishna/im2p/examples.png]
 
 download: 
-  handler: /multiple/Simple
+  handler: /single:File
   list:
     paragraphs:
-      handler: /single/File
+      handler: datamaestro.single:File
       url: http://visualgenome.org/static/data/dataset/paragraphs_v1.json.zip
     train:
-      handler: /single/File
+      handler: datamaestro.single:File
       url: https://cs.stanford.edu/people/ranjaykrishna/im2p/train_split.json
     val:
-      handler: /single/File
+      handler: datamaestro.single:File
       url: https://cs.stanford.edu/people/ranjaykrishna/im2p/val_split.json
     data:
-      handler: /single/File
+      handler: datamaestro.single:File
       url: https://cs.stanford.edu/people/ranjaykrishna/im2p/test_split.json

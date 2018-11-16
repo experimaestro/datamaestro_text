@@ -15,16 +15,16 @@ description: |
   existing machine comprehension datasets: its questions are often more
   open-ended, unanswerable, or only meaningful within the dialog context.
 download: 
-  handler: /multiple/simple
+  handler: /single:File
   list:
     train:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: https://s3.amazonaws.com/my89public/quac/train_v0.2.json
     test:
-      handler: /single/file
+      handler: datamaestro.single:File
       url: https://s3.amazonaws.com/my89public/quac/val_v0.2.json
     scorer:
       description: Evaluation script
-      handler: /single/file
+      handler: datamaestro.single:File
       url: https://s3.amazonaws.com/my89public/quac/scorer.py
   
