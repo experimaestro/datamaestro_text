@@ -52,18 +52,20 @@ class Handler(DownloadHandler):
 
 class MovieLens(Handler):
     def download(self, destination: Path):
-        parent = self.dataset.parent()
+        parent = self.dataset.parent
 
         cachepath = self.context.cachepath /  (hashlib.sha256(self.dataset.id.encode("utf-8")).hexdigest() + ".zip")
         logging.info("Retrieve items from moviedb.org (cache: %s)", cachepath)
 
         with zipfile.ZipFile(cachepath, mode="a", compression=zipfile.ZIP_DEFLATED) as z:
+            # Retrieve already downloaded items from Zip file
             done = set()
             for info in z.infolist():
                 done.add(info.filename)
             if done:
                 logging.info("Retrieved %d items from cache", len(done))
 
+            # Gather items to download
             Item = namedtuple('Item', ["tmdbId", "movieId"])
             logging.debug("Reading the movie IDs to download")
             items = []
@@ -78,7 +80,7 @@ class MovieLens(Handler):
                     if not movieId in done:
                         items.append(Item(movieId=movieId, tmdbId=fields[tmbdIx]))
 
-
+            # Download from Movie DB
             logging.info("Downloading from movie DB")
             pb = progressbar.ProgressBar()
             for item in pb(items):
@@ -86,4 +88,4 @@ class MovieLens(Handler):
                 if data is not None:
                     z.writestr(item.movieId, data)
 
-        shutil.move(cachepath, d.path(destination))
+        shutil.move(cachepath, self.path(destination))

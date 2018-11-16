@@ -26,8 +26,9 @@ description: |
       methods. 
 
 download:
-  handler: [/googledrive, /Archive:Zip]
+  handler: [/googledrive, "/Archive:Zip"]
   url: http://bit.ly/2m0W32k
+
 splits:
   train: 
     images: train/images/*.png

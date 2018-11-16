@@ -28,7 +28,7 @@ data:
     properties:
       parts: [desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.51-100.gz"
       transforms:
         - gunzip
@@ -60,7 +60,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.101-150.gz"
       transforms:
         - /gunzip
@@ -92,7 +92,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.151-200.gz"
       transforms:
         - /gunzip
@@ -136,7 +136,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.201-250.gz"
       transforms:
         - /gunzip
@@ -174,7 +174,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.251-300.gz"
       transforms:
         - /gunzip
@@ -210,7 +210,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.301-350.gz"
       transforms:
         - /gunzip
@@ -247,7 +247,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.351-400.gz"
       transforms:
         - /gunzip
@@ -277,7 +277,7 @@ data:
     properties:
       parts: [title, desc]
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/topics_eng/topics.401-450.gz"
       transforms:
         - /gunzip
@@ -304,7 +304,7 @@ data:
     name: "TREC Robust 2004 topics"
     handler: trec.adhoc/topics
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/robust/04.testset.gz"
       transforms: [ /gunzip ]
 
@@ -330,7 +330,7 @@ data:
     name: "TREC Robust 2005 topics"
     handler: trec.adhoc/topics
     download:
-      handler: datamaestro.single:File
+      handler: /single:File
       url: "http://trec.nist.gov/data/robust/05/05.50.topics.txt"
 
   "robust.2005.qrels":

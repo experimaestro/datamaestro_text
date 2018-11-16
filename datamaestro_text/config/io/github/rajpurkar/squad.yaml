@@ -23,8 +23,8 @@ data:
       handler: /single:File
       list:
         train:  
-          handler: datamaestro.single:File
+          handler: /single:File
           url: https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
         dev: 
-          handler: datamaestro.single:File
+          handler: /single:File
           url: https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json
