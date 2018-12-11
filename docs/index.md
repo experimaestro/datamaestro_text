@@ -2,3 +2,4 @@ This [datasets](https://github.com/bpiwowar/datasets) plugin covers text-related
 
 - Information Retrieval
 - Natural Language Processing tasks
+- Recommendation
