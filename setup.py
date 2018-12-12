@@ -9,7 +9,7 @@ setup(
     url='https://github.com/bpiwowar/datamaestro_texts',
     license='MIT',
     python_requires='>=3.5',
-    packages=find_namespace_packages(),
+    packages=find_namespace_packages(include="datamaestro_text.*"),
     package_data={
         '': [ '*.yaml' ]
     },
