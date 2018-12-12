@@ -15,16 +15,24 @@ description: |
   text, or span, from the corresponding reading passage, or the question
   might be unanswerable.
 
-data:
-  v2:
-    links:
-      paper: http://arxiv.org/abs/1806.03822
-    download:
+...
+---
+
+# SQUAD v2
+
+id: v2
+links:
+  paper: http://arxiv.org/abs/1806.03822
+download:
+  handler: /multiple:Simple
+  list:
+    train:  
       handler: /single:File
-      list:
-        train:  
-          handler: /single:File
-          url: https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
-        dev: 
-          handler: /single:File
-          url: https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json
+      url: https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
+    dev: 
+      handler: /single:File
+      url: https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json
+    evaluation:  
+      handler: /single:File
+      url: https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/
+      name: evaluate.py
