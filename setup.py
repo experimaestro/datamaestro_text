@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 setup(
     name='datamaestro_text',
@@ -9,7 +9,10 @@ setup(
     url='https://github.com/bpiwowar/datamaestro_texts',
     license='MIT',
     python_requires='>=3.5',
-    packages=["datamaestro_text"],
+    packages=find_namespace_packages(),
+    package_data={
+        '': [ '*.yaml' ]
+    },
     install_requires=[
         'datamaestro'
     ],
