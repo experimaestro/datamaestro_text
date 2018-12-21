@@ -3,7 +3,7 @@ import http.client
 import time
 import logging
 import zipfile
-import progressbar
+from tqdm import tqdm
 import hashlib
 import shutil
 from collections import namedtuple
@@ -82,8 +82,7 @@ class MovieLens(Handler):
 
             # Download from Movie DB
             logging.info("Downloading from movie DB")
-            pb = progressbar.ProgressBar()
-            for item in pb(items):
+            for item in tqdm(items):
                 data = self.retrieve(item.tmdbId)
                 if data is not None:
                     z.writestr(item.movieId, data)

@@ -1,0 +1,19 @@
+name: Large Movie Review Dataset
+task: sentiment analysis
+website: http://ai.stanford.edu/~amaas/data/sentiment/
+
+documents:
+  paper:
+    url: http://ai.stanford.edu/~amaas/papers/wvSent_acl2011.pdf
+
+
+download:
+  handler: /archive:Tar
+  url: http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+
+files:
+  readme: README.md
+
+datafiles:
+  imdb.vocab: 
+    description: Vocabulary (one word per line)
