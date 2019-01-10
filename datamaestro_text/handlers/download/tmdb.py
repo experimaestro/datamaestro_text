@@ -12,11 +12,13 @@ from datamaestro.handlers.download import DownloadHandler
 from datamaestro import Dataset
 from datamaestro.utils import TemporaryDirectory
 
+APIKEY_KEY = "org.themoviedb.apikey"
+
 class Handler(DownloadHandler):
     """Download using the TMDB API"""
     def __init__(self, dataset: Dataset, definition):
         super().__init__(dataset, definition)
-        self.apikey = self.repository.context.preference("org.themoviedb.apikey")
+        self.apikey = self.repository.context.preference(APIKEY_KEY)
         self.reset = 0
         self.remaining = 1
     
@@ -39,6 +41,8 @@ class Handler(DownloadHandler):
                 self.remaining = int(res.headers["x-ratelimit-remaining"])
                 if res.code == 200:
                     return res.read()
+                if res.code == 401:
+                    raise Exception(f"Unauthorized: add the api key in the preference file [{APIKEY_KEY}]")
                 if res.code == 403:
                     self.reset = float(res.headers["Retry-After"])
                     self.remaining = 0

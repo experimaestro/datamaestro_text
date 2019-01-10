@@ -26,7 +26,7 @@ description: |
       methods. 
 
 download:
-  handler: [/googledrive, "/Archive:Zip"]
+  handler: [/googledrive, "/archive:Zip"]
   url: http://bit.ly/2m0W32k
 
 splits:

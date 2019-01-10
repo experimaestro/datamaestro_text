@@ -10,7 +10,7 @@ tags:
   - recommendation
 
 download:
-  handler: /Archive:Zip
+  handler: /archive:Zip
   url: http://files.grouplens.org/datasets/movielens/ml-20m.zip
   size: 190M
   checksum: cd245b17a1ae2cc31bb14903e1204af3
