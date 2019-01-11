@@ -1,6 +1,6 @@
 name: QUAC
 url: http://quac.ai/
-version: 0.2
+version: "0.2"
 tags:
   - question answering
   - context
@@ -15,7 +15,7 @@ description: |
   existing machine comprehension datasets: its questions are often more
   open-ended, unanswerable, or only meaningful within the dialog context.
 download: 
-  handler: /single:File
+  handler: /multiple:List
   list:
     train:
       handler: /single:File

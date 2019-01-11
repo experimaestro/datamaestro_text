@@ -10,6 +10,7 @@ description: |
   Training is performed on aggregated global word-word co-occurrence statistics from a corpus,
   and the resulting representations showcase interesting linear substructures of the word vector space.
 ...
+
 ---
 id: 6b
 description: Trained on Wikipedia 2014 + Gigaword 5
@@ -21,13 +22,41 @@ statistics:
   tokens: 6G
   vocabulary: 400K
   cased: false
-  dimension: [50, 100, 200, 300]
-files:
-  "50": glove.6B.50d.txt
-  "100": glove.6B.100d.txt
-  "200": glove.6B.200d.txt
-  "300": glove.6B.300d.txt
+---
+id: 6b.50
+statistics: [dimension: 50]
+download: 
+  handler: /single:DatasetPath
+  reference: !dataset .6b
+  path: "glove.6B.50d.txt"
 ...
+---
+id: 6b.100
+statistics: [dimension: 100]
+download: 
+  handler: /single:DatasetPath
+  reference: !dataset .6b
+  path: "glove.6B.100d.txt"
+...
+---
+id: 6b.200
+statistics: [dimension: 200]
+download: 
+  handler: /single:DatasetPath
+  reference: !dataset .6b
+  path: "glove.6B.200d.txt"
+...
+...
+---
+id: 6b.300
+statistics: [dimension: 200]
+download: 
+  handler: /single:DatasetPath
+  reference: !dataset .6b
+  path: "glove.6B.200d.txt"
+...
+
+
 ---
 id: 42b
 description: Trained on Common Crawl
@@ -41,6 +70,7 @@ statistics:
   vocabulary: 2.2M
   dimension: 300
 ...
+
 ---
 id: 840b
 description: Trained on Common Crawl
