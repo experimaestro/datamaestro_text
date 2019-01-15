@@ -7,8 +7,6 @@ repo_url: https://github.com/bpiwowar/datamaestro_text
 # Main pages
 nav:
   - Home: index.md
-  - Recommendation: datamaestro/tag/recommendation.md
-  - Word Embeddings: datamaestro/tag/word embeddings.md
     
 
 # Automatic page generation for datasets

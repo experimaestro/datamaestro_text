@@ -1,0 +1,61 @@
+name: Large Text Compression Benchmark
+title: The Stanford Question Answering Dataset
+tags:
+  - language comprehension
+  - natural language inference
+  - question anwering
+licence: CC BY-SA 3.0
+links:
+  website: http://mattmahoney.net/dc/textdata.html
+
+description: |
+  The test data for the Large Text Compression Benchmark is the first 109 bytes
+  of the English Wikipedia dump on Mar. 3, 2006.
+  http://download.wikipedia.org/enwiki/20060303/enwiki-20060303-pages-articles.xml.bz2
+  (1.1 GB or 4.8 GB after decompressing with bzip2 - link no longer works).
+  Results are also given for the first 108 bytes, which is also used for the
+  Hutter Prize.
+  
+  The data is UTF-8 encoded XML consisting primarily of English text. enwik9
+  contains 243,426 article titles, of which 85,560 are links, and the rest are
+  regular articles. The example fragment below shows a redirection of "AdA" to
+  "Ada programming language" and the start of a regular article with title
+  "Anarchism". 
+
+  The data is UTF-8 clean. All characters are in the range U'0000 to U'10FFFF
+  with valid encodings of 1 to 4 bytes. The byte values 0xC0, 0xC1, and
+  0xF5-0xFF never occur. Also, in the Wikipedia dumps, there are no control
+  characters in the range 0x00-0x1F except for 0x09 (tab) and 0x0A (linefeed).
+  Linebreaks occur only on paragraph boundaries, so they always have a semantic
+  purpose. In the example below, lines were broken at 80 characters, but in
+  reality each paragraph is one long line. 
+
+  The data contains some URL encoded XHTML tags such as &lt;ref&gt ...
+  &lt;/ref&gt; and &lt;br /&gt; which decode to <ref> ... </ref> (citation) and
+  <br /> (line break). However, hypertext links have their own encoding.
+  External links are enclosed in square brackets in the form [URL anchor text].
+  Internal links are encoded as [[Wikipedia title | anchor text]], omitting the
+  title and vertical bar if the title and anchor text are identical. Non-English
+  characters are sometimes URL encoded as &amp;#945;, meaning &#945; (Greek
+  alpha, α), but are more often coded directly as a UTF-8 byte sequence. 
+
+...
+---
+
+id: 8
+statistics:
+  size: 36445475
+
+download:
+  handler: /single:File
+  url: http://mattmahoney.net/dc/enwik8.zip
+
+...
+---
+
+id: 9
+statistics:
+  size: 322592222  
+download:
+  handler: /single:File
+  url: http://mattmahoney.net/dc/enwik9.zip

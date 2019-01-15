@@ -1,6 +1,7 @@
 name: GloVe word embeddings
 website: http://nlp.stanford.edu/projects/glove/
 license: Public Domain Dedication and License
+abtract: True
 tags:
   - word embeddings
 papers:

@@ -1,3 +1,4 @@
+name: CBRecSys 2014
 description: |
   The corpus contains 1,832,307 xml files, each with combined book
   metadata from Amazon and LibraryThing. The filenames correspond to the
