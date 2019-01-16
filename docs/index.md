@@ -1,4 +1,4 @@
-This [datasets](https://github.com/bpiwowar/datasets) plugin covers text-related datasets:
+This [datamaestro](https://github.com/bpiwowar/datamaestro) plugin covers text-related datasets:
 
 - Information Retrieval
 - Natural Language Processing tasks

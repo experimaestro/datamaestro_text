@@ -1,5 +1,7 @@
 name: SQuAD
 title: The Stanford Question Answering Dataset
+tasks:
+  - Question Answering
 tags:
   - language comprehension
   - natural language inference

@@ -5,9 +5,9 @@ description: |
   applied to 27,000 movies by 138,000 users. Includes tag genome data with 
   12 million relevance scores across 1,100 tags. 
 date: 2016-10
-tags: 
-  - collaborative filtering
-  - recommendation
+tasks:
+  - Recommendation
+  - Collaborative Filtering
 
 download:
   handler: /archive:Zip

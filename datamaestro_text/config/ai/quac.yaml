@@ -1,10 +1,11 @@
 name: QUAC
 url: http://quac.ai/
 version: "0.2"
+tasks:
+  - Question Answering
 tags:
-  - question answering
-  - context
-  - dialogue
+  - Context
+  - Dialogue
 description: |
   Question Answering in Context is a dataset for modeling, understanding, and
   participating in information seeking dialog. Data instances consist of an
