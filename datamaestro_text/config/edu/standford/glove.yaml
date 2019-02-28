@@ -15,8 +15,7 @@ description: |
 ---
 id: 6b
 description: Trained on Wikipedia 2014 + Gigaword 5
-download: 
-  handler: /archive:Zip
+download: !@/archive:Zip
   url: http://nlp.stanford.edu/data/glove.6B.zip
 size: 822M
 statistics:
@@ -26,24 +25,21 @@ statistics:
 ---
 id: 6b.50
 statistics: [dimension: 50]
-download: 
-  handler: /single:DatasetPath
+download: !@/single:DatasetPath
   reference: !dataset .6b
   path: "glove.6B.50d.txt"
 ...
 ---
 id: 6b.100
 statistics: [dimension: 100]
-download: 
-  handler: /single:DatasetPath
+download: !@/single:DatasetPath
   reference: !dataset .6b
   path: "glove.6B.100d.txt"
 ...
 ---
 id: 6b.200
 statistics: [dimension: 200]
-download: 
-  handler: /single:DatasetPath
+download: !@/single:DatasetPath
   reference: !dataset .6b
   path: "glove.6B.200d.txt"
 ...
@@ -51,8 +47,7 @@ download:
 ---
 id: 6b.300
 statistics: [dimension: 200]
-download: 
-  handler: /single:DatasetPath
+download: !@/single:DatasetPath
   reference: !dataset .6b
   path: "glove.6B.200d.txt"
 ...
@@ -61,8 +56,7 @@ download:
 ---
 id: 42b
 description: Trained on Common Crawl
-download: 
-  handler: /single:File
+download: !@/single:File
   url: http://nlp.stanford.edu/data/glove.42B.300d.zip
 size: 2.03G
 statistics:
@@ -75,8 +69,7 @@ statistics:
 ---
 id: 840b
 description: Trained on Common Crawl
-download: 
-  handler: /single:File
+download: !@/single:File
   url: http://nlp.stanford.edu/data/glove.840B.300d.zip
 size: 2.03G
 statistics:
