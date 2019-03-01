@@ -24,7 +24,6 @@ description: |
 ---
 id: qa20
 name:   
-download: 
-  handler: /archive:Tar
+download: !@/archive:Tar
   url: http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz
 

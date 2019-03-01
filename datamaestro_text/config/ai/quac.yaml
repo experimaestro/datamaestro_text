@@ -15,17 +15,12 @@ description: |
   excerpts (spans) from the text. QuAC introduces challenges not found in
   existing machine comprehension datasets: its questions are often more
   open-ended, unanswerable, or only meaningful within the dialog context.
-download: 
-  handler: /multiple:List
-  list:
-    train:
-      handler: /single:File
-      url: https://s3.amazonaws.com/my89public/quac/train_v0.2.json
-    test:
-      handler: /single:File
-      url: https://s3.amazonaws.com/my89public/quac/val_v0.2.json
-    scorer:
-      description: Evaluation script
-      handler: /single:File
-      url: https://s3.amazonaws.com/my89public/quac/scorer.py
-  
+download: !@/multiple:List
+  train: !@/single:File
+    url: https://s3.amazonaws.com/my89public/quac/train_v0.2.json
+  test: !@/single:File
+    url: https://s3.amazonaws.com/my89public/quac/val_v0.2.json
+  scorer: !@/single:File
+    description: Evaluation script 
+    url: https://s3.amazonaws.com/my89public/quac/scorer.py
+
