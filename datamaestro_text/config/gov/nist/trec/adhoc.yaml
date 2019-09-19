@@ -313,8 +313,7 @@ download:
 id: "robust.2004.qrels"
 name: "TREC Robust 2004 relevance assessments"
 handler: trec.adhoc/assessments
-download:
-  handler: /single:File
+download: !@/single:File
   url: "http://trec.nist.gov/data/robust/qrels.robust2004.txt"
 ...
 ---

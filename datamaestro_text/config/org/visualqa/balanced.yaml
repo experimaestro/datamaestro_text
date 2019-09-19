@@ -9,16 +9,14 @@ tasks:
 id: balanced
 name: Balanced Real Images
 download:
-  handler: @!/multiple:List
-  train/annotation:
-    handler: /single:Archive
-    url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Train_mscoco.zip
-  train/question:
-    handler: /single:Archive
-    url: http://visualqa.org/data/mscoco/vqa/v2_Questions_Train_mscoco.zip
-  validation/annotation:
-    handler: /single:Archive
-    url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Val_mscoco.zip
+  handler: !@/multiple:List
+    list:
+      train/annotation: !@/single:Archive
+        url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Train_mscoco.zip
+      train/question: !@/single:Archive
+        url: http://visualqa.org/data/mscoco/vqa/v2_Questions_Train_mscoco.zip
+      validation/annotation: !@/single:Archive
+        url: http://visualqa.org/data/mscoco/vqa/v2_Annotations_Val_mscoco.zip
 ...
 ---
 id: abstract
