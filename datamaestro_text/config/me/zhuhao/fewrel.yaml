@@ -1,0 +1,15 @@
+name: FewRel
+web: http://www.zhuhao.me/fewrel/
+tasks:
+  - information extraction
+description: |
+  FewRel is a Few-shot Relation classification dataset, which features 70, 000
+  natural language sentences expressing 100 relations annotated by crowdworkers.
+papers:
+  technical description: https://arxiv.org/abs/1810.10147
+
+download: !@/multiple:List
+  training: !@/single:File
+    url: https://thunlp.oss-cn-qingdao.aliyuncs.com/fewrel/fewrel_train.json
+  validation: !@/single:File
+    url: https://thunlp.oss-cn-qingdao.aliyuncs.com/fewrel/fewrel_val.json
