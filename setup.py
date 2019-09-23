@@ -1,4 +1,9 @@
-from setuptools import setup, find_namespace_packages
+import sys
+try:
+    from setuptools import setup, find_namespace_packages
+except ImportError:
+    print("Please upgrade pip: find_namesspace_packages not found")
+    sys.exit(1)
 
 setup(
     name='datamaestro_text',
