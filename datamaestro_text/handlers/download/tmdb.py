@@ -42,7 +42,7 @@ class Handler(DownloadHandler):
                 if res.code == 200:
                     return res.read()
                 if res.code == 401:
-                    raise Exception(f"Unauthorized: add the api key in the preference file [{APIKEY_KEY}]")
+                    raise Exception("Unauthorized: add the api key in the preference file [{}]".format(APIKEY_KEY))
                 if res.code == 403:
                     self.reset = float(res.headers["Retry-After"])
                     self.remaining = 0
