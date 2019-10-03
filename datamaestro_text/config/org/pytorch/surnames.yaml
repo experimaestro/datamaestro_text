@@ -1,0 +1,16 @@
+# NAME
+
+name: Surname datasets
+web: https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html
+
+description: |
+  Included in the data/names directory are 18 text files named as
+  “[Language].txt”. Each file contains a bunch of names, one name per line,
+  mostly romanized (but we still need to convert from Unicode to ASCII).
+
+
+
+# Describe how to download
+download: !@/archive:Zip
+  url: https://download.pytorch.org/tutorial/data.zip
+  path: data/names
