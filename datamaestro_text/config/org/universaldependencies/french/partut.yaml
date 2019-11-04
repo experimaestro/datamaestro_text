@@ -1,0 +1,32 @@
+# See documentation on http://experimaestro.github.io/datamaestro/
+
+# Configuration
+# See http://experimaestro.github.io/datamaestro/configuration/
+
+name: UD_French-ParTUT
+web: https://github.com/UniversalDependencies/UD_French-ParTUT
+
+description: |
+  UD_French-ParTUT is a conversion of a multilingual parallel treebank developed
+  at the University of Turin, and consisting of a variety of text genres,
+  including talks, legal texts and Wikipedia articles, among others.
+
+tasks: [ "POS parsing", "dependency parsing" ]
+tags: [ "french" ]
+
+
+# Describe how to download
+# See http://experimaestro.github.io/datamaestro/download/
+
+download: !@/archive:Zip
+  url: https://codeload.github.com/UniversalDependencies/UD_French-ParTUT/zip/master
+
+files:
+  readme: README.md
+  stats: stats.xml
+  train: !@tagging:CoNLL_U
+    path: fr_partut-ud-train.conllu
+  dev: !@tagging:CoNLL_U
+    path: fr_partut-ud-dev.conllu  
+  test: !@tagging:CoNLL_U
+    path: fr_partut-ud-test.conllu  
