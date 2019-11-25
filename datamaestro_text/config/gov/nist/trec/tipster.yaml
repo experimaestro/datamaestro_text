@@ -22,8 +22,11 @@ datapath: .
 id: ap88
 description: Associated Press document collection (1988)
 pattern: ^AP88.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath
+  name: AP88
+  environ: TREC_DATADIR
+# handler: 
+#   documents/list: {type: ds.gov.nist.tipster}
 ...
 ---
 id: ap89

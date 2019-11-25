@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='datamaestro_text',
-    version='0.1',
+    version='0.2',
     description='Text related datasets',
     author='Benjamin Piwowarski',
     author_email='benjamin@piwowarski.fr',
@@ -19,7 +19,8 @@ setup(
         '': [ '*.yaml' ]
     },
     install_requires=[
-        'datamaestro'
+        'datamaestro',
+        'bs4'
     ],
     classifiers=[
         'Intended Audience :: Developers',
