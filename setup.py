@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='datamaestro_text',
-    version='0.3',
+    version='0.4',
     description='Text related datasets',
     author='Benjamin Piwowarski',
     author_email='benjamin@piwowarski.fr',
