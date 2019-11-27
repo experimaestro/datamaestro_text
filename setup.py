@@ -19,7 +19,7 @@ setup(
         '': [ '*.yaml' ]
     },
     install_requires=[
-        'datamaestro',
+        'datamaestro>=0.4.0',
         'bs4'
     ],
     classifiers=[
