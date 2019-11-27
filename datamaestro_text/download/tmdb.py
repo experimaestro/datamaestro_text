@@ -8,15 +8,15 @@ import hashlib
 import shutil
 from collections import namedtuple
 
-from datamaestro.handlers.download import DownloadHandler
-from datamaestro import Dataset
+from datamaestro.download import DownloadHandler
+from datamaestro import DatasetDefinition
 from datamaestro.utils import TemporaryDirectory
 
 APIKEY_KEY = "org.themoviedb.apikey"
 
 class Handler(DownloadHandler):
     """Download using the TMDB API"""
-    def __init__(self, dataset: Dataset, definition):
+    def __init__(self, dataset: DatasetDefinition, definition):
         super().__init__(dataset, definition)
         self.apikey = self.repository.context.preference(APIKEY_KEY)
         self.reset = 0

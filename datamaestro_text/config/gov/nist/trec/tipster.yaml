@@ -17,154 +17,168 @@ description: |
 url: https://catalog.ldc.upenn.edu/LDC93T3A
 datapath: .
 ...
----
+
+
+
 # Associated Press
+---
 id: ap88
 description: Associated Press document collection (1988)
-pattern: ^AP88.*$
 download: !@/manual:DownloadPath
   name: AP88
-  environ: TREC_DATADIR
-# handler: 
-#   documents/list: {type: ds.gov.nist.tipster}
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"]
 ...
 ---
 id: ap89
 description: Associated Press document collection (1989)
-pattern: ^AP89.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: AP89
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"]
 ...
 ---
 id: ap90
 description: Associated Press document collection (1990)
-pattern: ^AP90.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: AP90
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"]
 ...
 ---
 # Department of Energy
 id: doe1
 description: Department of Energy
-pattern: ^DOE1.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: DOE1
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/DOE"]
 ...
----
+
+
+
 # Wall Street Journal
+---
 id: wsj87
 description: Wall Street Journal (1987)
-pattern: ^WSJ87.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1987"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
 ---
 id: wsj88
 description: Wall Street Journal (1988)
-pattern: ^WSJ88.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1988"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
 ---
 id: wsj89
 description: Wall Street Journal (1989)
-pattern: ^WSJ89.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1989"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
 ---
 id: wsj90
 description: Wall Street Journal (1990)
-pattern: ^WSJ90.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1990"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
 ---
 id: wsj91
 description: Wall Street Journal (1991)
-pattern: ^WSJ91.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1991"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
 ---
 id: wsj92
 description: Wall Street Journal (1992)
-pattern: ^WSJ92.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: "1992"
+  search: [ "%TIPSTER_DATADIR%/WSJ"]
 ...
----
+
+
 # Federal Register (1988-89)
+
+---
 id: fr88
 description: Federal Register (1988)
-pattern: ^FR88.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: FR88
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
 ...
 ---
 id: fr89
 description: Federal Register (1989)
-pattern: ^FR89.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: FR89
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
 ...
 ---
 id: fr94
 description: Federal Register (1994)
-pattern: ^FR94.*$
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: FR94
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
 ...
+
+
+# ZIFF (1988-92)
+
 ---
 id: ziff1
 description: Ziff/Davis document collection (1988-89)
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: ZIFF
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
 ...
 ---
 id: ziff2
 description:  Ziff/Davis document collection (1989-90)
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  name: ZIFF2
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
 ...
 ---
 id: ziff3
 description:  Ziff/Davis document collection (1991-92)
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
 ...
----
+
 # SJM1
+
+---
 id: sjm1
 description: San Jose Mercury News (1991)
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
 ...
 ---
 # CR1
 id: cr1
 description: TODO
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
 ...
 ---
 # FT1
 id: ft1
 description: Financial Times
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%"]
 ...
 ---
 # FBIS1
 id: fbis1
 description: TODO
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%"]
 ...
 ---
 # FBIS1
 id: la8990
 description: Los Angeles Times (1989-90)
-handler: 
-  documents/list: {type: ds.gov.nist.tipster}
+download: !@/manual:DownloadPath 
+  search: ["%TIPSTER_DATADIR%"]
 

@@ -1,5 +1,5 @@
 import logging
-from datamaestro.handlers.files import File
+from datamaestro.files import File
 
 class CoNLL_U(File):
 
