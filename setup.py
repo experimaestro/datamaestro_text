@@ -15,12 +15,12 @@ setup(
     license='MIT',
     python_requires='>=3.5',
     packages=find_namespace_packages(include="datamaestro_text.*"),
+
     package_data={
         '': [ '*.yaml' ]
     },
     install_requires=[
         'datamaestro>=0.4.0',
-        'bs4'
     ],
     classifiers=[
         'Intended Audience :: Developers',
@@ -36,6 +36,7 @@ setup(
         'datamaestro.repositories': [
             'text = datamaestro_text:Repository'
         ]
+    },
 
-    }
+    test_suite='datamaestro_text.test'
 )

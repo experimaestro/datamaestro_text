@@ -44,18 +44,12 @@ description: |
 
     ![https://cs.stanford.edu/people/ranjaykrishna/im2p/examples.png]
 
-download: 
-  handler: /single:File
-  list:
-    paragraphs:
-      handler: /single:File
-      url: http://visualgenome.org/static/data/dataset/paragraphs_v1.json.zip
-    train:
-      handler: /single:File
-      url: https://cs.stanford.edu/people/ranjaykrishna/im2p/train_split.json
-    val:
-      handler: /single:File
-      url: https://cs.stanford.edu/people/ranjaykrishna/im2p/val_split.json
-    data:
-      handler: /single:File
-      url: https://cs.stanford.edu/people/ranjaykrishna/im2p/test_split.json
+download: !@/multiple:List
+  paragraphs: !@/single:File
+    url: http://visualgenome.org/static/data/dataset/paragraphs_v1.json.zip
+  train: !@/single:File
+    url: https://cs.stanford.edu/people/ranjaykrishna/im2p/train_split.json
+  val: !@/single:File
+    url: https://cs.stanford.edu/people/ranjaykrishna/im2p/val_split.json
+  data: !@/single:File
+    url: https://cs.stanford.edu/people/ranjaykrishna/im2p/test_split.json

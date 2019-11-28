@@ -1,5 +1,4 @@
 tags: [ documents, text, html, web ]
-type: warc
 warc-version: 0.18
 namespaces:
   clueweb: gov.nist.trec.clueweb

@@ -25,9 +25,9 @@ description: |
       The two QAngaroo datasets provide a training and evaluation resource for such
       methods. 
 
-download:
-  handler: [/googledrive, "/archive:Zip"]
-  url: http://bit.ly/2m0W32k
+# download:
+#   handler: [/googledrive, "/archive:Zip"]
+#   url: http://bit.ly/2m0W32k
 
 splits:
   train: 
