@@ -120,16 +120,24 @@ documents: !dataset ".1.documents"
 topics: !dataset ".3.topics"
 qrels: !dataset ".3.qrels"
 ...
+
+
+
 ---
 id: 4.documents
 name: Data collection used in TREC-4
 url: https://catalog.ldc.upenn.edu/LDC93T3A
-references: [
-  !dataset tipster!ap88, !dataset tipster!ap89, !dataset tipster!ap90, 
-  !dataset tipster!fr88, !dataset tipster!sjm1, # !dataset tipster!usp93, 
-  !dataset tipster!wsj90, !dataset tipster!wsj91, !dataset tipster!wsj92, 
-  !dataset tipster!ziff2, !dataset tipster!ziff3
-]
+download: !@/multiple:Datasets
+  ap88: !dataset tipster!ap88
+  ap89: !dataset tipster!ap89
+  ap90: !dataset tipster!ap90
+  fr88: !dataset tipster!fr88
+  sjm1: !dataset tipster!sjm1
+  wsj90: !dataset tipster!wsj90
+  wsj91: !dataset tipster!wsj91
+  wsj92: !dataset tipster!wsj92 
+  ziff2: !dataset tipster!ziff2
+  ziff3: !dataset tipster!ziff3
 ...
 ---
 id: 4.topics

@@ -143,6 +143,7 @@ download: !@/manual:DownloadPath
 id: ziff3
 description:  Ziff/Davis document collection (1991-92)
 download: !@/manual:DownloadPath 
+  name: ZIFF3
   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
 ...
 
@@ -152,6 +153,7 @@ download: !@/manual:DownloadPath
 id: sjm1
 description: San Jose Mercury News (1991)
 download: !@/manual:DownloadPath 
+  name: SJM1
   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
 ...
 ---
@@ -159,6 +161,7 @@ download: !@/manual:DownloadPath
 id: cr1
 description: TODO
 download: !@/manual:DownloadPath 
+  name: CR1
   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
 ...
 ---
@@ -166,6 +169,7 @@ download: !@/manual:DownloadPath
 id: ft1
 description: Financial Times
 download: !@/manual:DownloadPath 
+  name: FT1
   search: ["%TIPSTER_DATADIR%"]
 ...
 ---
@@ -173,6 +177,7 @@ download: !@/manual:DownloadPath
 id: fbis1
 description: TODO
 download: !@/manual:DownloadPath 
+  name: FBIS1
   search: ["%TIPSTER_DATADIR%"]
 ...
 ---
@@ -180,5 +185,6 @@ download: !@/manual:DownloadPath
 id: la8990
 description: Los Angeles Times (1989-90)
 download: !@/manual:DownloadPath 
+  name: FBIS1
   search: ["%TIPSTER_DATADIR%"]
 
