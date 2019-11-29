@@ -8,13 +8,13 @@ import hashlib
 import shutil
 from collections import namedtuple
 
-from datamaestro.download import DownloadHandler
+from datamaestro.download import Download
 from datamaestro import DatasetDefinition
 from datamaestro.utils import TemporaryDirectory
 
 APIKEY_KEY = "org.themoviedb.apikey"
 
-class Handler(DownloadHandler):
+class Handler(Download):
     """Download using the TMDB API"""
     def __init__(self, dataset: DatasetDefinition, definition):
         super().__init__(dataset, definition)

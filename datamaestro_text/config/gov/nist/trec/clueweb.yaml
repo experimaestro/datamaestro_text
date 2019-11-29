@@ -1,30 +1,32 @@
+---
 tags: [ documents, text, html, web ]
-warc-version: 0.18
 ...
 
 
 ---
-id: 09
+id: "09"
 description: The ClueWeb09 dataset
 url: https://lemurproject.org/clueweb09/
-statistics:
-  documents: 1040809705
-  links: 4780950903 
-  size: 
-    real: 25TB
-    compressed: 5TB
+download: !@/manual:DownloadPath 
+  type: !@warc
+    warc-version: 0.18
+  name: ClueWeb09
 ...
 
 ---
 id: 09b
 description: The ClueWeb09-B dataset, a subsample from ClueWeb09
 url: https://lemurproject.org/clueweb09/
+download: !@/manual:DownloadPath 
+  name: ClueWeb09B
 
 ...
 ---
-id: 12
+id: "12"
 description: The ClueWeb12 dataset
 url: https://lemurproject.org/clueweb12/
+download: !@/manual:DownloadPath
+  name: ClueWeb12B
 ...
 
 
@@ -32,4 +34,6 @@ url: https://lemurproject.org/clueweb12/
 id: 12b
 description: The ClueWeb12-B dataset, a subsample from ClueWeb12
 url: https://lemurproject.org/clueweb12/
+download: !@/manual:DownloadPath
+  name: ClueWeb12B
 ...

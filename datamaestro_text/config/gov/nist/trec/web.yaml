@@ -1,20 +1,26 @@
 tags: [ documents, text, html, web ]
-warc-version: 0.18
 namespaces:
   clueweb: gov.nist.trec.clueweb
+...
 
-data:
-  2009.adhoc:
-    url: http://trec.nist.gov/data/web09.html
-    documents: !dataset clueweb!09b
-    handler: trec.adhoc/task
-    subdatasets:
-      topics: 
+---
+id: 2009.b
+name: "TREC - Web Track 2009"
+type: ir:Adhoc
+url: http://trec.nist.gov/data/web09.html
+documents: !dataset clueweb!09b
+topics: !dataset .2009.topics
+assessments: !dataset .2009.prels.b
+...
 
-  # -
-  #   id: ["3", "1994"]
-  #   handler: trec.adhoc/task
-  #   description: "Ad-hoc task of TREC 3 (1994)"
-  #   documents: !dataset ".1.documents"
-  #   topics: !dataset ".3.topics"
-  #   qrels: !dataset ".3.qrels"
+---
+id: 2009.topics
+download: !@/single:File
+  url: https://trec.nist.gov/data/web/09/wt09.topics.full.xml
+...
+
+---
+id: 2009.prels.b
+download: !@/single:File
+  url: https://trec.nist.gov/data/web/09/prels.catB.1-50.gz
+...
