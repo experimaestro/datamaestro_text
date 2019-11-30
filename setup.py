@@ -5,6 +5,11 @@ except ImportError:
     print("Please upgrade pip: find_namesspace_packages not found")
     sys.exit(1)
 
+RE_BLANCK=re.compile(r"^\s*(#.*)?$")
+with (Path(__file__).parent / 'requirements.txt').open() as f:
+    requirements = [x for x in f.read().splitlines() if not RE_BLANCK.match(x)]
+
+
 setup(
     name='datamaestro_text',
     version='0.4',
@@ -19,9 +24,7 @@ setup(
     package_data={
         '': [ '*.yaml' ]
     },
-    install_requires=[
-        'datamaestro>=0.4.0',
-    ],
+    install_requires=requirements,
     classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
