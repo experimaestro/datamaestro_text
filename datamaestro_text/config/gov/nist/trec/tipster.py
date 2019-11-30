@@ -49,138 +49,121 @@ def doe1(documents):
 
 
 
-# # Wall Street Journal
-# ---
-# id: wsj87
-# description: Wall Street Journal (1987)
-# download: !@/manual:DownloadPath 
-#   name: "1987"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
-# ---
-# id: wsj88
-# description: Wall Street Journal (1988)
-# download: !@/manual:DownloadPath 
-#   name: "1988"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
-# ---
-# id: wsj89
-# description: Wall Street Journal (1989)
-# download: !@/manual:DownloadPath 
-#   name: "1989"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
-# ---
-# id: wsj90
-# description: Wall Street Journal (1990)
-# download: !@/manual:DownloadPath 
-#   name: "1990"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
-# ---
-# id: wsj91
-# description: Wall Street Journal (1991)
-# download: !@/manual:DownloadPath 
-#   name: "1991"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
-# ---
-# id: wsj92
-# description: Wall Street Journal (1992)
-# download: !@/manual:DownloadPath 
-#   name: "1992"
-#   search: [ "%TIPSTER_DATADIR%/WSJ"]
-# ...
+# --- Wall Street Journal (1987-92)
+
+@LinkFolder("documents", "WSJ87", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj87(documents):
+  """Wall Street Journal (1987)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "WSJ88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj88(documents):
+  """Wall Street Journal (1988)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "WSJ89", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj89(documents):
+  """Wall Street Journal (1989)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "WSJ90", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj90(documents):
+  """Wall Street Journal (1990)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "WSJ91", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj91(documents):
+  """Wall Street Journal (1991)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "WSJ92", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@TIPSTER
+def wsj92(documents):
+  """Wall Street Journal (1992)"""
+  return { "path": documents.path }
 
 
-# # Federal Register (1988-89)
+# --- Federal Register (1988-89)
 
-# ---
-# id: fr88
-# description: Federal Register (1988)
-# download: !@/manual:DownloadPath 
-#   name: FR88
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
-# ...
-# ---
-# id: fr89
-# description: Federal Register (1989)
-# download: !@/manual:DownloadPath 
-#   name: FR89
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
-# ...
-# ---
-# id: fr94
-# description: Federal Register (1994)
-# download: !@/manual:DownloadPath 
-#   name: FR94
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"]
-# ...
+
+@LinkFolder("documents", "FR88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@TIPSTER
+def fr88(documents):
+  """Federal Register (1988)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "FR89", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@TIPSTER
+def fr89(documents):
+  """Federal Register (1989)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "FR94", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@TIPSTER
+def fr94(documents):
+  """Federal Register (1994)"""
+  return { "path": documents.path }
 
 
 # # ZIFF (1988-92)
 
-# ---
-# id: ziff1
-# description: Ziff/Davis document collection
-# download: !@/manual:DownloadPath 
-#   name: ZIFF1
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
-# ...
-# ---
-# id: ziff2
-# description:  Ziff/Davis document collection (1989-90)
-# download: !@/manual:DownloadPath 
-#   name: ZIFF2
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
-# ...
-# ---
-# id: ziff3
-# description:  Ziff/Davis document collection (1991-92)
-# download: !@/manual:DownloadPath 
-#   name: ZIFF3
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"]
-# ...
+
+@LinkFolder("documents", "ZIFF1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@TIPSTER
+def ziff1(documents):
+  """Ziff/Davis document collection"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "ZIFF2", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@TIPSTER
+def ziff2(documents):
+  """ Ziff/Davis document collection (1989-90)"""
+  return { "path": documents.path }
+
+@LinkFolder("documents", "ZIFF3", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@TIPSTER
+def ziff3(documents):
+  """ Ziff/Davis document collection (1991-92)"""
+  return { "path": documents.path }
 
 # # SJM1
 
-# ---
-# id: sjm1
-# description: San Jose Mercury News (1991)
-# download: !@/manual:DownloadPath 
-#   name: SJM1
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
-# ...
-# ---
-# # CR1
-# id: cr1
-# description: TODO
-# download: !@/manual:DownloadPath 
-#   name: CR1
-#   search: ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"]
-# ...
-# ---
-# # FT1
-# id: ft1
-# description: Financial Times
-# download: !@/manual:DownloadPath 
-#   name: FT1
-#   search: ["%TIPSTER_DATADIR%"]
-# ...
-# ---
-# # FBIS1
-# id: fbis1
-# description: TODO
-# download: !@/manual:DownloadPath 
-#   name: FBIS
-#   search: ["%TIPSTER_DATADIR%"]
-# ...
-# ---
-# # FBIS1
-# id: la8990
-# description: Los Angeles Times (1989-90)
-# download: !@/manual:DownloadPath 
-#   name: LATIMES
-#   search: ["%TIPSTER_DATADIR%"]
 
+@LinkFolder("documents", "SJM1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"])
+@TIPSTER
+def sjm1(documents):
+  """San Jose Mercury News (1991)"""
+  return { "path": documents.path }
+
+# # CR1
+@LinkFolder("documents", "CR1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"])
+@TIPSTER
+def cr1(documents):
+  """TODO"""
+  return { "path": documents.path }
+
+# # FT1
+@LinkFolder("documents", "FT1", ["%TIPSTER_DATADIR%"])
+@TIPSTER
+def ft1(documents):
+  """Financial Times"""
+  return { "path": documents.path }
+
+# # FBIS1
+@LinkFolder("documents", "FBIS", ["%TIPSTER_DATADIR%"])
+@TIPSTER
+def fbis1(documents):
+  """TODO"""
+  return { "path": documents.path }
+# ---
+# # FBIS1
+@LinkFolder("documents", "LATIMES", ["%TIPSTER_DATADIR%"])
+@TIPSTER
+def la8990(documents):
+  """Los Angeles Times (1989-90)"""
+  return { "path": documents.path }

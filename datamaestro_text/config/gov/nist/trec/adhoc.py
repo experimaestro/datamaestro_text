@@ -2,61 +2,60 @@
 """
 
 from datamaestro.data import Generic
+from datamaestro.download import Reference
+from datamaestro.download.single import DownloadFile, ConcatDownload
 from datamaestro.download.links import Links
+from datamaestro.stream import TransformList
+from datamaestro.stream.compress import Gunzip
+from datamaestro.stream.lines import Replace
 from datamaestro.definitions import Data, Argument, Type, DataTasks, DataTags, Dataset
-from datamaestro_text.data.trec import TipsterCollection
+
+from datamaestro_text.data.trec import TipsterCollection, TrecTopics, TrecAssessments
+from datamaestro_text.data.ir import Adhoc
 
 from .tipster import *
 
 
-@Links("documents", ap88=ap88.path)
+# --- TREC 1 (1992)
+
+@Links("documents", 
+  ap88=ap88.path, ap89=ap89.path, fr88=fr88.path, fr89=fr89.path,
+  wsj87=wsj87.path, wsj88=wsj88.path, wsj89=wsj89.path,
+  wsj90=wsj90.path, wsj91=wsj91.path, wsj92=wsj92.path,
+  ziff1=ziff1.path, ziff2=ziff2.path)
 @Dataset(TipsterCollection)
 def trec1_documents(documents):
   """TREC-1 to TREC-3 documents (TIPSTER volumes 1 and 2)"""
   return { "path": documents.path }
 
+@DownloadFile(
+  "topics", "http://trec.nist.gov/data/topics_eng/topics.51-100.gz", 
+  transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
+)
+@Dataset(TrecTopics)
+def trec1_topics(topics):
+  return { "path": topics.path, "parts": ["desc"] }
 
+@ConcatDownload(
+  "qrels", "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz", 
+  transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
+)
+@Dataset(TrecAssessments)
+def trec1_assessments(qrels):
+  return { "path": qrels.path, "parts": ["desc"] }
 
-# ---
-# id: 1.documents
-# name: TREC-1 to TREC-3 documents (TIPSTER volumes 1 and 2)
-# type: trec:TipsterCollection
-# download: !@/multiple:Datasets
-#   ap88: !dataset tipster!ap88
-#   ap89: !dataset tipster!ap89
-#   doe1: !dataset tipster!doe1
-#   fr88: !dataset tipster!fr88
-#   fr89: !dataset tipster!fr89
-#   wsj87: !dataset tipster!wsj87
-#   wsj88: !dataset tipster!wsj88
-#   wsj89: !dataset tipster!wsj89
-#   wsj90: !dataset tipster!wsj90
-#   wsj91: !dataset tipster!wsj91
-#   wsj92: !dataset tipster!wsj92
-#   ziff1: !dataset tipster!ziff1
-#   ziff2: !dataset tipster!ziff2
-# ...
-# ---
-# id: 1.topics
-# name: "TREC 1 topics"
-# handler: trec.adhoc/topics
-# properties:
-#   parts: [desc]
-# download: !@/single:File
-#   url: "http://trec.nist.gov/data/topics_eng/topics.51-100.gz"
-#   transforms:
-#     - /compress:Gunzip
-#     # To get matching strings between queries and assessments
-#     - [ /stream:Replace, { repl: "Number: \\1", pattern: "Number:(\\s+)0" }]
-# ...
-# ---
-# id: 1.qrels
-# name: "TREC 1 relevance assessments"
-# handler: trec.adhoc/assessments
-# download: !@/single:Concat
-#   transforms: [ /compress:Gunzip ]
-#   url: "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz"
-# ...
+@Reference("documents", trec1_documents)
+@Reference("topics", trec1_topics)
+@Reference("assessments", trec1_assessments)
+@Dataset(Adhoc)
+def trec1(documents, topics, assessments):
+  "Ad-hoc task of TREC 1 (1992)"
+  return { 
+    "documents": documents.value,
+    "topics": topics.value,
+    "assessments": assessments.value
+  }
+
 # ---
 # id: 1
 # name: "Ad-hoc task of TREC 1 (1992)"
