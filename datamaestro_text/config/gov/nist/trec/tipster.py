@@ -51,37 +51,37 @@ def doe1(documents):
 
 # --- Wall Street Journal (1987-92)
 
-@LinkFolder("documents", "WSJ87", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1987", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj87(documents):
   """Wall Street Journal (1987)"""
   return { "path": documents.path }
 
-@LinkFolder("documents", "WSJ88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1988", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj88(documents):
   """Wall Street Journal (1988)"""
   return { "path": documents.path }
 
-@LinkFolder("documents", "WSJ89", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1989", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj89(documents):
   """Wall Street Journal (1989)"""
   return { "path": documents.path }
 
-@LinkFolder("documents", "WSJ90", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1990", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj90(documents):
   """Wall Street Journal (1990)"""
   return { "path": documents.path }
 
-@LinkFolder("documents", "WSJ91", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1991", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj91(documents):
   """Wall Street Journal (1991)"""
   return { "path": documents.path }
 
-@LinkFolder("documents", "WSJ92", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@LinkFolder("documents", "1992", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
 @TIPSTER
 def wsj92(documents):
   """Wall Street Journal (1992)"""
