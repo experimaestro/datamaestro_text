@@ -3,7 +3,7 @@
 
 from datamaestro.data import Generic
 from datamaestro.download import Reference
-from datamaestro.download.single import DownloadFile, ConcatDownload
+from datamaestro.download.single import FileDownloader, ConcatDownload
 from datamaestro.download.links import Links
 from datamaestro.stream import TransformList
 from datamaestro.stream.compress import Gunzip
@@ -23,16 +23,16 @@ from .tipster import *
   wsj87=wsj87.path, wsj88=wsj88.path, wsj89=wsj89.path,
   wsj90=wsj90.path, wsj91=wsj91.path, wsj92=wsj92.path,
   ziff1=ziff1.path, ziff2=ziff2.path)
-@Dataset(TipsterCollection)
+@Dataset(TipsterCollection, id="1.documents")
 def trec1_documents(documents):
   """TREC-1 to TREC-3 documents (TIPSTER volumes 1 and 2)"""
   return { "path": documents.path }
 
-@DownloadFile(
+@FileDownloader(
   "topics", "http://trec.nist.gov/data/topics_eng/topics.51-100.gz", 
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@Dataset(TrecTopics)
+@Dataset(TrecTopics, id="1.topics")
 def trec1_topics(topics):
   return { "path": topics.path, "parts": ["desc"] }
 
@@ -40,14 +40,14 @@ def trec1_topics(topics):
   "qrels", "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz", 
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@Dataset(TrecAssessments)
+@Dataset(TrecAssessments, id="1.assessments")
 def trec1_assessments(qrels):
   return { "path": qrels.path, "parts": ["desc"] }
 
 @Reference("documents", trec1_documents)
 @Reference("topics", trec1_topics)
 @Reference("assessments", trec1_assessments)
-@Dataset(Adhoc)
+@Dataset(Adhoc, id="1")
 def trec1(documents, topics, assessments):
   "Ad-hoc task of TREC 1 (1992)"
   return { 
