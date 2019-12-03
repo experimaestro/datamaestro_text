@@ -9,6 +9,11 @@ The list of available datasets and usage instruction can be found in the [docume
 
 ## List of available datasets
 
+### Documents
+
+- Aquaint
+- TIPSTER
+
 ### Word embeddings
 
 - [Glove](http://nlp.stanford.edu/projects/glove/) `edu.stanford.glove.XXXX`
@@ -16,3 +21,10 @@ The list of available datasets and usage instruction can be found in the [docume
 ### Sentiment analysis
 
 - [IMDB]() `edu.stanford.aclimdb`
+
+### Information Retrieval
+
+#### TREC
+
+- TREC-1 to TREC-8
+- Robust 2004 and 2005
