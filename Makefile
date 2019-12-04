@@ -12,6 +12,7 @@ clean:
 
 dev:
 	pip install --upgrade pip
+	pip install -r requirements.txt
 	pip install -r requirements-dev.txt
 	pip install -e .
 
@@ -24,5 +25,5 @@ package:
 test:
 	@echo "No test to run"
 	python setup.py test
-	# coverage run -m unittest discover
-	# coverage html
+	coverage run -m unittest discover
+#	coverage html

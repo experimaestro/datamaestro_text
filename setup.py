@@ -60,6 +60,8 @@ setup(
             'text = datamaestro_text:Repository'
         ]
     },
-
+    cmdclass={
+        'verify': VerifyVersionCommand,
+    },
     test_suite='datamaestro_text.test'
 )
