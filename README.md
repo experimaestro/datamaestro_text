@@ -11,8 +11,9 @@ The list of available datasets and usage instruction can be found in the [docume
 
 ### Documents
 
-- Aquaint
-- TIPSTER
+- Aquaint (TREC)
+- TIPSTER (TREC)
+- WikiText-2 and WikiText-103
 
 ### Word embeddings
 

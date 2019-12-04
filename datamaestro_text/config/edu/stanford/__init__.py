@@ -1,5 +1,4 @@
-from datamaestro.data import Supervised
-from datamaestro.data.ml import FolderBased
+from datamaestro.data.ml import FolderBased, Supervised
 from datamaestro.definitions import  DataTasks, DataTags, Dataset
 from datamaestro.download.archive import TarDownloader
 
