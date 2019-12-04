@@ -1,20 +1,23 @@
 from pathlib import Path
 import re
 import sys
+
 try:
     from setuptools import setup, find_namespace_packages
 except ImportError:
-    print("Please upgrade pip: find_namesspace_packages not found")
+    print("Please upgrade pip: find_namespace_packages not found")
     sys.exit(1)
+
+# Date-based versioning
+VERSION='2019.12.04'
 
 RE_BLANCK=re.compile(r"^\s*(#.*)?$")
 with (Path(__file__).parent / 'requirements.txt').open() as f:
     requirements = [x for x in f.read().splitlines() if not RE_BLANCK.match(x)]
 
-
 setup(
     name='datamaestro_text',
-    version='0.4',
+    version=VERSION,
     description='Text related datasets',
     author='Benjamin Piwowarski',
     author_email='benjamin@piwowarski.fr',
@@ -23,9 +26,6 @@ setup(
     python_requires='>=3.5',
     packages=find_namespace_packages(include="datamaestro_text.*"),
 
-    package_data={
-        '': [ '*.yaml' ]
-    },
     install_requires=requirements,
     classifiers=[
         'Intended Audience :: Developers',

@@ -4,8 +4,8 @@ from datamaestro.download.archive import ZipDownloader
 from datamaestro_text.data.language import LanguageModelData
 
 
-@DataTags([ "text" ])
-@DataTasks([ "language modeling" ])
+@DataTags("text")
+@DataTasks("language modeling")
 @MetaDataset(LanguageModelData)
 def WikiText(data, type):
     """WikiText-2
