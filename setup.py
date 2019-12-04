@@ -6,6 +6,7 @@ try:
 except ImportError:
     print("Please upgrade pip: find_namespace_packages not found")
     sys.exit(1)
+from setuptools.command.install import install
 
 # Date-based versioning
 VERSION='2019.12.04'
