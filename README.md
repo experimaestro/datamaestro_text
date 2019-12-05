@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/experimaestro/datamaestro_text.svg?style=svg)](https://circleci.com/gh/experimaestro/datamaestro) [![PyPI version](https://badge.fury.io/py/datamaestro-text.svg)](https://badge.fury.io/py/datamaestro-text)
+
 # Text-related datasets
 
 This [datamaestro](https://github.com/bpiwowar/datasets) plugin covers text-related datasets:
