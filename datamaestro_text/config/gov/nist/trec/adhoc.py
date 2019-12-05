@@ -14,7 +14,7 @@ from datamaestro_text.data.trec import TipsterCollection, TrecTopics, TrecAssess
 from datamaestro_text.data.ir import Adhoc
 
 from .tipster import *
-from datamaestro_text.config.edu.upenn.ldc import aquaint
+from datamaestro_text.config.edu.upenn.ldc.aquaint import aquaint
 
 
 # --- TREC 1 (1992)

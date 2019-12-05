@@ -32,5 +32,5 @@ def xie(documents):
 @Links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
 @Dataset(TipsterCollection, url=URL, id="")
 def aquaint(documents):
-  """Xinhua News Agency newswires (1996-2000)"""
+  """Aquaint dataset"""
   return { "path": documents }
