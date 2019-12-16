@@ -10,7 +10,7 @@ except ImportError:
 from setuptools.command.install import install
 
 # Date-based versioning
-VERSION='2019.12.5'
+VERSION='2019.12.16'
 
 RE_BLANCK=re.compile(r"^\s*(#.*)?$")
 with (Path(__file__).parent / 'requirements.txt').open() as f:
