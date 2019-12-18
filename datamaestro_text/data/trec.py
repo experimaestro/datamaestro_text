@@ -1,17 +1,18 @@
-from datamaestro.definitions import Argument, Data
+from datamaestro.definitions import argument, data
 from datamaestro.data import Generic
 from pathlib import Path
 from .ir import AdhocDocuments, AdhocTopics, AdhocAssessments
 
 
-@Argument("path", type=Path)
-@Data()
+@argument("path", type=Path)
+@argument("parts")
+@data()
 class TrecTopics(AdhocTopics): pass
 
-@Argument("path", type=Path)
-@Data()
+@argument("path", type=Path)
+@data()
 class TrecAssessments(AdhocAssessments): pass
 
-@Argument("path", type=Path)
-@Data()
+@argument("path", type=Path)
+@data()
 class TipsterCollection(AdhocDocuments): pass

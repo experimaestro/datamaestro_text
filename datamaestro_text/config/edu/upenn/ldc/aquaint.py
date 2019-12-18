@@ -3,34 +3,34 @@
 from datamaestro.data import Generic
 from datamaestro_text.data.trec import TipsterCollection
 from datamaestro.download.manual import LinkFolder
-from datamaestro.definitions import Data, Argument, Type, DataTasks, DataTags, Dataset
+from datamaestro.definitions import data, argument, config, datatasks, datatags, dataset
 from datamaestro.download.links import Links
 
 
 URL="https://catalog.ldc.upenn.edu/LDC2002T31"
 
 @LinkFolder("documents", "APW", ["%AQUAINT_DATADIR%"])
-@Dataset(TipsterCollection, url=URL, id="apw")
+@dataset(TipsterCollection, url=URL, id="apw")
 def apw(documents):
   """Associated Press (1998-2000)"""
   return { "path": documents }
 
 @LinkFolder("documents", "NYT", ["%AQUAINT_DATADIR%"])
-@Dataset(TipsterCollection, url=URL,id="nyt")
+@dataset(TipsterCollection, url=URL,id="nyt")
 def nyt(documents):
   """New York Times (1998-2000)"""
   return { "path": documents }
 
 
 @LinkFolder("documents", "XIE", ["%AQUAINT_DATADIR%"])
-@Dataset(TipsterCollection, url=URL, id="xie")
+@dataset(TipsterCollection, url=URL, id="xie")
 def xie(documents):
   """Xinhua News Agency newswires (1996-2000)"""
   return { "path": documents }
 
 
 @Links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
-@Dataset(TipsterCollection, url=URL, id="")
+@dataset(TipsterCollection, url=URL, id="")
 def aquaint(documents):
   """Aquaint dataset"""
   return { "path": documents }

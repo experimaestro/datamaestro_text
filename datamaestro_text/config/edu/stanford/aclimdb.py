@@ -1,9 +1,9 @@
 from datamaestro.data.ml import FolderBased, Supervised
-from datamaestro.definitions import  DataTasks, DataTags, Dataset
-from datamaestro.download.archive import TarDownloader
+from datamaestro.definitions import  datatasks, datatags, dataset
+from datamaestro.download.archive import tardownloader
 
-@TarDownloader("data", "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz")
-@Dataset(Supervised, url="http://ai.stanford.edu/~amaas/data/sentiment/", id="")
+@tardownloader("data", "http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz")
+@dataset(Supervised, url="http://ai.stanford.edu/~amaas/data/sentiment/", id="")
 def aclimdb(data):
   """Large Movie Review Dataset
 

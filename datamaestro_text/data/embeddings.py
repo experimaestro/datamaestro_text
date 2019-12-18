@@ -1,9 +1,9 @@
 from pathlib import Path
-from datamaestro.data import File, Data, Argument
+from datamaestro.data import File, data, argument
 import numpy as np
 
-@Argument("encoding", str, ignored=True, default="utf-8")
-@Data(description="Word embeddings as a text word / values")
+@argument("encoding", str, ignored=True, default="utf-8")
+@data(description="Word embeddings as a text word / values")
 class WordEmbeddingsText(File):
     def load(self):
         words = {}

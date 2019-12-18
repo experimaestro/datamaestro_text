@@ -1,9 +1,10 @@
 from pathlib import Path
-from datamaestro.data import Generic, Data, Argument
+from datamaestro.experimaestro import Any
+from datamaestro.data import Generic, data, argument
 from datamaestro.data.ml import Supervised
 
-@Argument("train", type=Generic)
-@Argument("test", type=Generic, required=False)
-@Argument("validation", type=Generic, required=False)
-@Data("A dataset used for training language models")
+@argument("train", type=Any)
+@argument("test", type=Any, required=False)
+@argument("validation", type=Any, required=False)
+@data("A dataset used for training language models")
 class LanguageModelData(Supervised): pass
