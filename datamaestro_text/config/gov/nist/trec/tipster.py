@@ -15,12 +15,12 @@ of three CD-ROMs of SGML encoded documents distributed by LDC plus queries and a
 (relevant documents) distributed by NIST.
 """
 
-from datamaestro.data import Generic
+from datamaestro.data import Base
 from datamaestro_text.data.trec import TipsterCollection
 from datamaestro.download.manual import LinkFolder
-from datamaestro.definitions import Data, Argument, Type, DataTasks, DataTags, Dataset
+from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 
-TIPSTER = Dataset(TipsterCollection, url="https://catalog.ldc.upenn.edu/LDC93T3A")
+TIPSTER = dataset(TipsterCollection, url="https://catalog.ldc.upenn.edu/LDC93T3A")
 
 @LinkFolder("documents", "AP88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"])
 @TIPSTER
