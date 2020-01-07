@@ -1,18 +1,19 @@
 from pathlib import Path
 from datamaestro.definitions import data, argument, datatasks, datatags
+from datamaestro.data import Base
 
 @data(description="IR documents")
-class AdhocDocuments(): pass
+class AdhocDocuments(Base): pass
 
 @data(description="IR topics")
-class AdhocTopics(): pass
+class AdhocTopics(Base): pass
 
 @data(description="IR assessments")
-class AdhocAssessments(): pass
+class AdhocAssessments(Base): pass
 
 @argument("documents", type=AdhocDocuments)
 @argument("topics", type=AdhocTopics)
 @argument("assessments", type=AdhocAssessments)
 @datatasks("information retrieval")
 @data()
-class Adhoc(): pass
+class Adhoc(Base): pass
