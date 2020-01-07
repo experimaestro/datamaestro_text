@@ -3,7 +3,7 @@
 
 from datamaestro.data import Base
 from datamaestro.download import Reference
-from datamaestro.download.single import filedownloader, ConcatDownload
+from datamaestro.download.single import filedownloader, concatdownload
 from datamaestro.download.links import Links
 from datamaestro.stream import TransformList
 from datamaestro.stream.compress import Gunzip
@@ -37,7 +37,7 @@ def trec1_documents(documents):
 def trec1_topics(topics):
   return { "path": topics, "parts": ["desc"] }
 
-@ConcatDownload(
+@concatdownload(
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
@@ -70,7 +70,7 @@ def trec1(documents, topics, assessments):
 def trec2_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload(
+@concatdownload(
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.101-150.disk1.disk2.parts1-5.tar.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
@@ -101,7 +101,7 @@ def trec2(documents, topics, assessments):
 def trec3_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload(
+@concatdownload(
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.151-200.201-250.disks1-3.all.tar.gz",
   transforms=TransformList(Gunzip(), Filter(r"^(1\d\d|200)\s"))
 )
@@ -142,7 +142,7 @@ def trec4_documents(documents):
 def trec4_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload(
+@concatdownload(
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.201-250.disk2.disk3.parts1-5.tar.gz"
 )
 @dataset(TrecAssessments, id="4.assessments")
@@ -183,7 +183,7 @@ def trec5_documents(documents):
 def trec5_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.251-300.parts1-5.tar.gz")
+@concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.251-300.parts1-5.tar.gz")
 @dataset(TrecAssessments, id="5.qrels")
 def trec5_assessments(assessments):
   return { "path": assessments }
@@ -217,7 +217,7 @@ def trec6_documents(documents):
 def trec6_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec6.adhoc.parts1-5.tar.gz")
+@concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec6.adhoc.parts1-5.tar.gz")
 @dataset(TrecAssessments, id="6.qrels")
 def trec6_assessments(assessments):
   return { "path": assessments }
@@ -251,7 +251,7 @@ def trec7_documents(documents):
 def trec7_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec7.adhoc.parts1-5.tar.gz")
+@concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec7.adhoc.parts1-5.tar.gz")
 @dataset(TrecAssessments, id="7.qrels")
 def trec7_assessments(assessments):
   return { "path": assessments }
@@ -274,7 +274,7 @@ def trec7(documents, topics, assessments):
 def trec8_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
-@ConcatDownload("assessments.qrels", url="https://trec.nist.gov/data/qrels_eng/qrels.trec8.adhoc.parts1-5.tar.gz")
+@concatdownload("assessments.qrels", url="https://trec.nist.gov/data/qrels_eng/qrels.trec8.adhoc.parts1-5.tar.gz")
 @dataset(TrecAssessments, id="8.qrels")
 def trec8_assessments(assessments):
   return { "path": assessments }
