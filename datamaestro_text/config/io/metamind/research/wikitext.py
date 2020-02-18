@@ -1,5 +1,12 @@
 from datamaestro.data import Base, File
-from datamaestro.definitions import data, argument, datatasks, datatags, dataset, metadataset
+from datamaestro.definitions import (
+    data,
+    argument,
+    datatasks,
+    datatags,
+    dataset,
+    metadataset,
+)
 from datamaestro.download.archive import zipdownloader
 from datamaestro_text.data.language import LanguageModelData
 
@@ -21,32 +28,45 @@ def WikiText(data, type):
     and numbers - all of which are removed in PTB. As it is composed of full
     articles, the dataset is well suited for models that can take advantage of long
     term dependencies.
-    
+
     https://blog.einstein.ai/the-wikitext-long-term-dependency-language-modeling-dataset/
     """
-    return { 
-        "train": File(path=data / ("wiki.train.%s" % type)), 
-        "validation": File(path=data / ("wiki.valid.%s" % type)), 
-        "test": File(path=data / ("wiki.test.%s" % type))
+    return {
+        "train": File(path=data / ("wiki.train.%s" % type)),
+        "validation": File(path=data / ("wiki.valid.%s" % type)),
+        "test": File(path=data / ("wiki.test.%s" % type)),
     }
 
-@zipdownloader("data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip")
+
+@zipdownloader(
+    "data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip"
+)
 @dataset(WikiText, id="2.tokens")
 def wikitext_2_words(data):
     return WikiText(data, "tokens")
 
-@zipdownloader("data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-raw-v1.zip")
+
+@zipdownloader(
+    "data",
+    "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-raw-v1.zip",
+)
 @dataset(WikiText, id="2.raw")
 def wikitext_2_raw(data):
     return WikiText(data, "raw")
 
 
-@zipdownloader("data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip")
+@zipdownloader(
+    "data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip"
+)
 @dataset(WikiText, id="103.tokens")
 def wikitext_103_words(data):
     return WikiText(data, "tokens")
 
-@zipdownloader("data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-raw-v1.zip")
+
+@zipdownloader(
+    "data",
+    "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-raw-v1.zip",
+)
 @dataset(WikiText, id="103.raw")
 def wikitext_103_raw(data):
     return WikiText(data, "raw")

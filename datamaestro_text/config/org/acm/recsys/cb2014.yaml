@@ -29,9 +29,8 @@ tags:
   - collaborative filtering
   - recommendation
 
-download: 
+download:
   handler: /archive:Zip
-  url: 
+  url:
     handler: /manual:DownloadPath
     name: cb2014.zip
-

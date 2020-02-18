@@ -2,6 +2,7 @@ from pathlib import Path
 from datamaestro.data import File, data, argument
 import numpy as np
 
+
 @argument("encoding", str, ignored=True, default="utf-8")
 @data(description="Word embeddings as a text word / values")
 class WordEmbeddingsText(File):

@@ -1,34 +1,34 @@
-# See documentation on http://experimaestro.github.io/datamaestro/
+# # See documentation on http://experimaestro.github.io/datamaestro/
 
-# Configuration
-# See http://experimaestro.github.io/datamaestro/configuration/
+# # Configuration
+# # See http://experimaestro.github.io/datamaestro/configuration/
 
-name: BookCorpus
-web: https://github.com/soskek/bookcorpus
+# name: BookCorpus
+# web: https://github.com/soskek/bookcorpus
 
-# Tags and tasks should be chosen by considering the datamaestro
-# repository practice
-tags: [ "text", "novels" ]
-tasks: [ "language model" ]
+# # Tags and tasks should be chosen by considering the datamaestro
+# # repository practice
+# tags: [ "text", "novels" ]
+# tasks: [ "language model" ]
 
 
-description: |
-  Books are a rich source of both fine-grained information, how a character, an
-  object or a scene looks like, as well as high-level semantics, what someone is
-  thinking, feeling and how these states evolve through a story. This work aims
-  to align books to their movie releases in order to provide rich descriptive
-  explanations for visual content that go semantically far beyond the captions
-  available in current datasets. To align movies and books we propose a neural
-  sentence embedding that is trained in an unsupervised way from a large corpus
-  of books, as well as a video-text neural embedding for computing similarities
-  between movie clips and sentences in the book. We propose a context-aware CNN
-  to combine information from multiple sources. We demonstrate good quantitative
-  performance for movie/book alignment and show several qualitative examples
-  that showcase the diversity of tasks our model can be used for.
+# description: |
+#   Books are a rich source of both fine-grained information, how a character, an
+#   object or a scene looks like, as well as high-level semantics, what someone is
+#   thinking, feeling and how these states evolve through a story. This work aims
+#   to align books to their movie releases in order to provide rich descriptive
+#   explanations for visual content that go semantically far beyond the captions
+#   available in current datasets. To align movies and books we propose a neural
+#   sentence embedding that is trained in an unsupervised way from a large corpus
+#   of books, as well as a video-text neural embedding for computing similarities
+#   between movie clips and sentences in the book. We propose a context-aware CNN
+#   to combine information from multiple sources. We demonstrate good quantitative
+#   performance for movie/book alignment and show several qualitative examples
+#   that showcase the diversity of tasks our model can be used for.
 
-# Describe how to download
-# See http://experimaestro.github.io/datamaestro/download/
+# # Describe how to download
+# # See http://experimaestro.github.io/datamaestro/download/
 
-download: !@/manual:DownloadPath
-  howto: Use the script in https://github.com/soskek/bookcorpus
-  name: BookCorpus
+# download: !@/manual:DownloadPath
+#   howto: Use the script in https://github.com/soskek/bookcorpus
+#   name: BookCorpus

@@ -3,13 +3,12 @@ url: https://www.microsoft.com/en-us/download/details.aspx?id=52419
 tasks:
   - Question Answering
 description: |
- The WikiQA corpus is a new publicly available set of question and sentence pairs, collected and annotated for research on open-domain question answering. 
+ The WikiQA corpus is a new publicly available set of question and sentence pairs, collected and annotated for research on open-domain question answering.
 date: 2015-08-28
 
-download: 
+download:
   handler: /archive:Zip
-  url: 
+  url:
     handler: /manual:DownloadPath
     url: https://www.microsoft.com/en-us/download/details.aspx?id=52419
     name: WikiQACorpus.zip
-

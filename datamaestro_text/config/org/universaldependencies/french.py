@@ -21,7 +21,10 @@ from datamaestro.download.archive import zipdownloader
 #   test: !@tagging:CoNLL_U
 #     path: fr_gsd-ud-test.conllu
 
-@zipdownloader("ds", "https://codeload.github.com/UniversalDependencies/UD_French-GSD/zip/master")
+
+@zipdownloader(
+    "ds", "https://codeload.github.com/UniversalDependencies/UD_French-GSD/zip/master"
+)
 @dataset(url="https://github.com/UniversalDependencies/UD_French-GSD")
 def gsd(ds) -> Supervised:
     """French GSD
@@ -35,6 +38,7 @@ def gsd(ds) -> Supervised:
         "test": CoNLL_U(path=ds / "fr_gsd-ud-dev.conllu"),
         "validation": CoNLL_U(path=ds / "fr_gsd-ud-test.conllu"),
     }
+
 
 # --- partut
 
@@ -67,6 +71,6 @@ def gsd(ds) -> Supervised:
 #   train: !@tagging:CoNLL_U
 #     path: fr_partut-ud-train.conllu
 #   dev: !@tagging:CoNLL_U
-#     path: fr_partut-ud-dev.conllu  
+#     path: fr_partut-ud-dev.conllu
 #   test: !@tagging:CoNLL_U
-#     path: fr_partut-ud-test.conllu  
+#     path: fr_partut-ud-test.conllu

@@ -1,29 +1,29 @@
-name: GoodBooks-10k
-url: http://fastml.com/goodbooks-10k
-data:
-  - item ratings
-  - book information
-  - tags
-tasks:
-  - recommendation
-  - collaborative filtering
-description: |
-  The dataset contains six million ratings for ten thousand most popular books (with most ratings). 
+# name: GoodBooks-10k
+# url: http://fastml.com/goodbooks-10k
+# data:
+#   - item ratings
+#   - book information
+#   - tags
+# tasks:
+#   - recommendation
+#   - collaborative filtering
+# description: |
+#   The dataset contains six million ratings for ten thousand most popular books (with most ratings).
 
-  - explicit ratings
-  - implicit feedback indicators (books marked to read)
-  - tabular data (book info)
-  - tags
+#   - explicit ratings
+#   - implicit feedback indicators (books marked to read)
+#   - tabular data (book info)
+#   - tags
 
-download: !@/multiple:List
-  books: !@/single:File 
-    url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/books.zip
-    description: Meta information on books (GoodReads ID, ISBN, authors)
-  book_tags: !@/single:File 
-    url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/book_tags.zip
-  tags: !@/single:File 
-    url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/tags.zip
-  ratings: !@/single:File
-    url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/ratings.zip
-  to_read: !@/single:File
-    url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/to_read.zip
+# download: !@/multiple:List
+#   books: !@/single:File
+#     url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/books.zip
+#     description: Meta information on books (GoodReads ID, ISBN, authors)
+#   book_tags: !@/single:File
+#     url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/book_tags.zip
+#   tags: !@/single:File
+#     url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/tags.zip
+#   ratings: !@/single:File
+#     url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/ratings.zip
+#   to_read: !@/single:File
+#     url: https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/to_read.zip

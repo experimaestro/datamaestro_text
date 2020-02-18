@@ -23,16 +23,16 @@ description: |
       documents.
 
       The two QAngaroo datasets provide a training and evaluation resource for such
-      methods. 
+      methods.
 
 # download:
 #   handler: [/googledrive, "/archive:Zip"]
 #   url: http://bit.ly/2m0W32k
 
 splits:
-  train: 
+  train:
     images: train/images/*.png
     labels: train/train.json
-  dev: 
+  dev:
     images: dev/images/*.png
     labels: dev/dev.json

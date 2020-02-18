@@ -6,9 +6,10 @@ from datamaestro.test import DatasetTests
 from datamaestro_text import Repository
 from datamaestro import Context
 
+
 class MainTest(DatasetTests, unittest.TestCase):
-    pass        
+    pass
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
-

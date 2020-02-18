@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/experimaestro/datamaestro_text.svg?style=svg)](https://circleci.com/gh/experimaestro/datamaestro) [![PyPI version](https://badge.fury.io/py/datamaestro-text.svg)](https://badge.fury.io/py/datamaestro-text)
+ [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit) [![CircleCI](https://circleci.com/gh/experimaestro/datamaestro_text.svg?style=svg)](https://circleci.com/gh/experimaestro/datamaestro)  [![PyPI version](https://badge.fury.io/py/datamaestro-text.svg)](https://badge.fury.io/py/datamaestro-text)
 
 # Text-related datasets
 

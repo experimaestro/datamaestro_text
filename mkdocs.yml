@@ -1,20 +1,19 @@
 # Configuration
 
 site_name: Text Datasets
-theme: readthedocs
 repo_url: https://github.com/bpiwowar/datamaestro_text
 
 # Main pages
 nav:
   - Home: index.md
-    
+
 
 # Automatic page generation for datasets
 plugins:
-  - datamaestro: 
+  - datamaestro:
         repository: text
   - search
-  
+
 # Theme
 theme:
     name: material
