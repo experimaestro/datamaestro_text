@@ -10,7 +10,7 @@ from datamaestro.stream.compress import Gunzip
 from datamaestro.stream.lines import Replace, Filter
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 
-from datamaestro_text.data.trec import TipsterCollection, TrecTopics, TrecAssessments
+from datamaestro_text.data.trec import TipsterCollection, TrecAdhocTopics, TrecAdhocAssessments
 from datamaestro_text.data.ir import Adhoc
 
 from .tipster import *
@@ -33,7 +33,7 @@ def trec1_documents(documents):
   "topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.51-100.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@dataset(TrecTopics, id="1.topics")
+@dataset(TrecAdhocTopics, id="1.topics")
 def trec1_topics(topics):
   return { "path": topics, "parts": ["desc"] }
 
@@ -41,7 +41,7 @@ def trec1_topics(topics):
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.51-100.disk1.disk2.parts1-5.tar.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@dataset(TrecAssessments, id="1.assessments")
+@dataset(TrecAdhocAssessments, id="1.assessments")
 def trec1_assessments(assessments):
   return { "path": assessments }
 
@@ -66,7 +66,7 @@ def trec1(documents, topics, assessments):
   "topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.101-150.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@dataset(TrecTopics, id="2.topics")
+@dataset(TrecAdhocTopics, id="2.topics")
 def trec2_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
@@ -74,7 +74,7 @@ def trec2_topics(topics):
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.101-150.disk1.disk2.parts1-5.tar.gz",
   transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1"))
 )
-@dataset(TrecAssessments, id="2.assessments")
+@dataset(TrecAdhocAssessments, id="2.assessments")
 def trec2_assessments(assessments):
   return { "path": assessments  }
 
@@ -97,7 +97,7 @@ def trec2(documents, topics, assessments):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.151-200.gz")
-@dataset(TrecTopics, id="3.topics")
+@dataset(TrecAdhocTopics, id="3.topics")
 def trec3_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
@@ -105,7 +105,7 @@ def trec3_topics(topics):
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.151-200.201-250.disks1-3.all.tar.gz",
   transforms=TransformList(Gunzip(), Filter(r"^(1\d\d|200)\s"))
 )
-@dataset(TrecAssessments, id="3.assessments")
+@dataset(TrecAdhocAssessments, id="3.assessments")
 def trec3_assessments(assessments):
   return { "path": assessments }
 
@@ -138,14 +138,14 @@ def trec4_documents(documents):
   return { "path": documents }
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.201-250.gz")
-@dataset(TrecTopics, id="4.topics")
+@dataset(TrecAdhocTopics, id="4.topics")
 def trec4_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @concatdownload(
   "assessments.qrels", "http://trec.nist.gov/data/qrels_eng/qrels.201-250.disk2.disk3.parts1-5.tar.gz"
 )
-@dataset(TrecAssessments, id="4.assessments")
+@dataset(TrecAdhocAssessments, id="4.assessments")
 def trec4_assessments(assessments):
   return { "path": assessments }
 
@@ -173,18 +173,18 @@ def trec4(documents, topics, assessments):
   wsj90=wsj90.path, wsj91=wsj91.path, wsj9=wsj92.path,
   ziff2=ziff2.path
 )
-@dataset(TipsterCollection, id="4.documents")
+@dataset(TipsterCollection, id="5.documents")
 def trec5_documents(documents):
   """TREC-5 documents"""
   return { "path": documents }
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.251-300.gz")
-@dataset(TrecTopics, id="5.topics")
+@dataset(TrecAdhocTopics, id="5.topics")
 def trec5_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.251-300.parts1-5.tar.gz")
-@dataset(TrecAssessments, id="5.qrels")
+@dataset(TrecAdhocAssessments, id="5.qrels")
 def trec5_assessments(assessments):
   return { "path": assessments }
 
@@ -207,18 +207,18 @@ def trec5(documents, topics, assessments):
   ft1=ft1.path,
   la8990=la8990.path
 )
-@dataset(TipsterCollection, id="4.documents")
+@dataset(TipsterCollection, id="6.documents")
 def trec6_documents(documents):
   """TREC-5 documents"""
   return { "path": documents }
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.301-350.gz")
-@dataset(TrecTopics, id="6.topics")
+@dataset(TrecAdhocTopics, id="6.topics")
 def trec6_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec6.adhoc.parts1-5.tar.gz")
-@dataset(TrecAssessments, id="6.qrels")
+@dataset(TrecAdhocAssessments, id="6.qrels")
 def trec6_assessments(assessments):
   return { "path": assessments }
 
@@ -240,19 +240,19 @@ def trec6(documents, topics, assessments):
   ft1=ft1.path,
   la8990=la8990.path
 )
-@dataset(TipsterCollection, id="4.documents")
+@dataset(TipsterCollection, id="7.documents")
 def trec7_documents(documents):
   """TREC-7 documents"""
   return { "path": documents }
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.351-400.gz")
-@dataset(TrecTopics, id="7.topics")
+@dataset(TrecAdhocTopics, id="7.topics")
 def trec7_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @concatdownload("assessments.qrels", url="http://trec.nist.gov/data/qrels_eng/qrels.trec7.adhoc.parts1-5.tar.gz")
-@dataset(TrecAssessments, id="7.qrels")
+@dataset(TrecAdhocAssessments, id="7.qrels")
 def trec7_assessments(assessments):
   return { "path": assessments }
 
@@ -270,12 +270,12 @@ def trec7(documents, topics, assessments):
 # --- TREC 8 (1999)
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.401-450.gz")
-@dataset(TrecTopics, id="8.topics")
+@dataset(TrecAdhocTopics, id="8.topics")
 def trec8_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @concatdownload("assessments.qrels", url="https://trec.nist.gov/data/qrels_eng/qrels.trec8.adhoc.parts1-5.tar.gz")
-@dataset(TrecAssessments, id="8.qrels")
+@dataset(TrecAdhocAssessments, id="8.qrels")
 def trec8_assessments(assessments):
   return { "path": assessments }
 
@@ -290,12 +290,12 @@ def trec8(documents, topics, assessments):
 # --- TREC Robust (2004)
 
 @filedownloader("topics", "http://trec.nist.gov/data/robust/04.testset.gz")
-@dataset(TrecTopics, id="robust.2004.topics")
+@dataset(TrecAdhocTopics, id="robust.2004.topics")
 def robust2004_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @filedownloader("assessments.qrels", "http://trec.nist.gov/data/robust/qrels.robust2004.txt")
-@dataset(TrecAssessments, id="robust.2004.qrels")
+@dataset(TrecAdhocAssessments, id="robust.2004.qrels")
 def robust2004_assessments(assessments):
   return { "path": assessments }
 
@@ -311,12 +311,12 @@ def robust2004(documents, topics, assessments):
 # --- TREC Robust (2005)
 
 @filedownloader("topics", "http://trec.nist.gov/data/robust/05/05.50.topics.txt")
-@dataset(TrecTopics, id="robust.2005.topics")
+@dataset(TrecAdhocTopics, id="robust.2005.topics")
 def robust2005_topics(topics):
   return { "path": topics, "parts": ["title", "desc"] }
 
 @filedownloader("assessments.qrels", url="http://trec.nist.gov/data/robust/05/TREC2005.qrels.txt")
-@dataset(TrecAssessments, id="robust.2005.qrels")
+@dataset(TrecAdhocAssessments, id="robust.2005.qrels")
 def robust2005_assessments(assessments):
   return { "path": assessments }
 

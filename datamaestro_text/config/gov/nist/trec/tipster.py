@@ -13,6 +13,8 @@ retrieval research groups, working on the same task as the TIPSTER groups, but m
 once a year in a workshop to compare results (similar to MUC). The test collection consists 
 of three CD-ROMs of SGML encoded documents distributed by LDC plus queries and answers 
 (relevant documents) distributed by NIST.
+
+See also https://trec.nist.gov/data/docs_eng.html and https://trec.nist.gov/data/intro_eng.html
 """
 
 from datamaestro.data import Base
@@ -22,26 +24,26 @@ from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 
 TIPSTER = dataset(TipsterCollection, url="https://catalog.ldc.upenn.edu/LDC93T3A")
 
-@linkfolder("documents", "AP88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/AP"])
 @TIPSTER
 def ap88(documents):
   """Associated Press document collection (1988)"""
   return { "path": documents }
 
-@linkfolder("documents", "AP89", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/AP"])
 @TIPSTER
 def ap89(documents):
   """Associated Press document collection (1989)"""
   return { "path": documents }
 
-@linkfolder("documents", "AP90", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/AP"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk3/AP"])
 @TIPSTER
 def ap90(documents):
   """Associated Press document collection (1990)"""
   return { "path": documents }
 
 
-@linkfolder("documents", "DOE1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/DOE"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/DOE"])
 @TIPSTER
 def doe1(documents):
   """Department of Energy documents"""
@@ -51,37 +53,37 @@ def doe1(documents):
 
 # --- Wall Street Journal (1987-92)
 
-@linkfolder("documents", "1987", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/WSJ/1987"])
 @TIPSTER
 def wsj87(documents):
   """Wall Street Journal (1987)"""
   return { "path": documents }
 
-@linkfolder("documents", "1988", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/WSJ/1988"])
 @TIPSTER
 def wsj88(documents):
   """Wall Street Journal (1988)"""
   return { "path": documents }
 
-@linkfolder("documents", "1989", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/WSJ/1989"])
 @TIPSTER
 def wsj89(documents):
   """Wall Street Journal (1989)"""
   return { "path": documents }
 
-@linkfolder("documents", "1990", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/WSJ/1990"])
 @TIPSTER
 def wsj90(documents):
   """Wall Street Journal (1990)"""
   return { "path": documents }
 
-@linkfolder("documents", "1991", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/WSJ/1991"])
 @TIPSTER
 def wsj91(documents):
   """Wall Street Journal (1991)"""
   return { "path": documents }
 
-@linkfolder("documents", "1992", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/WSJ"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/WSJ/1992"])
 @TIPSTER
 def wsj92(documents):
   """Wall Street Journal (1992)"""
@@ -91,19 +93,19 @@ def wsj92(documents):
 # --- Federal Register (1988-89)
 
 
-@linkfolder("documents", "FR88", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/FR"])
 @TIPSTER
 def fr88(documents):
   """Federal Register (1988)"""
   return { "path": documents }
 
-@linkfolder("documents", "FR89", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/FR"])
 @TIPSTER
 def fr89(documents):
   """Federal Register (1989)"""
   return { "path": documents }
 
-@linkfolder("documents", "FR94", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/FR"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk4/FR94"])
 @TIPSTER
 def fr94(documents):
   """Federal Register (1994)"""
@@ -113,56 +115,50 @@ def fr94(documents):
 # # ZIFF (1988-92)
 
 
-@linkfolder("documents", "ZIFF1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk1/ZIFF"])
 @TIPSTER
 def ziff1(documents):
-  """Ziff/Davis document collection"""
+  """Information from the Computer Select disks (1989-90)"""
   return { "path": documents }
 
-@linkfolder("documents", "ZIFF2", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk2/ZIFF"])
 @TIPSTER
 def ziff2(documents):
-  """ Ziff/Davis document collection (1989-90)"""
+  """Information from the Computer Select disks (1989-90)"""
   return { "path": documents }
 
-@linkfolder("documents", "ZIFF3", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/ZIFF"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk3/ZIFF"])
 @TIPSTER
 def ziff3(documents):
-  """ Ziff/Davis document collection (1991-92)"""
+  """Information from the Computer Select disks (1990-91)"""
   return { "path": documents }
 
-# # SJM1
 
-
-@linkfolder("documents", "SJM1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk3/SJM"])
 @TIPSTER
 def sjm1(documents):
   """San Jose Mercury News (1991)"""
   return { "path": documents }
 
-# # CR1
-@linkfolder("documents", "CR1", ["%TIPSTER_DATADIR%", "%TIPSTER_DATADIR%/SJM"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk4/CR"])
 @TIPSTER
 def cr1(documents):
   """TODO"""
   return { "path": documents }
 
-# # FT1
-@linkfolder("documents", "FT1", ["%TIPSTER_DATADIR%"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk4/FT"])
 @TIPSTER
 def ft1(documents):
   """Financial Times"""
   return { "path": documents }
 
-# # FBIS1
-@linkfolder("documents", "FBIS", ["%TIPSTER_DATADIR%"])
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk5/FBIS"])
 @TIPSTER
 def fbis1(documents):
-  """TODO"""
+  """Foreign Broadcast Information Service (1996)"""
   return { "path": documents }
-# ---
-# # FBIS1
-@linkfolder("documents", "LATIMES", ["%TIPSTER_DATADIR%"])
+
+@linkfolder("documents", ["{{gov.nist.trec.tipster}}/Disk5/LATIMES"])
 @TIPSTER
 def la8990(documents):
   """Los Angeles Times (1989-90)"""

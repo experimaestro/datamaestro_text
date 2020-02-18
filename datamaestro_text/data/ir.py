@@ -11,6 +11,9 @@ class AdhocTopics(Base): pass
 @data(description="IR assessments")
 class AdhocAssessments(Base): pass
 
+@data(description="IR adhoc results")
+class AdhocResults(Base): pass
+
 @argument("documents", type=AdhocDocuments)
 @argument("topics", type=AdhocTopics)
 @argument("assessments", type=AdhocAssessments)
