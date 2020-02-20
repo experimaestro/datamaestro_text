@@ -11,6 +11,6 @@ def aclimdb(data):
   Paper http://ai.stanford.edu/~amaas/papers/wvSent_acl2011.pdf
   """
     return {
-        "train": FolderBased(path=data / "train", classes=["pos", "neg"]),
-        "test": FolderBased(path=data / "test", classes=["pos", "neg"]),
+        "train": FolderBased(path=data / "train", classes=["neg", "pos"]),
+        "test": FolderBased(path=data / "test", classes=["neg", "pos"]),
     }
