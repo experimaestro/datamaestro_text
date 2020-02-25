@@ -27,6 +27,7 @@ from datamaestro_text.data.embeddings import WordEmbeddingsText
 @zipdownloader("embeddings", "http://nlp.stanford.edu/data/glove.6B.zip")
 @dataset(WordEmbeddingsText, id="6b")
 def glove_6b(embeddings):
+    """Embeddings for 6B words in various dimensions"""
     return {"path": embeddings}
 
 
@@ -62,7 +63,7 @@ def glove_6b_300(data_6b):
 
 
 @filedownloader("embeddings", "http://nlp.stanford.edu/data/glove.42B.300d.zip")
-@dataset(Generic, id="42b")
+@dataset(WordEmbeddingsText, id="42b")
 # size: 2.03G
 # statistics:
 #   cased: true
@@ -75,7 +76,7 @@ def glove_42b(embeddings):
 
 
 @filedownloader("embeddings", "http://nlp.stanford.edu/data/glove.840B.300d.zip")
-@dataset(Generic, id="840b")
+@dataset(WordEmbeddingsText, id="840b")
 # size: 2.03G
 # statistics:
 #   cased: true

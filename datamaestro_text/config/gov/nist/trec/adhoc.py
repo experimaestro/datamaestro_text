@@ -1,4 +1,6 @@
 """TREC AD-HOC datasets and tasks
+
+https://trec.nist.gov/data/test_coll.html
 """
 
 from datamaestro.data import Base
@@ -50,7 +52,7 @@ def trec1_documents(documents):
     "http://trec.nist.gov/data/topics_eng/topics.51-100.gz",
     transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1")),
 )
-@dataset(TrecAdhocTopics, id="1.topics")
+@dataset(TrecAdhocTopics, id="1.topics", url="")
 def trec1_topics(topics):
     return {"path": topics, "parts": ["desc"]}
 

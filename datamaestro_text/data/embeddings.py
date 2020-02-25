@@ -1,8 +1,10 @@
 from pathlib import Path
 from datamaestro.data import File, data, argument
+from datamaestro.definitions import datatags
 import numpy as np
 
 
+@datatags("word embeddings")
 @argument("encoding", str, ignored=True, default="utf-8")
 @data(description="Word embeddings as a text word / values")
 class WordEmbeddingsText(File):
