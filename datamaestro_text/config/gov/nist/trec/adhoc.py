@@ -4,9 +4,9 @@ https://trec.nist.gov/data/test_coll.html
 """
 
 from datamaestro.data import Base
-from datamaestro.download import Reference
+from datamaestro.download import reference
 from datamaestro.download.single import filedownloader, concatdownload
-from datamaestro.download.links import Links
+from datamaestro.download.links import links
 from datamaestro.stream import TransformList
 from datamaestro.stream.compress import Gunzip
 from datamaestro.stream.lines import Replace, Filter
@@ -26,7 +26,7 @@ from datamaestro_text.config.edu.upenn.ldc.aquaint import aquaint
 # --- TREC 1 (1992)
 
 
-@Links(
+@links(
     "documents",
     ap88=ap88.path,
     ap89=ap89.path,
@@ -67,9 +67,9 @@ def trec1_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec1_documents)
-@Reference("topics", trec1_topics)
-@Reference("assessments", trec1_assessments)
+@reference("documents", trec1_documents)
+@reference("topics", trec1_topics)
+@reference("assessments", trec1_assessments)
 @dataset(Adhoc, id="1")
 def trec1(documents, topics, assessments):
     "Ad-hoc task of TREC 1 (1992)"
@@ -99,9 +99,9 @@ def trec2_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec1_documents)
-@Reference("topics", trec2_topics)
-@Reference("assessments", trec2_assessments)
+@reference("documents", trec1_documents)
+@reference("topics", trec2_topics)
+@reference("assessments", trec2_assessments)
 @dataset(Adhoc, id="2")
 def trec2(documents, topics, assessments):
     "Ad-hoc task of TREC 2 (1993)"
@@ -127,9 +127,9 @@ def trec3_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec1_documents)
-@Reference("topics", trec3_topics)
-@Reference("assessments", trec3_assessments)
+@reference("documents", trec1_documents)
+@reference("topics", trec3_topics)
+@reference("assessments", trec3_assessments)
 @dataset(Adhoc, id="3")
 def trec3(documents, topics, assessments):
     "Ad-hoc task of TREC 3 (1994)"
@@ -139,7 +139,7 @@ def trec3(documents, topics, assessments):
 # --- TREC 4 (1995)
 
 
-@Links(
+@links(
     "documents",
     ap88=ap88.path,
     ap89=ap89.path,
@@ -173,9 +173,9 @@ def trec4_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec4_documents)
-@Reference("topics", trec4_topics)
-@Reference("assessments", trec4_assessments)
+@reference("documents", trec4_documents)
+@reference("topics", trec4_topics)
+@reference("assessments", trec4_assessments)
 @dataset(Adhoc, id="4")
 def trec4(documents, topics, assessments):
     "Ad-hoc task of TREC 4 (1995)"
@@ -185,7 +185,7 @@ def trec4(documents, topics, assessments):
 # --- TREC 5 (1995)
 
 
-@Links(
+@links(
     "documents",
     ap88=ap88.path,
     cr1=cr1.path,
@@ -218,9 +218,9 @@ def trec5_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec5_documents)
-@Reference("topics", trec5_topics)
-@Reference("assessments", trec5_assessments)
+@reference("documents", trec5_documents)
+@reference("topics", trec5_topics)
+@reference("assessments", trec5_assessments)
 @dataset(Adhoc, id="5")
 def trec5(documents, topics, assessments):
     "Ad-hoc task of TREC 5 (1996)"
@@ -230,7 +230,7 @@ def trec5(documents, topics, assessments):
 # -- TREC 6 (1997)
 
 
-@Links(
+@links(
     "documents",
     cr1=cr1.path,
     fbis1=fbis1.path,
@@ -259,9 +259,9 @@ def trec6_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec6_documents)
-@Reference("topics", trec6_topics)
-@Reference("assessments", trec6_assessments)
+@reference("documents", trec6_documents)
+@reference("topics", trec6_topics)
+@reference("assessments", trec6_assessments)
 @dataset(Adhoc, id="6")
 def trec6(documents, topics, assessments):
     "Ad-hoc task of TREC 6 (1997)"
@@ -271,7 +271,7 @@ def trec6(documents, topics, assessments):
 # --- TREC 7 (1998)
 
 
-@Links("documents", fbis1=fbis1.path, fr94=fr94.path, ft1=ft1.path, la8990=la8990.path)
+@links("documents", fbis1=fbis1.path, fr94=fr94.path, ft1=ft1.path, la8990=la8990.path)
 @dataset(TipsterCollection, id="7.documents")
 def trec7_documents(documents):
     """TREC-7 documents"""
@@ -293,9 +293,9 @@ def trec7_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec7_documents)
-@Reference("topics", trec7_topics)
-@Reference("assessments", trec7_assessments)
+@reference("documents", trec7_documents)
+@reference("topics", trec7_topics)
+@reference("assessments", trec7_assessments)
 @dataset(Adhoc, id="7")
 def trec7(documents, topics, assessments):
     "Ad-hoc task of TREC 3 (1994)"
@@ -320,9 +320,9 @@ def trec8_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec7_documents)
-@Reference("topics", trec8_topics)
-@Reference("assessments", trec8_assessments)
+@reference("documents", trec7_documents)
+@reference("topics", trec8_topics)
+@reference("assessments", trec8_assessments)
 @dataset(Adhoc, id="8")
 def trec8(documents, topics, assessments):
     "Ad-hoc task of TREC 8 (1999)"
@@ -346,9 +346,9 @@ def robust2004_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", trec7_documents)
-@Reference("topics", robust2004_topics)
-@Reference("assessments", robust2004_assessments)
+@reference("documents", trec7_documents)
+@reference("topics", robust2004_topics)
+@reference("assessments", robust2004_assessments)
 @dataset(Adhoc, id="robust.2004")
 def robust2004(documents, topics, assessments):
     "Ad-hoc task of TREC Robust (2004)"
@@ -372,9 +372,9 @@ def robust2005_assessments(assessments):
     return {"path": assessments}
 
 
-@Reference("documents", aquaint)
-@Reference("topics", robust2005_topics)
-@Reference("assessments", robust2005_assessments)
+@reference("documents", aquaint)
+@reference("topics", robust2005_topics)
+@reference("assessments", robust2005_assessments)
 @dataset(Adhoc, id="robust.2005")
 def robust2005(documents, topics, assessments):
     "Ad-hoc task of TREC Robust (2005)"

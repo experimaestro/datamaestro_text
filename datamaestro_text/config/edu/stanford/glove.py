@@ -14,7 +14,7 @@ GloVe is an unsupervised learning algorithm for obtaining vector representations
 
 from datamaestro.definitions import dataset
 from datamaestro.data import Base, Generic
-from datamaestro.download import Reference
+from datamaestro.download import reference
 from datamaestro.download.archive import zipdownloader
 from datamaestro.download.single import filedownloader
 from datamaestro_text.data.embeddings import WordEmbeddingsText
@@ -31,21 +31,21 @@ def glove_6b(embeddings):
     return {"path": embeddings}
 
 
-@Reference("data_6b", glove_6b)
+@reference("data_6b", glove_6b)
 @dataset(WordEmbeddingsText, id="6b.50")
 def glove_6b_50(data_6b):
     """Glove 6B - dimension 50"""
     return {"path": data_6b.path / "glove.6B.50d.txt"}
 
 
-@Reference("data_6b", glove_6b)
+@reference("data_6b", glove_6b)
 @dataset(WordEmbeddingsText, id="6b.100")
 def glove_6b_100(data_6b):
     """Glove 6B - dimension 100"""
     return {"path": data_6b.path / "glove.6B.100d.txt"}
 
 
-@Reference("data_6b", glove_6b)
+@reference("data_6b", glove_6b)
 @dataset(WordEmbeddingsText, id="6b.200")
 def glove_6b_200(data_6b):
     """Glove 6B - dimension 200"""
@@ -55,7 +55,7 @@ def glove_6b_200(data_6b):
 ...
 
 
-@Reference("data_6b", glove_6b)
+@reference("data_6b", glove_6b)
 @dataset(WordEmbeddingsText, id="6b.300")
 def glove_6b_300(data_6b):
     """Glove 6B - dimension 200"""

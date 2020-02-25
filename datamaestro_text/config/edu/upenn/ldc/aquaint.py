@@ -5,7 +5,7 @@ from datamaestro.data import Base
 from datamaestro_text.data.trec import TipsterCollection
 from datamaestro.download.manual import linkfolder
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
-from datamaestro.download.links import Links
+from datamaestro.download.links import links
 
 
 URL = "https://catalog.ldc.upenn.edu/LDC2002T31"
@@ -32,7 +32,7 @@ def xie(documents):
     return {"path": documents}
 
 
-@Links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
+@links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
 @dataset(TipsterCollection, url=URL, id="")
 def aquaint(documents):
     """Aquaint dataset"""
