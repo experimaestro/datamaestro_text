@@ -3,9 +3,8 @@
 from datamaestro.definitions import DatafolderPath
 from datamaestro.data import Base
 from datamaestro_text.data.trec import TipsterCollection
-from datamaestro.download.manual import linkfolder
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
-from datamaestro.download.links import links
+from datamaestro.download.links import links, linkfolder
 
 
 URL = "https://catalog.ldc.upenn.edu/LDC2002T31"
