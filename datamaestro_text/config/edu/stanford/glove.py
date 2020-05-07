@@ -3,14 +3,6 @@ GloVe is an unsupervised learning algorithm for obtaining vector representations
   Training is performed on aggregated global word-word co-occurrence statistics from a corpus,
   and the resulting representations showcase interesting linear substructures of the word vector space.
 """
-# website: http://nlp.stanford.edu/projects/glove/
-# license: Public Domain Dedication and License
-# abtract: True
-# tags:
-#   - word embeddings
-# papers:
-#   technical description: http://nlp.stanford.edu/pubs/glove.pdf
-# description: |
 
 from datamaestro.definitions import dataset
 from datamaestro.data import Base, Generic
