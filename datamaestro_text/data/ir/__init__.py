@@ -1,3 +1,5 @@
+"""Generic data types for information retrieval"""
+
 from pathlib import Path
 from datamaestro.definitions import data, argument, datatasks, datatags
 from datamaestro.data import Base
@@ -12,14 +14,13 @@ class AdhocDocuments(Base):
 class AdhocTopics(Base):
     pass
 
-
 @data(description="IR assessments")
 class AdhocAssessments(Base):
     pass
 
 
-@data(description="IR adhoc results")
-class AdhocResults(Base):
+@data(description="IR adhoc run")
+class AdhocRun(Base):
     pass
 
 
@@ -27,6 +28,11 @@ class AdhocResults(Base):
 @argument("topics", type=AdhocTopics)
 @argument("assessments", type=AdhocAssessments)
 @datatasks("information retrieval")
-@data()
+@data(description="An Adhoc IR collection")
 class Adhoc(Base):
+    pass
+
+@argument("run", type=AdhocRun)
+@data(description="Re-ranking task")
+class RerankAdhoc(Adhoc):
     pass

@@ -18,7 +18,7 @@ See also https://trec.nist.gov/data/docs_eng.html and https://trec.nist.gov/data
 """
 
 from datamaestro.data import Base
-from datamaestro_text.data.trec import TipsterCollection
+from datamaestro_text.data.ir.trec import TipsterCollection
 from datamaestro.download.links import linkfolder
 from datamaestro.definitions import (
     data,

@@ -12,7 +12,7 @@ from datamaestro.stream.compress import Gunzip
 from datamaestro.stream.lines import Replace, Filter
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 
-from datamaestro_text.data.trec import (
+from datamaestro_text.data.ir.trec import (
     TipsterCollection,
     TrecAdhocTopics,
     TrecAdhocAssessments,

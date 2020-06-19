@@ -1,8 +1,9 @@
+from typing import List
 from datamaestro.definitions import argument, data
 from experimaestro import Any
 from datamaestro.data import Base
 from pathlib import Path
-from .ir import AdhocDocuments, AdhocTopics, AdhocAssessments, AdhocResults
+from datamaestro_text.data.ir import AdhocDocuments, AdhocTopics, AdhocAssessments, AdhocRun
 
 
 @argument("path", type=Path)
@@ -20,11 +21,15 @@ class TrecAdhocAssessments(AdhocAssessments):
 
 @argument("path", type=Path)
 @data()
-class TrecAdhocResults(AdhocResults):
+class TrecAdhocRun(AdhocRun):
     pass
 
-
-# --- Document collections
+@argument("measures", required=False, type=List[str], help="List of reported metrics (None if all from trec_eval)")
+@argument("aggregated", type=Path, help="Main results")
+@argument("detailed", type=Path, required=False, help="Results per topic (if any)")
+@data()
+class TrecAdhocResults():
+    pass
 
 
 @argument("path", type=Path)
