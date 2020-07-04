@@ -24,8 +24,8 @@ class TrecAdhocAssessments(AdhocAssessments):
 class TrecAdhocRun(AdhocRun):
     pass
 
-@argument("measures", required=False, type=List[str], help="List of reported metrics (None if all from trec_eval)")
-@argument("aggregated", type=Path, help="Main results")
+@argument("metrics", required=False, type=List[str], help="List of reported metrics (None if all from trec_eval)")
+@argument("results", type=Path, help="Main results")
 @argument("detailed", type=Path, required=False, help="Results per topic (if any)")
 @data()
 class TrecAdhocResults():
