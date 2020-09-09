@@ -6,7 +6,7 @@ import datamaestro_text.data.ir as ir
 @argument("path", type=Path)
 @argument("separator", type=str, default="\t", ignored=True)
 @data(description="(qid, doc.id, query, passage)")
-class AdhocRunWithText(ir.AdhocTopics): 
+class AdhocRunWithText(ir.AdhocRun): 
     pass
 
 @argument("path", type=Path)
@@ -19,5 +19,5 @@ class AdhocTopics(ir.AdhocTopics):
 @argument("path", type=Path)
 @argument("separator", type=str, default="\t", ignored=True)
 @data(description="One line per document, format pid<SEP>text")
-class AdhocDocuments(ir.AdhocTopics): 
+class AdhocDocuments(ir.AdhocDocuments): 
     pass
