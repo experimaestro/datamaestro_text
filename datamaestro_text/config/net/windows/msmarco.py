@@ -52,9 +52,9 @@ def collection(collection):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.train.tar.gz",
     checker=HashCheck("d99fdbd5b2ea84af8aa23194a3263052", md5),
 )
-@dataset(AdhocRun)
-def train_run(queries):
-    return {"path": queries / "top1000.train.tsv"}
+@dataset(AdhocRunWithText)
+def train_run(run):
+    return {"path": run / "top1000.train.tsv"}
 
 
 @lua
@@ -101,7 +101,7 @@ def train(topics, qrels, collection):
 @dataset(RerankAdhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def train_withrun(train, run):
     """MSMarco train dataset, including the top-1000 to documents to re-rank"""
-    return {**train, "run": run}
+    return {**train.__arguments__(), "run": run}
 
 
 # --- Development
@@ -125,9 +125,9 @@ def dev_queries(queries):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.dev.tar.gz",
     checker=HashCheck("8c140662bdf123a98fbfe3bb174c5831", md5),
 )
-@dataset(AdhocRun)
+@dataset(AdhocRunWithText)
 def dev_run(run):
-    return {"path": queries / "top1000.eval.tsv"}
+    return {"path": run / "top1000.eval.tsv"}
 
 
 @lua
@@ -156,13 +156,13 @@ def dev(topics, qrels, collection):
 
 
 @lua
-@reference("train", dev)
+@reference("dev", dev)
 @reference("run", dev_run)
 @datatasks("information retrieval", "passage retrieval")
 @dataset(RerankAdhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def dev_withrun(dev, run):
     """MSMarco dev dataset, including the top-1000 to documents to re-rank"""
-    return {**dev, "run": run}
+    return {**dev.__arguments__(), "run": run}
 
 
 # --- Test (eval): there is no (as for now) test assessments
@@ -186,9 +186,9 @@ def eval_queries(queries):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.eval.tar.gz",
     checker=HashCheck("73778cd99f6e0632d12d0b5731b20a02", md5),
 )
-@dataset(AdhocRun)
+@dataset(AdhocRunWithText)
 def eval_withrun(run):
-    return {"path": queries / "top1000.eval.tsv"}
+    return {"path": run / "top1000.eval.tsv"}
 
 
 # --- TREC 2019
@@ -211,9 +211,9 @@ def trec2019_test_queries(queries):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-passagetest2019-top1000.tsv.gz",
     checker=HashCheck("ec9e012746aa9763c7ff10b3336a3ce1", md5),
 )
-@dataset(AdhocRun)
+@dataset(AdhocRunWithText)
 def trec2019_test_run(run):
-    return {"path": queries / "top1000.eval.tsv"}
+    return {"path": run / "top1000.eval.tsv"}
 
 
 @lua
@@ -242,10 +242,10 @@ def trec2019_test(topics, qrels, collection):
 
 
 @lua
-@reference("train", dev)
+@reference("trec2019", trec2019_test)
 @reference("run", trec2019_test_run)
 @datatasks("information retrieval", "passage retrieval")
 @dataset(RerankAdhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
-def trec2019_test_withrun(dev, run):
+def trec2019_test_withrun(trec2019, run):
     """MSMarco dev dataset, including the top-1000 to documents to re-rank"""
-    return {**dev, "run": run}
+    return {**trec2019.__arguments__(), "run": run}
