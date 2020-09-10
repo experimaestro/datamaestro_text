@@ -17,6 +17,8 @@ from datamaestro.download.archive import tardownloader
 from datamaestro_text.data.ir import RerankAdhoc, Adhoc, AdhocRun
 from datamaestro_text.data.ir.csv import AdhocTopics, AdhocRunWithText, AdhocDocuments
 from datamaestro_text.data.ir.trec import TrecAdhocAssessments
+from datamaestro.utils import HashCheck
+from hashlib import md5
 
 
 lua = useragreement(
@@ -33,6 +35,7 @@ http://www.msmarco.org/dataset.aspx""",
 @tardownloader(
     "collection",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/collection.tar.gz",
+    checker=HashCheck("87dd01826da3e2ad45447ba5af577628", md5),
 )
 @dataset(AdhocDocuments, size="2.9GB")
 def collection(collection):
@@ -47,6 +50,7 @@ def collection(collection):
 @tardownloader(
     "run",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.train.tar.gz",
+    checker=HashCheck("d99fdbd5b2ea84af8aa23194a3263052", md5),
 )
 @dataset(AdhocRun)
 def train_run(queries):
@@ -58,6 +62,7 @@ def train_run(queries):
     "queries",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/queries.tar.gz",
     files=["queries.train.tsv"],
+    checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
 )
 @dataset(AdhocTopics)
 def train_queries(queries):
@@ -68,6 +73,7 @@ def train_queries(queries):
 @filedownloader(
     "qrels.tsv",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/qrels.train.tsv",
+    checker=HashCheck("733fb9fe12d93e497f7289409316eccf", md5),
 )
 @dataset(TrecAdhocAssessments, size="10.1MB")
 def train_qrels(qrels):
@@ -106,6 +112,7 @@ def train_withrun(train, run):
     "queries",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/queries.tar.gz",
     files=["queries.dev.tsv"],
+    checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
 )
 @dataset(AdhocTopics)
 def dev_queries(queries):
@@ -114,7 +121,9 @@ def dev_queries(queries):
 
 @lua
 @tardownloader(
-    "run", url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.dev.tar.gz"
+    "run",
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.dev.tar.gz",
+    checker=HashCheck("8c140662bdf123a98fbfe3bb174c5831", md5),
 )
 @dataset(AdhocRun)
 def dev_run(run):
@@ -125,6 +134,7 @@ def dev_run(run):
 @filedownloader(
     "qrels.tsv",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/qrels.dev.tsv",
+    checker=HashCheck("9157ccaeaa8227f91722ba5770787b16", md5),
 )
 @dataset(TrecAdhocAssessments)
 def dev_qrels(qrels):
@@ -163,9 +173,10 @@ def dev_withrun(dev, run):
     "queries",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/queries.tar.gz",
     files=["queries.eval.tsv"],
+    checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
 )
 @dataset(AdhocTopics)
-def queries_eval(queries):
+def eval_queries(queries):
     return {"path": queries / "queries.val.tsv"}
 
 
@@ -173,9 +184,10 @@ def queries_eval(queries):
 @tardownloader(
     "run",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.eval.tar.gz",
+    checker=HashCheck("73778cd99f6e0632d12d0b5731b20a02", md5),
 )
 @dataset(AdhocRun)
-def run_eval(run):
+def eval_withrun(run):
     return {"path": queries / "top1000.eval.tsv"}
 
 
@@ -186,6 +198,7 @@ def run_eval(run):
 @filedownloader(
     "queries.tsv",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-test2019-queries.tsv.gz",
+    checker=HashCheck("756e60d714cee28d3b552289d6272f1d", md5),
 )
 @dataset(AdhocTopics)
 def trec2019_test_queries(queries):
@@ -196,6 +209,7 @@ def trec2019_test_queries(queries):
 @filedownloader(
     "run.tsv",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-passagetest2019-top1000.tsv.gz",
+    checker=HashCheck("ec9e012746aa9763c7ff10b3336a3ce1", md5),
 )
 @dataset(AdhocRun)
 def trec2019_test_run(run):
@@ -203,7 +217,11 @@ def trec2019_test_run(run):
 
 
 @lua
-@filedownloader("qrels.tsv", url="https://trec.nist.gov/data/deep/2019qrels-pass.txt")
+@filedownloader(
+    "qrels.tsv",
+    url="https://trec.nist.gov/data/deep/2019qrels-pass.txt",
+    checker=HashCheck("2f4be390198da108f6845c822e5ada14", md5),
+)
 @dataset(TrecAdhocAssessments)
 def trec2019_test_qrels(qrels):
     return {"path": qrels}
