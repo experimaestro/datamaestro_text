@@ -1,1 +1,1 @@
-datamaestro>=0.6.18
+datamaestro>=0.6.19
