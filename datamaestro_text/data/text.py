@@ -1,5 +1,5 @@
 from pathlib import Path
-from datamaestro.data import Base, Folder, data, argument
+from datamaestro.data import Base, Folder, File, data, argument
 from datamaestro.data.ml import Supervised
 
 
@@ -13,4 +13,9 @@ class TrainingText(Supervised):
 
 @data("A folder composed of texts")
 class TextFolder(Folder):
+    pass
+
+
+@data("A file composed of texts")
+class TextFile(File):
     pass
