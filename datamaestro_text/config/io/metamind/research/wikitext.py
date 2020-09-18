@@ -8,12 +8,12 @@ from datamaestro.definitions import (
     metadataset,
 )
 from datamaestro.download.archive import zipdownloader
-from datamaestro_text.data.language import LanguageModelData
+from datamaestro_text.data.text import TrainingText
 
 
 @datatags("text")
 @datatasks("language modeling")
-@metadataset(LanguageModelData)
+@metadataset(TrainingText)
 def WikiText(data, type):
     """WikiText-2
 
