@@ -15,6 +15,8 @@ from datamaestro.utils import HashCheck
 def english(file):
     """Huge French corpus from INRIA
 
-  OSCAR or Open Super-large Crawled ALMAnaCH coRpus is a huge multilingual corpus obtained by language classification and filtering of the Common Crawl corpus using the goclassy architecture.
+  OSCAR or Open Super-large Crawled ALMAnaCH coRpus is a huge multilingual corpus
+  obtained by language classification and filtering of the Common Crawl corpus using
+  the goclassy architecture.
   """
     return {"path": file}
