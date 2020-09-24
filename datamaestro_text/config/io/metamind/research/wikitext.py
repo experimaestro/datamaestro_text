@@ -43,6 +43,7 @@ def WikiText(data, type):
 )
 @dataset(WikiText, id="2.tokens")
 def wikitext_2_words(data):
+    """The small wikitext corpus, already tokenized"""
     return WikiText(data, "tokens")
 
 
@@ -52,6 +53,7 @@ def wikitext_2_words(data):
 )
 @dataset(WikiText, id="2.raw")
 def wikitext_2_raw(data):
+    """The small wikitext corpus (raw data)"""
     return WikiText(data, "raw")
 
 
