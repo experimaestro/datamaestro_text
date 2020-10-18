@@ -4,9 +4,12 @@ from datamaestro.definitions import datatags
 import numpy as np
 from typing import Tuple, List
 
+
 @datatags("word embeddings")
 @data(description="Generic class for word embeddings")
 class WordEmbeddings:
+    """Generic word embeddings"""
+
     def load(self) -> Tuple[List[str], np.matrix]:
         """Load the word embeddings
 
@@ -15,9 +18,12 @@ class WordEmbeddings:
         """
         raise NotImplementedError()
 
+
 @argument("encoding", str, ignored=True, default="utf-8")
 @data(description="Word embeddings as a text word / values")
 class WordEmbeddingsText(WordEmbeddings, File):
+    """Word embeddings"""
+
     def load(self):
         words = []
         vectors = []
