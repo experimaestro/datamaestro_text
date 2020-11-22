@@ -1,9 +1,10 @@
 import logging
 from datamaestro.data import File, data
-
+from experimaestro import configmethod
 
 @data()
 class CoNLL_U(File):
+    @configmethod
     def data(self):
         try:
             from conllu import parse
@@ -14,6 +15,7 @@ class CoNLL_U(File):
         with self.path.open("r", encoding="utf-8") as data_file:
             return parse(data_file.read())
 
+    @configmethod
     def __iter__(self):
         try:
             from conllu import parse_incr
