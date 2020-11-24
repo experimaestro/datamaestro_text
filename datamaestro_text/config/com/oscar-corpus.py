@@ -1,5 +1,3 @@
-# See documentation on http://experimaestro.github.io/datamaestro/
-
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 from datamaestro.download.single import filedownloader
 from datamaestro_text.data.text import TextFile
