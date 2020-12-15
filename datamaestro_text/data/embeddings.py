@@ -1,5 +1,5 @@
 from pathlib import Path
-from datamaestro.data import File, data, argument
+from datamaestro.data import File, data, argument, configmethod
 from datamaestro.definitions import datatags
 import numpy as np
 from typing import Tuple, List
@@ -24,6 +24,7 @@ class WordEmbeddings:
 class WordEmbeddingsText(WordEmbeddings, File):
     """Word embeddings"""
 
+    @configmethod
     def load(self):
         words = []
         vectors = []
