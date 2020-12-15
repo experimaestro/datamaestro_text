@@ -24,7 +24,6 @@ class WordEmbeddings:
 class WordEmbeddingsText(WordEmbeddings, File):
     """Word embeddings"""
 
-    @configmethod
     def load(self):
         words = []
         vectors = []
