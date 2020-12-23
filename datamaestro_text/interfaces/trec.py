@@ -33,10 +33,10 @@ def parse_qrels(path: Path):
 
 
 class Topic(NamedTuple):
-    num: str
+    qid: str
     title: str
-    desc: str
-    narr: str
+    description: str
+    narrative: str
 
 
 def cleanup(s: Optional[str]):

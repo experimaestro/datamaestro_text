@@ -6,13 +6,16 @@
 
 ## Information Retrieval
 
-@@api:datamaestro_text.data.ir
-
-## CSV formats (MS Marco)
-
 @@api:datamaestro_text.data.ir.AdhocRunWithText
 @@api:datamaestro_text.data.ir.AdhocTopics
 @@api:datamaestro_text.data.ir.AdhocDocuments
+
+## CSV formats (MS Marco)
+
+@@api:datamaestro_text.data.ir.csv.AdhocRunWithText
+@@api:datamaestro_text.data.ir.csv.AdhocTopics
+@@api:datamaestro_text.data.ir.csv.AdhocDocuments
+
 
 ## TREC (SGML)
 

@@ -12,11 +12,16 @@ class AdhocDocuments(Base):
 
 @data(description="IR topics")
 class AdhocTopics(Base):
-    pass
+    def iter(self):
+        """Returns an iterator over topics"""
+        raise NotImplementedError()
+
 
 @data(description="IR assessments")
 class AdhocAssessments(Base):
-    pass
+    def iter(self):
+        """Returns an iterator over assessments"""
+        raise NotImplementedError()
 
 
 @data(description="IR adhoc run")
@@ -31,6 +36,7 @@ class AdhocRun(Base):
 @data(description="An Adhoc IR collection")
 class Adhoc(Base):
     pass
+
 
 @argument("run", type=AdhocRun)
 @data(description="Re-ranking task")
