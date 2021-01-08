@@ -24,7 +24,7 @@ def parse_qrels(path: Path):
                     yield AssessedTopic(_qid, assessments)
                 _qid = qid
                 assessments = []
-            assessments.append(Assessment(docno, float(rel)))
+            assessments.append(Assessment(docno, int(rel)))
 
         yield AssessedTopic(_qid, assessments)
 
