@@ -25,6 +25,9 @@ class TrecAdhocTopics(AdhocTopics):
 @argument("path", type=Path)
 @data()
 class TrecAdhocAssessments(AdhocAssessments):
+    def trecpath(self):
+        return self.path
+
     def iter(self):
         """Iterate over TREC adhoc topics"""
         import datamaestro_text.interfaces.trec as trec

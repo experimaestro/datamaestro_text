@@ -1,5 +1,8 @@
 from pathlib import Path
 from typing import List, NamedTuple, Optional
+import re
+
+# --- Assessments
 
 
 class Assessment(NamedTuple):
@@ -18,7 +21,7 @@ def parse_qrels(path: Path):
         assessments = None
 
         for line in fp:
-            qid, _, docno, rel = line.strip().split(" ")
+            qid, _, docno, rel = re.split(r"\s+", line.strip())
             if qid != _qid:
                 if _qid is not None:
                     yield AssessedTopic(_qid, assessments)
