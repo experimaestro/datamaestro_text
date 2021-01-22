@@ -42,3 +42,10 @@ class Adhoc(Base):
 @data(description="Re-ranking task")
 class RerankAdhoc(Adhoc):
     pass
+
+
+@data(
+    description="Triplet for training IR systems: query, positive document, negative document"
+)
+class TrainingTriplets(Base):
+    pass

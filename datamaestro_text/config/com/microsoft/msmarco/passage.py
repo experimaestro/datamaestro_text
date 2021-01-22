@@ -15,12 +15,19 @@ from datamaestro.download import reference
 from datamaestro.definitions import data, argument, datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
 from datamaestro_text.data.ir import RerankAdhoc, Adhoc, AdhocRun
-from datamaestro_text.data.ir.csv import AdhocTopics, AdhocRunWithText, AdhocDocuments
+from datamaestro_text.data.ir.csv import (
+    AdhocTopics,
+    AdhocRunWithText,
+    AdhocDocuments,
+    TrainingTriplets,
+    TrainingTripletsID,
+)
 from datamaestro_text.data.ir.trec import TrecAdhocAssessments
 from datamaestro.utils import HashCheck
 from hashlib import md5
 
 
+# User agreement
 lua = useragreement(
     """Will begin downloading MS-MARCO dataset.
 Please confirm you agree to the authors' data usage stipulations found at
@@ -28,7 +35,7 @@ http://www.msmarco.org/dataset.aspx""",
     id="net.windows.msmarco",
 )
 
-# --- Document collections
+# --- Document collection
 
 
 @lua
@@ -39,7 +46,9 @@ http://www.msmarco.org/dataset.aspx""",
 )
 @dataset(AdhocDocuments, size="2.9GB")
 def collection(collection):
-    """This file contains each unique Passage in the larger MSMARCO dataset. Format is PID\tPassage."""
+    """This file contains each unique Passage in the larger MSMARCO dataset.
+
+    Format is TSV (PID \t Passage)"""
     return {"path": collection / "collection.tsv"}
 
 
@@ -52,8 +61,12 @@ def collection(collection):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/top1000.train.tar.gz",
     checker=HashCheck("d99fdbd5b2ea84af8aa23194a3263052", md5),
 )
-@dataset(AdhocRunWithText)
+@dataset(AdhocRunWithText, size="2.5GB")
 def train_run(run):
+    """
+
+    TSV format: qid, pid, query, passage
+    """
     return {"path": run / "top1000.train.tsv"}
 
 
@@ -104,7 +117,60 @@ def train_withrun(train, run):
     return {**train.__arguments__(), "run": run}
 
 
-# --- Development
+# Training triplets
+
+
+@filedownloader(
+    "triples.tsv",
+    size=1_841_693_309,
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/qidpidtriples.train.full.2.tsv.gz",
+    checker=HashCheck("4e58f45f82f3fe99e3239ecffd8ed371", md5),
+)
+@dataset(
+    TrainingTripletsID,
+    url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
+    size="5.7GB",
+)
+def train_idtriples(triples):
+    """Full training triples (query, positive passage, negative passage) with IDs"""
+    return {"path": triples}
+
+
+@filedownloader(
+    "triples.tsv",
+    size=7_930_881_353,
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/triples.train.small.tar.gz",
+    checker=HashCheck("c13bf99ff23ca691105ad12eab837f84", md5),
+)
+@dataset(
+    TrainingTriplets,
+    url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
+    size="27.1GB",
+)
+def train_texttriples_small(triples):
+    """Small training triples (query, positive passage, negative passage) with text"""
+    return {"path": triples}
+
+
+@filedownloader(
+    "triples.tsv",
+    size=77_877_731_328,
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/triples.train.full.tar.gz",
+    checker=HashCheck("8d509d484ea1971e792b812ae4800c6f", md5),
+)
+@dataset(
+    TrainingTriplets,
+    url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
+    size="272.2GB",
+)
+def train_texttriples_full(triples):
+    """Full training triples (query, positive passage, negative passage) with text"""
+    return {"path": triples}
+
+
+# ---
+# --- Development set
+# ---
 
 
 @lua
@@ -165,21 +231,6 @@ def dev_withrun(dev, run):
     return {**dev.__arguments__(), "run": run}
 
 
-# --- Test (eval): there is no (as for now) test assessments
-
-
-@lua
-@tardownloader(
-    "queries",
-    url="https://msmarco.blob.core.windows.net/msmarcoranking/queries.tar.gz",
-    files=["queries.eval.tsv"],
-    checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
-)
-@dataset(AdhocTopics)
-def eval_queries(queries):
-    return {"path": queries / "queries.val.tsv"}
-
-
 @lua
 @tardownloader(
     "run",
@@ -191,7 +242,9 @@ def eval_withrun(run):
     return {"path": run / "top1000.eval.tsv"}
 
 
+# ---
 # --- TREC 2019
+# ---
 
 
 @lua
@@ -232,8 +285,9 @@ def trec2019_test_qrels(qrels):
 @reference("topics", trec2019_test_queries)
 @reference("qrels", trec2019_test_qrels)
 @datatasks("information retrieval", "passage retrieval")
-@dataset(Adhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+@dataset(Adhoc, url="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019.html")
 def trec2019_test(topics, qrels, collection):
+    "TREC 2019 passage retrieval task (test set)"
     return {
         "documents": collection,
         "topics": topics,
@@ -245,7 +299,40 @@ def trec2019_test(topics, qrels, collection):
 @reference("trec2019", trec2019_test)
 @reference("run", trec2019_test_run)
 @datatasks("information retrieval", "passage retrieval")
-@dataset(RerankAdhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+@dataset(
+    RerankAdhoc, url="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019.html"
+)
 def trec2019_test_withrun(trec2019, run):
-    """MSMarco dev dataset, including the top-1000 to documents to re-rank"""
+    """TREC 2019 passage retrieval task (test set), including the top-1000 to documents to re-rank"""
     return {**trec2019.__arguments__(), "run": run}
+
+
+# ---
+# --- TREC 2020
+# ---
+
+
+@lua
+@filedownloader(
+    "queries.tsv",
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-test2020-queries.tsv.gz",
+    checker=HashCheck("00a406fb0d14ed3752d70d1e4eb98600", md5),
+)
+@dataset(AdhocTopics, size="12K")
+def trec2020_test_queries(queries):
+    """Topics of the TREC 2019 MS-Marco Deep Learning track"""
+    return {"path": queries}
+
+
+@lua
+@datatasks("information retrieval", "passage retrieval")
+@datatags("reranking")
+@filedownloader(
+    "run.tsv",
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-passagetest2020-top1000.tsv.gz",
+    checker=HashCheck("aa6fbc51d66bd1dc745964c0e140a727", md5),
+)
+@dataset(AdhocRunWithText)
+def trec2020_test_run(run):
+    """Set of query/passages for the passage re-ranking task re-rank (TREC 2020)"""
+    return {"path": run / "top1000.eval.tsv"}

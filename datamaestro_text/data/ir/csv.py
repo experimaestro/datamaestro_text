@@ -26,3 +26,17 @@ class AdhocTopics(ir.AdhocTopics):
 @data(description="One line per document, format pid<SEP>text")
 class AdhocDocuments(ir.AdhocDocuments):
     pass
+
+
+@argument("path", type=Path)
+@argument("separator", type=str, default="\t", ignored=True)
+@data(description="Training triplets (query/document IDs only)")
+class TrainingTripletsID(ir.TrainingTriplets):
+    pass
+
+
+@argument("path", type=Path)
+@argument("separator", type=str, default="\t", ignored=True)
+@data(description="Training triplets (full text)")
+class TrainingTriplets(ir.TrainingTriplets):
+    pass
