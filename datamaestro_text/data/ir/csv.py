@@ -2,8 +2,8 @@ from pathlib import Path
 
 from datamaestro.definitions import argument, data, datatags, datatasks
 import datamaestro_text.data.ir as ir
+from datamaestro_text.interfaces.plaintext import read_tsv
 from datamaestro_text.interfaces.trec import Topic
-from xpmir.interfaces.plaintext import read_tsv
 
 
 @argument("path", type=Path)
