@@ -32,6 +32,6 @@ def english(dir):
   If you use this data, please cite Sentiment140 as your source.
   """
     return {
-        "train": Generic(path=dir / "training.1600000.processed.noemoticon.csv"),
-        "test": Generic(path=dir / "testdata.manual.2009.06.14.csv"),
+        "train": Generic._(path=dir / "training.1600000.processed.noemoticon.csv"),
+        "test": Generic._(path=dir / "testdata.manual.2009.06.14.csv"),
     }

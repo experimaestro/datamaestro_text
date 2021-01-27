@@ -126,14 +126,16 @@ def train_withrun(train, run):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/qidpidtriples.train.full.2.tsv.gz",
     checker=HashCheck("4e58f45f82f3fe99e3239ecffd8ed371", md5),
 )
+@reference("collection", collection)
+@reference("topics", train_queries)
 @dataset(
     TrainingTripletsID,
     url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
     size="5.7GB",
 )
-def train_idtriples(triples):
+def train_idtriples(topics, collection, triples):
     """Full training triples (query, positive passage, negative passage) with IDs"""
-    return {"path": triples}
+    return {"path": triples, "topics": topics, "documents": collection}
 
 
 @filedownloader(

@@ -30,6 +30,8 @@ class AdhocDocuments(ir.AdhocDocuments):
 
 @argument("path", type=Path)
 @argument("separator", type=str, default="\t", ignored=True)
+@argument("documents", type=ir.AdhocDocuments)
+@argument("topics", ir.AdhocTopics)
 @data(description="Training triplets (query/document IDs only)")
 class TrainingTripletsID(ir.TrainingTriplets):
     pass

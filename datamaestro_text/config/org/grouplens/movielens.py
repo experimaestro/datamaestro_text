@@ -31,10 +31,10 @@ def small(ds) -> Movielens:
   100,000 ratings and 3,600 tag applications applied to 9,000 movies by 600 users (as of 9/2018)
   """
     return {
-        "ratings": csv.Generic(path=ds / "ratings.csv", names_row=0),
-        "links": csv.Generic(path=ds / "links.csv", names_row=0),
-        "movies": csv.Generic(path=ds / "movies.csv", names_row=0),
-        "tags": csv.Generic(path=ds / "tags.csv", names_row=0),
+        "ratings": csv.Generic._(path=ds / "ratings.csv", names_row=0),
+        "links": csv.Generic._(path=ds / "links.csv", names_row=0),
+        "movies": csv.Generic._(path=ds / "movies.csv", names_row=0),
+        "tags": csv.Generic._(path=ds / "tags.csv", names_row=0),
     }
 
 
@@ -46,8 +46,8 @@ def full(ds) -> Movielens:
   27,000,000 ratings and 1,100,000 tag applications applied to 58,000 movies by 280,000 users (as of 9/2018)
   """
     return {
-        "ratings": csv.Generic(path=ds / "ratings.csv", names_row=0),
-        "links": csv.Generic(path=ds / "links.csv", names_row=0),
-        "movies": csv.Generic(path=ds / "movies.csv", names_row=0),
-        "tags": csv.Generic(path=ds / "tags.csv", names_row=0),
+        "ratings": csv.Generic._(path=ds / "ratings.csv", names_row=0),
+        "links": csv.Generic._(path=ds / "links.csv", names_row=0),
+        "movies": csv.Generic._(path=ds / "movies.csv", names_row=0),
+        "tags": csv.Generic._(path=ds / "tags.csv", names_row=0),
     }

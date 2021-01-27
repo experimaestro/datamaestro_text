@@ -1,5 +1,5 @@
 from pathlib import Path
-from datamaestro.data import File, data, argument, configmethod
+from datamaestro.data import File, data, argument
 from datamaestro.definitions import datatags
 import numpy as np
 from typing import Tuple, List

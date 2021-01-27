@@ -32,9 +32,9 @@ def WikiText(data, type):
     https://blog.einstein.ai/the-wikitext-long-term-dependency-language-modeling-dataset/
     """
     return {
-        "train": File(path=data / ("wiki.train.%s" % type)),
-        "validation": File(path=data / ("wiki.valid.%s" % type)),
-        "test": File(path=data / ("wiki.test.%s" % type)),
+        "train": File._(path=data / ("wiki.train.%s" % type)),
+        "validation": File._(path=data / ("wiki.valid.%s" % type)),
+        "test": File._(path=data / ("wiki.test.%s" % type)),
     }
 
 
