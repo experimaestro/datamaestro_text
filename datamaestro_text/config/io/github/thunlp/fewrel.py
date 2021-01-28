@@ -31,4 +31,4 @@ def v1(train, validation):
    Only the train and validation dataset are available. The test set is hidden
    for the leaderboard.
   """
-    return {"train": File._(path=train), "validation": File._(path=validation)}
+    return {"train": File(path=train), "validation": File(path=validation)}
