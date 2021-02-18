@@ -12,9 +12,9 @@
 from datamaestro.annotations.agreement import useragreement
 from datamaestro.download.single import filedownloader
 from datamaestro.download import reference
-from datamaestro.definitions import data, argument, datatasks, datatags, dataset
+from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
-from datamaestro_text.data.ir import RerankAdhoc, Adhoc, AdhocRun
+from datamaestro_text.data.ir import RerankAdhoc, Adhoc
 from datamaestro_text.data.ir.csv import (
     AdhocTopics,
     AdhocRunWithText,
@@ -184,7 +184,7 @@ def train_texttriples_full(triples):
 )
 @dataset(AdhocTopics)
 def dev_queries(queries):
-    return {"path": queries / "queries.val.tsv"}
+    return {"path": queries / "queries.dev.tsv"}
 
 
 @lua
