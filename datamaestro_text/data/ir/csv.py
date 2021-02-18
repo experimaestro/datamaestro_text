@@ -1,6 +1,7 @@
 from pathlib import Path
+from typing import Iterator, Tuple
 
-from datamaestro.definitions import argument, data, datatags, datatasks
+from datamaestro.definitions import argument, data, constant, datatags, datatasks
 import datamaestro_text.data.ir as ir
 from datamaestro_text.interfaces.plaintext import read_tsv
 from datamaestro_text.interfaces.trec import Topic
@@ -32,13 +33,17 @@ class AdhocDocuments(ir.AdhocDocuments):
 @argument("separator", type=str, default="\t", ignored=True)
 @argument("documents", type=ir.AdhocDocuments)
 @argument("topics", ir.AdhocTopics)
+@constant("ids", True)
 @data(description="Training triplets (query/document IDs only)")
 class TrainingTripletsID(ir.TrainingTriplets):
-    pass
+    def iter(self) -> Iterator[Tuple[str, str, str]]:
+        yield from read_tsv(self.path)
 
 
 @argument("path", type=Path)
 @argument("separator", type=str, default="\t", ignored=True)
+@constant("ids", False)
 @data(description="Training triplets (full text)")
 class TrainingTriplets(ir.TrainingTriplets):
-    pass
+    def iter(self) -> Iterator[Tuple[str, str, str]]:
+        yield from read_tsv(self.path)

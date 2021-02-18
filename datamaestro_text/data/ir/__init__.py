@@ -1,6 +1,7 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
+from typing import Iterator, Tuple
 from datamaestro.definitions import data, argument, datatasks, datatags
 from datamaestro.data import Base
 
@@ -44,8 +45,12 @@ class RerankAdhoc(Adhoc):
     pass
 
 
+@argument(
+    "ids", type=bool, help="Wether the triplet is made of ids (for the documents)"
+)
 @data(
     description="Triplet for training IR systems: query, positive document, negative document"
 )
 class TrainingTriplets(Base):
-    pass
+    def iter(self) -> Iterator[Tuple[str, str, str]]:
+        raise NotImplementedError()
