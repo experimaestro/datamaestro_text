@@ -12,7 +12,10 @@ nav:
 # Automatic page generation for datasets
 plugins:
   - datamaestro:
-        repository: text
+      repository: text
+  - experimaestro:
+      modules:
+        - datamaestro_text: api.md
   - search
 
 # Theme
