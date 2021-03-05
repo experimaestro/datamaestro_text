@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from typing import Iterator, Tuple
-from datamaestro.definitions import data, argument, datatasks, datatags
+from datamaestro.definitions import data, argument, datatasks, Param, datatags
 from datamaestro.data import Base
 
 
@@ -30,13 +30,14 @@ class AdhocRun(Base):
     pass
 
 
-@argument("documents", type=AdhocDocuments)
-@argument("topics", type=AdhocTopics)
-@argument("assessments", type=AdhocAssessments)
 @datatasks("information retrieval")
-@data(description="An Adhoc IR collection")
+@data()
 class Adhoc(Base):
-    pass
+    """An Adhoc IR collection"""
+
+    documents: Param[AdhocDocuments]
+    topics: Param[AdhocTopics]
+    assessments: Param[AdhocAssessments]
 
 
 @argument("run", type=AdhocRun)
@@ -49,8 +50,15 @@ class RerankAdhoc(Adhoc):
     "ids", type=bool, help="Wether the triplet is made of ids (for the documents)"
 )
 @data(
-    description="Triplet for training IR systems: query, positive document, negative document"
+    description="Triplet for training IR systems: query / query ID, positive document, negative document"
 )
 class TrainingTriplets(Base):
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         raise NotImplementedError()
+
+
+class TrainingTripletsLines(TrainingTriplets):
+    """Training triplets with one line per triple
+    """
+
+    path: Param[Path]
