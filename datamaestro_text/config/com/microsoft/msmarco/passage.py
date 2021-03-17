@@ -10,11 +10,12 @@
 """
 
 from datamaestro.annotations.agreement import useragreement
+from datamaestro.data import Folder
 from datamaestro.download.single import filedownloader
 from datamaestro.download import reference
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
-from datamaestro_text.data.ir import RerankAdhoc, Adhoc
+from datamaestro_text.data.ir import AdhocAssessments, RerankAdhoc, Adhoc
 from datamaestro_text.data.ir.csv import (
     AdhocTopics,
     AdhocRunWithText,
@@ -37,19 +38,28 @@ http://www.msmarco.org/dataset.aspx""",
 
 # --- Document collection
 
-
+# TODO: Not ideal since it would be better to have small versions right away
+# instead of downloading again the MS Marco Collection
 @lua
 @tardownloader(
-    "collection",
-    url="https://msmarco.blob.core.windows.net/msmarcoranking/collection.tar.gz",
-    checker=HashCheck("87dd01826da3e2ad45447ba5af577628", md5),
+    "data",
+    url="https://msmarco.blob.core.windows.net/msmarcoranking/collectionandqueries.tar.gz",
+    checker=HashCheck("31644046b18952c1386cd4564ba2ae69", md5),
 )
+@dataset(Folder, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+def collection_etc(data):
+    """Documents and some more files"""
+    return {"path": data}
+
+
+@lua
+@reference("data", collection_etc)
 @dataset(AdhocDocuments, size="2.9GB")
-def collection(collection):
+def collection(data):
     """This file contains each unique Passage in the larger MSMARCO dataset.
 
     Format is TSV (PID \t Passage)"""
-    return {"path": collection / "collection.tsv"}
+    return {"path": data.path / "collection.tsv"}
 
 
 # --- Train
@@ -242,6 +252,40 @@ def dev_withrun(dev, run):
 @dataset(AdhocRunWithText)
 def eval_withrun(run):
     return {"path": run / "top1000.eval.tsv"}
+
+
+# ---
+# --- Relevant Passages
+# --- https://github.com/microsoft/MSMARCO-Passage-Ranking#relevant-passages
+# ---
+
+
+@reference("data", collection_etc)
+@dataset(AdhocTopics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+def dev_small_queries(data):
+    return {"path": data.path / "queries.dev.small.tsv"}
+
+
+@reference("data", collection_etc)
+@dataset(
+    TrecAdhocAssessments, url="https://github.com/microsoft/MSMARCO-Passage-Ranking"
+)
+def dev_small_qrels(data):
+    return {"path": data.path / "qrels.dev.small.tsv"}
+
+
+@reference("topics", dev_small_queries)
+@reference("qrels", dev_small_qrels)
+@reference("collection", collection)
+@dataset(Adhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+def dev_small(collection, topics, qrels):
+    return {"documents": collection, "topics": topics, "assessments": qrels}
+
+
+@reference("data", collection_etc)
+@dataset(AdhocTopics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+def eval_queries_small(data):
+    return {"path": data.path / "queries.eval.small.tsv"}
 
 
 # ---
