@@ -6,7 +6,9 @@ repo_url: https://github.com/bpiwowar/datamaestro_text
 # Main pages
 nav:
   - Home: index.md
-  - API: api.md
+  - API:
+    - General: api.md
+    - Information Retrieval: api/ir.md
 
 
 # Automatic page generation for datasets
@@ -15,17 +17,12 @@ plugins:
       repository: text
   - experimaestro:
       modules:
+        - datamaestro_text.data.ir: api/ir.md
         - datamaestro_text: api.md
   - search
 
 # Theme
 theme:
-    name: material
-    feature:
-        tabs: true
-    palette:
-        primary: 'indigo'
-        accent: 'indigo'
-    font:
-        text: 'Roboto'
-        code: 'Roboto Mono'
+    name: readthedocs
+    highlightjs: true
+    collapse_navigation: true

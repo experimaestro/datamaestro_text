@@ -2,13 +2,32 @@
 
 from pathlib import Path
 from typing import Iterator, Tuple
-from datamaestro.definitions import data, argument, datatasks, Param, datatags
-from datamaestro.data import Base
+from datamaestro.definitions import data, argument, datatasks, Param, Option
+from datamaestro.data import Base, documentation
+
+
+class AdhocDocument:
+    """A document with an identifier"""
+
+    docid: str
+    text: str
+
+    def __init__(self, docid: str, text: str):
+        self.docid = docid
+        self.text = text
 
 
 @data(description="IR documents")
 class AdhocDocuments(Base):
-    pass
+    """A set of documents with identifiers"""
+
+    # Number of documents
+    count: Option[int] = None
+
+    @documentation
+    def iter(self) -> Iterator[AdhocDocument]:
+        """Returns an iterator over adhoc documents"""
+        raise NotImplementedError("No document iterator")
 
 
 @data(description="IR topics")
@@ -20,6 +39,8 @@ class AdhocTopics(Base):
 
 @data(description="IR assessments")
 class AdhocAssessments(Base):
+    """Ad-hoc assessements (qrels)"""
+
     def iter(self):
         """Returns an iterator over assessments"""
         raise NotImplementedError()
@@ -43,6 +64,8 @@ class Adhoc(Base):
 @argument("run", type=AdhocRun)
 @data(description="Re-ranking task")
 class RerankAdhoc(Adhoc):
+    """Re-ranking ad-hoc task"""
+
     pass
 
 
