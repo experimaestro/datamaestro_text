@@ -35,13 +35,6 @@ def parse_qrels(path: Path):
 # ---- TOPICS
 
 
-class Topic(NamedTuple):
-    qid: str
-    title: str
-    description: str
-    narrative: str
-
-
 def cleanup(s: Optional[str]):
     return s.replace("\t", " ").strip() if s is not None else None
 

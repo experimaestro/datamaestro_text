@@ -1,9 +1,18 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
-from typing import Iterator, Tuple
+from typing import Iterator, NamedTuple, Tuple
 from datamaestro.definitions import data, argument, datatasks, Param, Option
 from datamaestro.data import Base, documentation
+
+
+class AdhocTopic(NamedTuple):
+    """Standard topic with an ID, title (keyword query), description (long query) and narrative"""
+
+    qid: str
+    title: str
+    description: str
+    narrative: str
 
 
 class AdhocDocument:
@@ -32,7 +41,7 @@ class AdhocDocuments(Base):
 
 @data(description="IR topics")
 class AdhocTopics(Base):
-    def iter(self):
+    def iter(self) -> Iterator[AdhocTopic]:
         """Returns an iterator over topics"""
         raise NotImplementedError()
 
