@@ -2,11 +2,12 @@
 
   MS MARCO(Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and passage ranking. A variant of this task will be the part of TREC and AFIRM 2019. For Updates about TREC 2019 please follow This Repository Passage Reranking task Task Given a query q and a the 1000 most relevant passages P = p1, p2, p3,... p1000, as retrieved by BM25 a succeful system is expected to rerank the most relevant passage as high as possible. For this task not all 1000 relevant items have a human labeled relevant passage. Evaluation will be done using MRR.
 
+  **Publication**:
   Tri Nguyen, Mir Rosenberg, Xia Song, Jianfeng Gao, Saurabh Tiwary, RanganMajumder, and Li Deng. 2016.
   MS MARCO: A Human Generated MAchineReading COmprehension Dataset. In CoCo@NIPS.
 
 
-  See https://github.com/microsoft/MSMARCO-Passage-Ranking for more details
+  See [https://github.com/microsoft/MSMARCO-Passage-Ranking](https://github.com/microsoft/MSMARCO-Passage-Ranking) for more details
 """
 
 from datamaestro.annotations.agreement import useragreement
@@ -15,7 +16,7 @@ from datamaestro.download.single import filedownloader
 from datamaestro.download import reference
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
-from datamaestro_text.data.ir import AdhocAssessments, RerankAdhoc, Adhoc
+from datamaestro_text.data.ir import RerankAdhoc, Adhoc
 from datamaestro_text.data.ir.csv import (
     AdhocTopics,
     AdhocRunWithText,
@@ -56,7 +57,9 @@ def collection_etc(data):
 @reference("data", collection_etc)
 @dataset(AdhocDocuments, size="2.9GB")
 def collection(data):
-    """This file contains each unique Passage in the larger MSMARCO dataset.
+    """MS-Marco documents
+
+    This file contains each passage in the larger MSMARCO dataset.
 
     Format is TSV (PID \t Passage)"""
     return {"path": data.path / "collection.tsv"}
@@ -110,6 +113,7 @@ def train_qrels(qrels):
 @datatasks("information retrieval", "passage retrieval")
 @dataset(Adhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def train(topics, qrels, collection):
+    """MS-Marco train dataset"""
     return {
         "documents": collection,
         "topics": topics,
@@ -226,6 +230,7 @@ def dev_qrels(qrels):
 @datatasks("information retrieval", "passage retrieval")
 @dataset(Adhoc, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def dev(topics, qrels, collection):
+    """MS-Marco dev dataset"""
     return {
         "documents": collection,
         "topics": topics,
@@ -333,7 +338,7 @@ def trec2019_test_qrels(qrels):
 @datatasks("information retrieval", "passage retrieval")
 @dataset(Adhoc, url="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019.html")
 def trec2019_test(topics, qrels, collection):
-    "TREC 2019 passage retrieval task (test set)"
+    "TREC Deep Learning (2019)"
     return {
         "documents": collection,
         "topics": topics,
@@ -349,7 +354,7 @@ def trec2019_test(topics, qrels, collection):
     RerankAdhoc, url="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019.html"
 )
 def trec2019_test_withrun(trec2019, run):
-    """TREC 2019 passage retrieval task (test set), including the top-1000 to documents to re-rank"""
+    """TREC Deep Learning (2019), including the top-1000 to documents to re-rank"""
     return {**trec2019.__arguments__(), "run": run}
 
 
@@ -366,7 +371,9 @@ def trec2019_test_withrun(trec2019, run):
 )
 @dataset(AdhocTopics, size="12K")
 def trec2020_test_queries(queries):
-    """Topics of the TREC 2019 MS-Marco Deep Learning track"""
+    """TREC Deep Learning 2019 (topics)
+
+    Topics of the TREC 2019 MS-Marco Deep Learning track"""
     return {"path": queries}
 
 
@@ -378,7 +385,12 @@ def trec2020_test_queries(queries):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-passagetest2020-top1000.tsv.gz",
     checker=HashCheck("aa6fbc51d66bd1dc745964c0e140a727", md5),
 )
-@dataset(AdhocRunWithText)
+@dataset(
+    AdhocRunWithText,
+    url="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020.html",
+)
 def trec2020_test_run(run):
-    """Set of query/passages for the passage re-ranking task re-rank (TREC 2020)"""
+    """TREC Deep Learning (2020)
+
+    Set of query/passages for the passage re-ranking task re-rank (TREC 2020)"""
     return {"path": run / "top1000.eval.tsv"}

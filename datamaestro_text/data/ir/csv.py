@@ -5,7 +5,6 @@ from experimaestro import Param, Option, Constant
 from datamaestro.definitions import argument, data, constant, datatags, datatasks
 import datamaestro_text.data.ir as ir
 from datamaestro_text.interfaces.plaintext import read_tsv
-from datamaestro_text.interfaces.trec import Topic
 
 
 @argument("path", type=Path)
@@ -20,7 +19,9 @@ class AdhocRunWithText(ir.AdhocRun):
 @data(description="Pairs of query id - query using a separator")
 class AdhocTopics(ir.AdhocTopics):
     def iter(self):
-        return (Topic(qid, title, None, None) for qid, title in read_tsv(self.path))
+        return (
+            ir.AdhocTopic(qid, title, None, None) for qid, title in read_tsv(self.path)
+        )
 
 
 @argument("path", type=Path)
