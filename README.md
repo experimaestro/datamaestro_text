@@ -7,4 +7,4 @@ This [datamaestro](https://github.com/bpiwowar/datasets) plugin covers text-rela
 - Information Retrieval
 - Natural Language Processing tasks
 
-The list of available datasets and usage instruction can be found in the [documentation](http://experimaestro.github.io/datamaestro_text/).
+The list of available datasets and usage instruction can be found in the [documentation](https://datamaestro-text.readthedocs.io/).
