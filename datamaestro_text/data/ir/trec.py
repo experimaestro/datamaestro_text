@@ -1,5 +1,5 @@
 from typing import List
-from datamaestro.definitions import argument, data
+from datamaestro.definitions import argument, data, Option
 from experimaestro import Any
 from datamaestro.data import Base
 from pathlib import Path
@@ -12,9 +12,10 @@ from datamaestro_text.data.ir import (
 
 
 @argument("path", type=Path)
-@argument("parts", type=Any)
 @data()
 class TrecAdhocTopics(AdhocTopics):
+    path: Option[Path]
+
     def iter(self):
         """Iterate over TREC adhoc topics"""
         import datamaestro_text.interfaces.trec as trec
@@ -22,9 +23,10 @@ class TrecAdhocTopics(AdhocTopics):
         yield from trec.parse_query_format(self.path)
 
 
-@argument("path", type=Path)
 @data()
 class TrecAdhocAssessments(AdhocAssessments):
+    path: Option[Path]
+
     def trecpath(self):
         return self.path
 
