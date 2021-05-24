@@ -1,4 +1,5 @@
 from typing import List
+from datamaestro.commands.site import document
 from datamaestro.definitions import argument, data, Option
 from experimaestro import Any
 from datamaestro.data import Base
@@ -16,6 +17,7 @@ class TrecAdhocTopics(AdhocTopics):
     path: Option[Path]
     parts: Option[List[str]]
 
+    @document
     def iter(self):
         """Iterate over TREC adhoc topics"""
         import datamaestro_text.interfaces.trec as trec
@@ -30,6 +32,7 @@ class TrecAdhocAssessments(AdhocAssessments):
     def trecpath(self):
         return self.path
 
+    @document
     def iter(self):
         """Iterate over TREC adhoc topics"""
         import datamaestro_text.interfaces.trec as trec
