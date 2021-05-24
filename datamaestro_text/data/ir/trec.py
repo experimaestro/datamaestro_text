@@ -11,10 +11,10 @@ from datamaestro_text.data.ir import (
 )
 
 
-@argument("path", type=Path)
 @data()
 class TrecAdhocTopics(AdhocTopics):
     path: Option[Path]
+    parts: Option[List[str]]
 
     def iter(self):
         """Iterate over TREC adhoc topics"""
