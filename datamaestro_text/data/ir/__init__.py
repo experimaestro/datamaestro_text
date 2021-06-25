@@ -1,7 +1,7 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
-from typing import Iterator, NamedTuple, Tuple
+from typing import Iterator, NamedTuple, Optional, Tuple
 from datamaestro.definitions import data, argument, datatasks, Param, Option
 from datamaestro.data import Base, documentation
 
@@ -31,7 +31,7 @@ class AdhocDocuments(Base):
     """A set of documents with identifiers"""
 
     # Number of documents
-    count: Option[int] = None
+    count: Option[Optional[int]]
 
     @documentation
     def iter(self) -> Iterator[AdhocDocument]:
