@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional
 import re
 
+from datamaestro_text.data.ir import AdhocTopic
+
 # --- Assessments
 
 
@@ -18,7 +20,7 @@ class AssessedTopic(NamedTuple):
 def parse_qrels(path: Path):
     with path.open("rt") as fp:
         _qid = None
-        assessments = None
+        assessments = []
 
         for line in fp:
             qid, _, docno, rel = re.split(r"\s+", line.strip())
@@ -35,8 +37,8 @@ def parse_qrels(path: Path):
 # ---- TOPICS
 
 
-def cleanup(s: Optional[str]):
-    return s.replace("\t", " ").strip() if s is not None else None
+def cleanup(s: Optional[str]) -> str:
+    return s.replace("\t", " ").strip() if s is not None else ""
 
 
 def parse_query_format(file, xml_prefix=None):
@@ -51,7 +53,8 @@ def parse_query_format(file, xml_prefix=None):
                 # translation comment in older formats (e.g., TREC 3 Spanish track)
                 continue
             elif line.startswith("</top>"):
-                yield Topic(num, cleanup(title), cleanup(desc), cleanup(narr))
+                if num:
+                    yield AdhocTopic(num, cleanup(title), cleanup(desc), cleanup(narr))
                 num, title, desc, narr, reading = None, None, None, None, None
             elif line.startswith("<num>"):
                 num = line[len("<num>") :].replace("Number:", "").strip()

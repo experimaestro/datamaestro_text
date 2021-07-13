@@ -96,7 +96,7 @@ class MovieLens(Handler):
                 for line in fp:
                     fields = line.strip().split(",")
                     movieId = fields[movieIx]
-                    if not movieId in done:
+                    if movieId not in done:
                         items.append(Item(movieId=movieId, tmdbId=fields[tmbdIx]))
 
             # Download from Movie DB

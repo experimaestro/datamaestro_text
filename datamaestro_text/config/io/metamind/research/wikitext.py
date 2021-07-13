@@ -1,7 +1,5 @@
 from datamaestro.data import Base, File
 from datamaestro.definitions import (
-    data,
-    argument,
     datatasks,
     datatags,
     dataset,

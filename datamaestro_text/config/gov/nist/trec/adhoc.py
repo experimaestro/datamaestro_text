@@ -19,7 +19,7 @@ from datamaestro_text.data.ir.trec import (
 )
 from datamaestro_text.data.ir import Adhoc
 
-from .tipster import *
+import tipster
 from datamaestro_text.config.edu.upenn.ldc.aquaint import aquaint
 
 
@@ -28,18 +28,18 @@ from datamaestro_text.config.edu.upenn.ldc.aquaint import aquaint
 
 @links(
     "documents",
-    ap88=ap88.path,
-    ap89=ap89.path,
-    fr88=fr88.path,
-    fr89=fr89.path,
-    wsj87=wsj87.path,
-    wsj88=wsj88.path,
-    wsj89=wsj89.path,
-    wsj90=wsj90.path,
-    wsj91=wsj91.path,
-    wsj92=wsj92.path,
-    ziff1=ziff1.path,
-    ziff2=ziff2.path,
+    ap88=tipster.ap88.path,
+    ap89=tipster.ap89.path,
+    fr88=tipster.fr88.path,
+    fr89=tipster.fr89.path,
+    wsj87=tipster.wsj87.path,
+    wsj88=tipster.wsj88.path,
+    wsj89=tipster.wsj89.path,
+    wsj90=tipster.wsj90.path,
+    wsj91=tipster.wsj91.path,
+    wsj92=tipster.wsj92.path,
+    ziff1=tipster.ziff1.path,
+    ziff2=tipster.ziff2.path,
 )
 @dataset(TipsterCollection, id="1.documents")
 def trec1_documents(documents):
@@ -141,16 +141,16 @@ def trec3(documents, topics, assessments):
 
 @links(
     "documents",
-    ap88=ap88.path,
-    ap89=ap89.path,
-    ap90=ap90.path,
-    fr88=fr88.path,
-    sjm1=sjm1.path,
-    wsj90=wsj90.path,
-    wsj91=wsj91.path,
-    wsj92=wsj92.path,
-    ziff2=ziff2.path,
-    ziff3=ziff3.path,
+    ap88=tipster.ap88.path,
+    ap89=tipster.ap89.path,
+    ap90=tipster.ap90.path,
+    fr88=tipster.fr88.path,
+    sjm1=tipster.sjm1.path,
+    wsj90=tipster.wsj90.path,
+    wsj91=tipster.wsj91.path,
+    wsj92=tipster.wsj92.path,
+    ziff2=tipster.ziff2.path,
+    ziff3=tipster.ziff3.path,
 )
 @dataset(TipsterCollection, id="4.documents")
 def trec4_documents(documents):
@@ -187,15 +187,15 @@ def trec4(documents, topics, assessments):
 
 @links(
     "documents",
-    ap88=ap88.path,
-    cr1=cr1.path,
-    fr88=fr88.path,
-    fr94=fr94.path,
-    ft1=ft1.path,
-    wsj90=wsj90.path,
-    wsj91=wsj91.path,
-    wsj9=wsj92.path,
-    ziff2=ziff2.path,
+    ap88=tipster.ap88.path,
+    cr1=tipster.cr1.path,
+    fr88=tipster.fr88.path,
+    fr94=tipster.fr94.path,
+    ft1=tipster.ft1.path,
+    wsj90=tipster.wsj90.path,
+    wsj91=tipster.wsj91.path,
+    wsj9=tipster.wsj92.path,
+    ziff2=tipster.ziff2.path,
 )
 @dataset(TipsterCollection, id="5.documents")
 def trec5_documents(documents):
@@ -232,11 +232,11 @@ def trec5(documents, topics, assessments):
 
 @links(
     "documents",
-    cr1=cr1.path,
-    fbis1=fbis1.path,
-    fr94=fr94.path,
-    ft1=ft1.path,
-    la8990=la8990.path,
+    cr1=tipster.cr1.path,
+    fbis1=tipster.fbis1.path,
+    fr94=tipster.fr94.path,
+    ft1=tipster.ft1.path,
+    la8990=tipster.la8990.path,
 )
 @dataset(TipsterCollection, id="6.documents")
 def trec6_documents(documents):
@@ -271,7 +271,13 @@ def trec6(documents, topics, assessments):
 # --- TREC 7 (1998)
 
 
-@links("documents", fbis1=fbis1.path, fr94=fr94.path, ft1=ft1.path, la8990=la8990.path)
+@links(
+    "documents",
+    fbis1=tipster.fbis1.path,
+    fr94=tipster.fr94.path,
+    ft1=tipster.ft1.path,
+    la8990=tipster.la8990.path,
+)
 @dataset(TipsterCollection, id="7.documents")
 def trec7_documents(documents):
     """TREC-7 documents"""

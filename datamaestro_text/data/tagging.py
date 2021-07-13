@@ -7,7 +7,7 @@ class CoNLL_U(File):
     def data(self):
         try:
             from conllu import parse
-        except:
+        except Exception:
             logging.error("conllu python module not installed")
             raise
 
@@ -17,7 +17,7 @@ class CoNLL_U(File):
     def __iter__(self):
         try:
             from conllu import parse_incr
-        except:
+        except Exception:
             logging.error("conllu python module not installed")
             raise
 
