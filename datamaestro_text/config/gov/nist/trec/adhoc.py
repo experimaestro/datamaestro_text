@@ -3,14 +3,13 @@
 https://trec.nist.gov/data/test_coll.html
 """
 
-from datamaestro.data import Base
 from datamaestro.download import reference
 from datamaestro.download.single import filedownloader, concatdownload
 from datamaestro.download.links import links
 from datamaestro.stream import TransformList
 from datamaestro.stream.compress import Gunzip
 from datamaestro.stream.lines import Replace, Filter
-from datamaestro.definitions import data, argument, datatasks, datatags, dataset
+from datamaestro.definitions import dataset
 
 from datamaestro_text.data.ir.trec import (
     TipsterCollection,
@@ -19,7 +18,7 @@ from datamaestro_text.data.ir.trec import (
 )
 from datamaestro_text.data.ir import Adhoc
 
-import tipster
+from . import tipster
 from datamaestro_text.config.edu.upenn.ldc.aquaint import aquaint
 
 
