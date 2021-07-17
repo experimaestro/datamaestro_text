@@ -1,20 +1,15 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List, NamedTuple, Optional
 import re
 
-from datamaestro_text.data.ir import AdhocTopic
+from datamaestro_text.data.ir import (
+    AdhocAssessedTopic,
+    AdhocAssessment,
+    AdhocTopic,
+)
 
 # --- Assessments
-
-
-class Assessment(NamedTuple):
-    docno: str
-    rel: float
-
-
-class AssessedTopic(NamedTuple):
-    qid: str
-    assessments: List[Assessment]
 
 
 def parse_qrels(path: Path):
@@ -26,15 +21,21 @@ def parse_qrels(path: Path):
             qid, _, docno, rel = re.split(r"\s+", line.strip())
             if qid != _qid:
                 if _qid is not None:
-                    yield AssessedTopic(_qid, assessments)
+                    yield AdhocAssessedTopic(_qid, assessments)
                 _qid = qid
                 assessments = []
-            assessments.append(Assessment(docno, int(rel)))
+            assessments.append(AdhocAssessment(docno, int(rel)))
 
-        yield AssessedTopic(_qid, assessments)
+        yield AdhocAssessedTopic(_qid, assessments)
 
 
 # ---- TOPICS
+
+
+@dataclass()
+class TrecAdhocTopic(AdhocTopic):
+    description: str
+    narrative: str
 
 
 def cleanup(s: Optional[str]) -> str:
@@ -54,7 +55,9 @@ def parse_query_format(file, xml_prefix=None):
                 continue
             elif line.startswith("</top>"):
                 if num:
-                    yield AdhocTopic(num, cleanup(title), cleanup(desc), cleanup(narr))
+                    yield TrecAdhocTopic(
+                        num, cleanup(title), cleanup(desc), cleanup(narr)
+                    )
                 num, title, desc, narr, reading = None, None, None, None, None
             elif line.startswith("<num>"):
                 num = line[len("<num>") :].replace("Number:", "").strip()

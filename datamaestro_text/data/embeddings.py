@@ -1,13 +1,12 @@
 from pathlib import Path
-from datamaestro.data import File, data, argument
+from datamaestro.data import Base, File, argument
 from datamaestro.definitions import datatags
 import numpy as np
 from typing import Tuple, List
 
 
 @datatags("word embeddings")
-@data(description="Generic class for word embeddings")
-class WordEmbeddings:
+class WordEmbeddings(Base):
     """Generic word embeddings"""
 
     def load(self) -> Tuple[List[str], np.matrix]:
@@ -20,9 +19,8 @@ class WordEmbeddings:
 
 
 @argument("encoding", str, ignored=True, default="utf-8")
-@data(description="Word embeddings as a text word / values")
 class WordEmbeddingsText(WordEmbeddings, File):
-    """Word embeddings"""
+    """Word embeddings as a text word / values"""
 
     def load(self):
         words = []

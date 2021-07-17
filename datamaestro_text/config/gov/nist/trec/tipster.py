@@ -25,6 +25,7 @@ from datamaestro.definitions import (
     DatafolderPath,
 )
 
+# Store meta-information
 TIPSTER = dataset(TipsterCollection, url="https://catalog.ldc.upenn.edu/LDC93T3A")
 
 

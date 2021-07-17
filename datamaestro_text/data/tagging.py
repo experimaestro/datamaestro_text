@@ -1,8 +1,7 @@
 import logging
-from datamaestro.data import File, data
+from datamaestro.data import File
 
 
-@data()
 class CoNLL_U(File):
     def data(self):
         try:

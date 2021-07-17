@@ -1,5 +1,6 @@
 from typing import List
-from datamaestro.definitions import argument, data, Option
+from datamaestro.definitions import argument, Option
+from datamaestro.data import Base
 from experimaestro import documentation
 from pathlib import Path
 from datamaestro_text.data.ir import (
@@ -10,7 +11,6 @@ from datamaestro_text.data.ir import (
 )
 
 
-@data()
 class TrecAdhocTopics(AdhocTopics):
     path: Option[Path]
     parts: Option[List[str]]
@@ -23,7 +23,6 @@ class TrecAdhocTopics(AdhocTopics):
         yield from trec.parse_query_format(self.path)
 
 
-@data()
 class TrecAdhocAssessments(AdhocAssessments):
     path: Option[Path]
 
@@ -39,7 +38,6 @@ class TrecAdhocAssessments(AdhocAssessments):
 
 
 @argument("path", type=Path)
-@data()
 class TrecAdhocRun(AdhocRun):
     pass
 
@@ -52,12 +50,10 @@ class TrecAdhocRun(AdhocRun):
 )
 @argument("results", type=Path, help="Main results")
 @argument("detailed", type=Path, required=False, help="Results per topic (if any)")
-@data()
-class TrecAdhocResults:
+class TrecAdhocResults(Base):
     pass
 
 
 @argument("path", type=Path)
-@data()
 class TipsterCollection(AdhocDocuments):
     pass

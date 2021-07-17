@@ -2,7 +2,6 @@ from csv import DictReader
 from typing import Iterator
 
 from datamaestro.data import File, documentation
-from datamaestro.definitions import data
 from datamaestro_text.data.ir import (
     AdhocDocument,
     AdhocDocuments,
@@ -13,7 +12,6 @@ from datamaestro.data.csv import Generic as GenericCSV
 import xml.etree.ElementTree as ET
 
 
-@data()
 class Topics(AdhocTopics, File):
     """XML format used in Adhoc topics"""
 
@@ -29,7 +27,6 @@ class Topics(AdhocTopics, File):
             )
 
 
-@data()
 class Documents(AdhocDocuments, GenericCSV):
     @documentation
     def iter(self) -> Iterator[AdhocDocument]:

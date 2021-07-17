@@ -3,7 +3,7 @@
 from datamaestro.definitions import DatafolderPath
 from datamaestro.data import Base
 from datamaestro_text.data.ir.trec import TipsterCollection
-from datamaestro.definitions import data, argument, datatasks, datatags, dataset
+from datamaestro.definitions import argument, datatasks, datatags, dataset
 from datamaestro.download.links import links, linkfolder
 
 
