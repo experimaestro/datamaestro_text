@@ -97,6 +97,8 @@ class TrainingTriplets(Base):
     ids: True if the triplet is made of IDs, False otherwise
     """
 
+    ids: Meta[bool]
+
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         raise NotImplementedError()
 
