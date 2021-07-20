@@ -15,7 +15,7 @@ class AdhocTopic:
     text: str
 
 
-@dataclass()
+@dataclass(frozen=True)
 class AdhocAssessment:
     """Adhoc assessments associate a document ID with a relevance"""
 
@@ -62,7 +62,7 @@ class AdhocTopics(Base):
 class AdhocAssessments(Base):
     """Ad-hoc assessements (qrels)"""
 
-    def iter(self) -> Iterator[AdhocAssessment]:
+    def iter(self) -> Iterator[AdhocAssessedTopic]:
         """Returns an iterator over assessments"""
         raise NotImplementedError()
 

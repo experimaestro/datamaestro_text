@@ -1,10 +1,21 @@
+from pathlib import Path
+
+
 def read_sv(file, sep):
     if hasattr(file, "read"):
         for line in file:
             # TODO: handle values with sep, blank values, etc?
             yield line.rstrip("\r\n").split(sep)
     else:
-        with open(file, "rt") as f:
+        _open = open
+        path = Path(file)
+
+        if path.suffix.endswith(".gz"):
+            import gzip
+
+            _open = gzip.open
+
+        with _open(file, "rt") as f:
             yield from read_sv(f, sep)
 
 

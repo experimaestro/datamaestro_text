@@ -20,9 +20,7 @@ class AdhocTopics(ir.AdhocTopics):
     "Pairs of query id - query using a separator"
 
     def iter(self):
-        return (
-            ir.AdhocTopic(qid, title, None, None) for qid, title in read_tsv(self.path)
-        )
+        return (ir.AdhocTopic(qid, title) for qid, title in read_tsv(self.path))
 
 
 @argument("path", type=Path)
@@ -42,7 +40,7 @@ class TrainingTripletsID(ir.TrainingTripletsLines):
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         queries = {}
         for query in self.topics.iter():
-            queries[query.qid] = query.title
+            queries[query.qid] = query.text
 
         for qid, pos, neg in read_tsv(self.path):
             yield queries[qid], pos, neg
