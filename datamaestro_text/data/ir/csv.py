@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Iterator, Tuple
 
-from experimaestro import Param, Option, Constant
+from experimaestro import Param, Option, Constant, Meta
 from datamaestro.definitions import argument, constant, datatags, datatasks
 import datamaestro_text.data.ir as ir
 from datamaestro_text.interfaces.plaintext import read_tsv
@@ -23,10 +23,12 @@ class AdhocTopics(ir.AdhocTopics):
         return (ir.AdhocTopic(qid, title) for qid, title in read_tsv(self.path))
 
 
-@argument("path", type=Path)
-@argument("separator", type=str, default="\t", ignored=True)
 class AdhocDocuments(ir.AdhocDocuments):
     "One line per document, format pid<SEP>text"
+
+    path: Param[Path]
+    separator: Meta[str] = "\t"
+
     pass
 
 
@@ -46,11 +48,11 @@ class TrainingTripletsID(ir.TrainingTripletsLines):
             yield queries[qid], pos, neg
 
 
-@argument("path", type=Path)
-@argument("separator", type=str, default="\t", ignored=True)
-@constant("ids", False)
 class TrainingTriplets(ir.TrainingTriplets):
     "Training triplets (full text)"
+    path: Param[Path]
+    separator: Meta[str] = "\t"
+    ids: Constant[bool] = True
 
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         yield from read_tsv(self.path)

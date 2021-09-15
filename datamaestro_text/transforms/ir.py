@@ -1,5 +1,7 @@
 import logging
-from typing import List, Union
+from typing import BinaryIO, List, Union
+
+from xpmir.utils import StreamGenerator
 
 logging.basicConfig(level=logging.INFO)
 
@@ -46,22 +48,22 @@ class RandomStream(Thread):
 
 def getpathname(context, config):
     name = "triplets.lst"
-    if config.data.path.name.endswith(".gz"):
+    if config.compressed:
         name = "triplets.lst.gz"
 
     return context.currentpath() / name
 
 
 class ShuffledTrainingTripletsLines(Task):
-    data: Param[ir.TrainingTripletsLines]
+    data: Param[ir.TrainingTriplets]
     path: Annotated[Path, pathgenerator(getpathname)]
     seed: Param[int]
     compressed: Option[bool] = True
 
     def config(self):
-        data = self.data.copy()
-        data.path = self.path
-        return data
+        return ir.TrainingTripletsLines(
+            id="", path=self.path, ids=self.data.ids, sep="\t"
+        )
 
     def execute(self):
         # --- Shuffle using the shuf command with a seed
@@ -72,15 +74,20 @@ class ShuffledTrainingTripletsLines(Task):
 
         if not self.compressed:
             command.extend(["-o", self.path])
+        command.append("-")
 
-        compressed = self.data.path.name.endswith(".gz")
-        if compressed:
-            stdin = subprocess.Popen(
-                ["gunzip", "-c", self.data.path], stdout=subprocess.PIPE
-            ).stdout
-            command.append("-")
-        else:
-            command.append(self.data.path)
+        def triplegenerator(out: BinaryIO):
+            logging.info("Starting to output triples")
+            count = 0
+
+            for qid, doca, docb in self.data.iter():
+                out.write(f"{qid}\t{doca}\t{docb}\n".encode("utf-8"))
+                count += 1
+
+            logging.info("Triples output ended (%d triples)", count)
+
+        logging.info("Creating generator")
+        generator = StreamGenerator(triplegenerator, mode="wb")
 
         # Output can be a stream or nothing
         stdout = None
@@ -91,10 +98,11 @@ class ShuffledTrainingTripletsLines(Task):
             ).stdin
 
         # Run the command
-        p = subprocess.Popen(command, stdin=stdin, stdout=stdout)
-        if stdin != subprocess.DEVNULL:
-            stdin.close()
+        with generator as _:
+            logging.info("Starting to shuffle")
+            with generator.filepath.open("rb") as stdin:
+                p = subprocess.Popen(command, stdin=stdin, stdout=stdout)
 
-        with r:
-            p.wait()
-            assert p.returncode == 0
+            with r:
+                p.wait()
+                assert p.returncode == 0

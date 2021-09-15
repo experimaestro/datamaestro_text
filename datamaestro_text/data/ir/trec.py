@@ -1,7 +1,7 @@
 from typing import List
 from datamaestro.definitions import argument, Option
 from datamaestro.data import Base
-from experimaestro import documentation
+from experimaestro import documentation, Param
 from pathlib import Path
 from datamaestro_text.data.ir import (
     AdhocDocuments,
@@ -54,6 +54,5 @@ class TrecAdhocResults(Base):
     pass
 
 
-@argument("path", type=Path)
 class TipsterCollection(AdhocDocuments):
-    pass
+    path: Param[Path]

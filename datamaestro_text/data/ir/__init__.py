@@ -103,8 +103,24 @@ class TrainingTriplets(Base):
         raise NotImplementedError()
 
 
+def autoopen(path: Path, mode: str):
+    print("Reading", path)
+    if path.suffix == ".gz":
+        import gzip
+
+        return gzip.open(path, mode)
+    return path.open(mode)
+
+
 class TrainingTripletsLines(TrainingTriplets):
     """Training triplets with one line per triple (text only)
     """
 
+    sep: Meta[str]
     path: Param[Path]
+
+    def iter(self) -> Iterator[Tuple[str, str, str]]:
+        with autoopen(self.path, "rt") as fp:
+            for line in fp:
+                q, pos, neg = line.strip().split(self.sep)
+                yield q, pos, neg
