@@ -94,7 +94,7 @@ class TrainingTriplets(Base):
 
     attributes:
 
-    ids: True if the triplet is made of IDs, False otherwise
+        ids: True if the triplet is made of IDs, False otherwise
     """
 
     ids: Meta[bool]

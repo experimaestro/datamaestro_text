@@ -7,3 +7,4 @@ test-reports/
 .tox/
 .mypy_cache/
 .eggs/
+docs/build

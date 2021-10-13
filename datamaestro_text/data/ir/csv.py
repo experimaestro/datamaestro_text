@@ -33,7 +33,15 @@ class AdhocDocuments(ir.AdhocDocuments):
 
 
 class TrainingTripletsID(ir.TrainingTripletsLines):
-    "Training triplets (query/document IDs only)"
+    """Training triplets (query/document IDs only)
+
+    Attributes:
+        separator: Field separator
+        documents: The documents
+        topics: The topics
+        ids: Whether documents are IDs or full text
+    """
+
     separator: Option[str] = "\t"
     documents: Param[ir.AdhocDocuments]
     topics: Param[ir.AdhocTopics]
