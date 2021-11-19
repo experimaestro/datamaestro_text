@@ -1,13 +1,14 @@
-from typing import List
+from typing import List, Optional
 from datamaestro.definitions import argument, Option
 from datamaestro.data import Base
-from experimaestro import documentation, Param
+from experimaestro import documentation, Param, Config
 from pathlib import Path
 from datamaestro_text.data.ir import (
     AdhocDocuments,
     AdhocTopics,
     AdhocAssessments,
     AdhocRun,
+    Measure,
 )
 
 
@@ -42,16 +43,17 @@ class TrecAdhocRun(AdhocRun):
     pass
 
 
-@argument(
-    "metrics",
-    required=False,
-    type=List[str],
-    help="List of reported metrics (None if all from trec_eval)",
-)
-@argument("results", type=Path, help="Main results")
-@argument("detailed", type=Path, required=False, help="Results per topic (if any)")
 class TrecAdhocResults(Base):
-    pass
+    """Adhoc results"""
+
+    metrics: Param[List[Measure]]
+    """List of reported metrics"""
+
+    results: Param[Path]
+    """Main results"""
+
+    detailed: Param[Optional[Path]]
+    """Results per topic (if any)"""
 
 
 class TipsterCollection(AdhocDocuments):

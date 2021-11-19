@@ -34,5 +34,5 @@ def xie(documents):
 @links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
 @dataset(TipsterCollection, url=URL, id="")
 def aquaint(documents):
-    """Aquaint dataset"""
+    """Aquaint documents"""
     return {"path": documents}

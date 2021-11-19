@@ -20,7 +20,7 @@ class AdhocTopics(ir.AdhocTopics):
     "Pairs of query id - query using a separator"
 
     def iter(self):
-        return (ir.AdhocTopic(qid, title) for qid, title in read_tsv(self.path))
+        return (ir.AdhocTopic(qid, title, {}) for qid, title in read_tsv(self.path))
 
 
 class AdhocDocuments(ir.AdhocDocuments):

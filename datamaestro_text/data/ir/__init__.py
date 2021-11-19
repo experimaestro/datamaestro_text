@@ -1,7 +1,8 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
-from typing import Iterator, List, Optional, Tuple
+from typing import Dict, Iterator, List, Optional, Tuple
+from experimaestro import Config
 from datamaestro.definitions import argument, datatasks, Param, Meta
 from dataclasses import dataclass
 from datamaestro.data import Base, documentation
@@ -12,7 +13,13 @@ class AdhocTopic:
     """The most generic topic: an ID with some text"""
 
     qid: str
+    """Query identifier"""
+
     text: str
+    """The main query text"""
+
+    metadata: Dict[str, str]
+    """Extra-information about the query"""
 
 
 @dataclass(frozen=True)
@@ -85,6 +92,12 @@ class Adhoc(Base):
 @argument("run", type=AdhocRun)
 class RerankAdhoc(Adhoc):
     """Re-ranking ad-hoc task based on an existing run"""
+
+    pass
+
+
+class Measure(Config):
+    """An Information Retrieval measure"""
 
     pass
 
