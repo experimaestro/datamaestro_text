@@ -26,7 +26,10 @@ class AdhocTopic:
 class AdhocAssessment:
     """Adhoc assessments associate a document ID with a relevance"""
 
+    #: Document identifier
     docno: str
+
+    #: Relevance (> 0 if relevant)
     rel: float
 
 
@@ -54,10 +57,56 @@ class AdhocDocuments(Base):
 
     count: Meta[Optional[int]]
 
-    @documentation
     def iter(self) -> Iterator[AdhocDocument]:
-        """Returns an iterator over adhoc documents"""
+        """(deprecated, use iter_documents) Returns an iterator over adhoc documents"""
         raise NotImplementedError("No document iterator")
+
+    def iter_documents(self) -> Iterator[AdhocDocument]:
+        return self.iter()
+
+    def iter_ids(self) -> Iterator[str]:
+        """Iterates over document ids
+
+        By default, use iter_documents, which is not really efficient.
+        """
+        for doc in self.iter():
+            yield doc.docid
+
+
+class AdhocDocumentStore(AdhocDocuments):
+    """A document store
+
+    A document store can
+    - match external/internal ID
+    - return the document content
+    - return the number of documents
+    """
+
+    @property
+    def documentcount(self):
+        """Returns the number of terms in the index"""
+        raise NotImplementedError()
+
+    def document_text(self, docid: str) -> str:
+        """Returns the text of the document given its id"""
+        raise NotImplementedError()
+
+    def docid_internal2external(self, docid: int):
+        """Converts an internal collection ID (integer) to an external ID"""
+        raise NotImplementedError()
+
+
+class AdhocIndex(AdhocDocumentStore):
+    """An index can be used to retrieve documents based on terms"""
+
+    @property
+    def termcount(self):
+        """Returns the number of terms in the index"""
+        raise NotImplementedError()
+
+    def term_df(self, term: str):
+        """Returns the document frequency"""
+        raise NotImplementedError()
 
 
 class AdhocTopics(Base):
