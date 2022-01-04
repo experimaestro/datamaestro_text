@@ -89,7 +89,7 @@ class AdhocDocumentStore(AdhocDocuments):
 
     def document_text(self, docid: str) -> str:
         """Returns the text of the document given its id"""
-        raise NotImplementedError()
+        raise NotImplementedError(f"document_text() for {self.__class__}")
 
     def docid_internal2external(self, docid: int):
         """Converts an internal collection ID (integer) to an external ID"""
