@@ -1,7 +1,8 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Callable, Dict, Iterator, List, Optional, Tuple
+import random
 from experimaestro import Config
 from datamaestro.definitions import argument, datatasks, Param, Meta
 from dataclasses import dataclass
@@ -94,6 +95,19 @@ class AdhocDocumentStore(AdhocDocuments):
     def docid_internal2external(self, docid: int):
         """Converts an internal collection ID (integer) to an external ID"""
         raise NotImplementedError()
+
+    def document(self, ix) -> AdhocDocument:
+        docid = self.docid_internal2external(ix)
+        return AdhocDocument(docid, self.document_text(docid))
+
+    def iter_sample(
+        self, randint: Optional[Callable[[int], int]]
+    ) -> Iterator[AdhocDocument]:
+        """Sample documents from the dataset"""
+        length = self.documentcount
+        randint = randint or (lambda max: random.randint(0, max - 1))
+        while True:
+            yield self.document(randint(length))
 
 
 class AdhocIndex(AdhocDocumentStore):
