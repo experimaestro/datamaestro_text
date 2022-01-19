@@ -128,6 +128,10 @@ class AdhocTopics(Base):
         """Returns an iterator over topics"""
         raise NotImplementedError()
 
+    def count(self) -> Optional[int]:
+        """Returns the number of topics if known"""
+        return None
+
 
 class AdhocAssessments(Base):
     """Ad-hoc assessements (qrels)"""
