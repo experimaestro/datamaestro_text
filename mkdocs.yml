@@ -17,8 +17,8 @@ plugins:
       repository: text
   - experimaestro:
       modules:
-        - datamaestro_text.data.ir: api/ir.md
-        - datamaestro_text: api.md
+        - api/ir.md: [datamaestro_text.data.ir]
+        - api.md: [datamaestro_text]
   - search
 
 # Theme
