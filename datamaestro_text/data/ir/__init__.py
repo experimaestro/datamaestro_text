@@ -49,14 +49,10 @@ class AdhocDocument:
 
 
 class AdhocDocuments(Base):
-    """A set of documents with identifiers
-
-    Attributes:
-
-    count: number of documents or passages
-    """
+    """A set of documents with identifiers"""
 
     count: Meta[Optional[int]]
+    """Number of documents"""
 
     def iter(self) -> Iterator[AdhocDocument]:
         """(deprecated, use iter_documents) Returns an iterator over adhoc documents"""
@@ -152,15 +148,20 @@ class Adhoc(Base):
     """An Adhoc IR collection"""
 
     documents: Param[AdhocDocuments]
+    """The set of documents"""
+
     topics: Param[AdhocTopics]
+    """The set of topics"""
+
     assessments: Param[AdhocAssessments]
+    """The set of assessments (for each topic)"""
 
 
-@argument("run", type=AdhocRun)
 class RerankAdhoc(Adhoc):
     """Re-ranking ad-hoc task based on an existing run"""
 
-    pass
+    run: Param[AdhocRun]
+    """The run to re-rank"""
 
 
 class Measure(Config):

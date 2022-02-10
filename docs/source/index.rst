@@ -10,7 +10,8 @@ Welcome to Datamaestro Text's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   api/ir
+   api/index
+   datasets/index
 
 
 This `datamaestro <https://github.com/bpiwowar/datamaestro>`_ plugin covers text-related datasets:

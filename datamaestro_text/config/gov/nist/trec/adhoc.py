@@ -1,6 +1,6 @@
-"""TREC AD-HOC datasets and tasks
+"""TREC Adhoc datasets and tasks
 
-https://trec.nist.gov/data/test_coll.html
+See [https://trec.nist.gov/data/test_coll.html](https://trec.nist.gov/data/test_coll.html)
 """
 
 from datamaestro.download import reference

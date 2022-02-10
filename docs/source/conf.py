@@ -32,6 +32,7 @@ release = "2021-10-12"
 # ones.
 extensions = [
     "experimaestro.sphinx",
+    "datamaestro.sphinx",
     "sphinx_rtd_theme",
     "sphinx.ext.autosummary",
     # Link to other documentations
@@ -63,3 +64,15 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Default repository for datamaestro extension
+datamaestro_repository = "text"
+
+intersphinx_mapping = {
+    "datamaestro": (
+        (
+            "https://datamaestro.readthedocs.io/en/latest/",
+            "https://datamaestro.readthedocs.io/en/latest/objects.inv",
+        )
+    )
+}
