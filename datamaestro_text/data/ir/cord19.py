@@ -22,8 +22,10 @@ class Topics(AdhocTopics, File):
             yield AdhocTopic(
                 topic.get("number"),
                 topic.find("query").text,
-                topic.find("question").text,
-                topic.find("narrative").text,
+                {
+                    "question": topic.find("question").text,
+                    "narrative": topic.find("narrative").text,
+                },
             )
 
 

@@ -39,7 +39,6 @@ Assessments
 Runs
 ----
 
-
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocRun
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocRunWithText
 
