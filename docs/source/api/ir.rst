@@ -48,6 +48,14 @@ Reranking
 
 .. autoxpmconfig:: datamaestro_text.data.ir.RerankAdhoc
 
+Document Index
+---------------
+
+.. autoxpmconfig:: datamaestro_text.data.ir.AdhocDocumentStore
+    :members: documentcount, document_text, docid_internal2external, document, iter_sample
+
+.. autoxpmconfig:: datamaestro_text.data.ir.AdhocIndex
+    :members: termcount, term_df
 
 Training triplets
 -----------------

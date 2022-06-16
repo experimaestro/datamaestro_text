@@ -46,6 +46,7 @@ class AdhocDocument:
 
     docid: str
     text: str
+    internal_docid: Optional[int] = None
 
 
 class AdhocDocuments(Base):
@@ -92,9 +93,12 @@ class AdhocDocumentStore(AdhocDocuments):
         """Converts an internal collection ID (integer) to an external ID"""
         raise NotImplementedError()
 
-    def document(self, ix) -> AdhocDocument:
-        docid = self.docid_internal2external(ix)
-        return AdhocDocument(docid, self.document_text(docid))
+    def document(self, internal_docid: int) -> AdhocDocument:
+        """Returns a document given its internal ID"""
+        docid = self.docid_internal2external(internal_docid)
+        return AdhocDocument(
+            docid, self.document_text(docid), internal_docid=internal_docid
+        )
 
     def iter_sample(
         self, randint: Optional[Callable[[int], int]]
@@ -194,8 +198,7 @@ def autoopen(path: Path, mode: str):
 
 
 class TrainingTripletsLines(TrainingTriplets):
-    """Training triplets with one line per triple (text only)
-    """
+    """Training triplets with one line per triple (text only)"""
 
     sep: Meta[str]
     path: Param[Path]

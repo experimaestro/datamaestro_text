@@ -35,4 +35,6 @@ class Documents(AdhocDocuments, GenericCSV):
         """Returns an iterator over adhoc documents"""
         with self.path.open("r") as fp:
             for row in DictReader(fp):
-                yield AdhocDocument(row["cord_uid"], row["abstract"])
+                yield AdhocDocument(
+                    row["cord_uid"], f"""{row["title"]} {row["abstract"]}"""
+                )
