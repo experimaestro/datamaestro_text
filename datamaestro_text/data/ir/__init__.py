@@ -70,6 +70,11 @@ class AdhocDocuments(Base):
         for doc in self.iter():
             yield doc.docid
 
+    @property
+    def documentcount(self):
+        """Returns the number of terms in the index"""
+        raise NotImplementedError()
+
 
 class AdhocDocumentStore(AdhocDocuments):
     """A document store
@@ -79,11 +84,6 @@ class AdhocDocumentStore(AdhocDocuments):
     - return the document content
     - return the number of documents
     """
-
-    @property
-    def documentcount(self):
-        """Returns the number of terms in the index"""
-        raise NotImplementedError()
 
     def document_text(self, docid: str) -> str:
         """Returns the text of the document given its id"""
