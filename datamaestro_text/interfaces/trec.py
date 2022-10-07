@@ -56,7 +56,7 @@ def parse_query_format(file, xml_prefix=None):
             elif line.startswith("</top>"):
                 if num:
                     yield TrecAdhocTopic(
-                        num, cleanup(title), cleanup(desc), cleanup(narr)
+                        num, cleanup(title), {}, cleanup(desc), cleanup(narr)
                     )
                 num, title, desc, narr, reading = None, None, None, None, None
             elif line.startswith("<num>"):
