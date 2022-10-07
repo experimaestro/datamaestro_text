@@ -22,7 +22,7 @@ class ShuffledTrainingTripletsLines(Task):
     seed: Param[int]
     compressed: Option[bool] = True
 
-    def config(self):
+    def taskoutputs(self):
         return ir.TrainingTripletsLines(
             id="", path=self.path, ids=self.data.ids, sep="\t"
         )
