@@ -57,6 +57,7 @@ Document Index
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocIndex
     :members: termcount, term_df
 
+
 Training triplets
 -----------------
 
