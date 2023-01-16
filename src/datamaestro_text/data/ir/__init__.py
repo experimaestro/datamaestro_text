@@ -208,3 +208,17 @@ class TrainingTripletsLines(TrainingTriplets):
             for line in fp:
                 q, pos, neg = line.strip().split(self.sep)
                 yield q, pos, neg
+
+
+class HuggingFaceTrainingTriplets(HuggingFaceDataset):
+    """Triplet for training IR systems: query / query ID, positive document, negative document
+
+    attributes:
+
+        ids: True if the triplet is made of IDs, False otherwise
+    """
+
+    ids: Meta[bool]
+
+    def iter(self) -> Iterator[Tuple[str, str, str]]:
+        raise NotImplementedError()

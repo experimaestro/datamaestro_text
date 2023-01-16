@@ -1,4 +1,4 @@
-graft datamaestro_text
+graft src
 
 include MANIFEST.in
 include setup.py
@@ -7,4 +7,4 @@ include README.md
 include requirements.txt
 include mkdocs.yml
 
-recursive-exclude datamaestro_text __pycache__ *.pyc
+recursive-exclude src __pycache__ *.pyc

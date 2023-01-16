@@ -28,8 +28,8 @@ from datamaestro_text.data.recommendation import Movielens
 def small(ds) -> Movielens:
     """MovieLens (small dataset)
 
-  100,000 ratings and 3,600 tag applications applied to 9,000 movies by 600 users (as of 9/2018)
-  """
+    100,000 ratings and 3,600 tag applications applied to 9,000 movies by 600 users (as of 9/2018)
+    """
     return {
         "ratings": csv.Generic(path=ds / "ratings.csv", names_row=0),
         "links": csv.Generic(path=ds / "links.csv", names_row=0),
@@ -43,8 +43,8 @@ def small(ds) -> Movielens:
 def full(ds) -> Movielens:
     """MovieLens (full dataset)
 
-  27,000,000 ratings and 1,100,000 tag applications applied to 58,000 movies by 280,000 users (as of 9/2018)
-  """
+    27,000,000 ratings and 1,100,000 tag applications applied to 58,000 movies by 280,000 users (as of 9/2018)
+    """
     return {
         "ratings": csv.Generic(path=ds / "ratings.csv", names_row=0),
         "links": csv.Generic(path=ds / "links.csv", names_row=0),

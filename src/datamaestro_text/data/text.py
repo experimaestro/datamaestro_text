@@ -7,7 +7,7 @@ from datamaestro.data.ml import Supervised
 @argument("test", type=Base, required=False)
 @argument("validation", type=Base, required=False)
 class TrainingText(Supervised):
-    """"A dataset used for training with a train and a test"""
+    """ "A dataset used for training with a train and a test"""
 
     pass
 

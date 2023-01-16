@@ -27,7 +27,7 @@ from typing import TextIO
 
 # need better way to estimate this given overhead for str. setting to
 # 0.5GB uses rougly 4GB of ram.
-MEMORY = int(float(os.environ.get("MEMORY", 4.0)) / 8 * 1024 ** 3)
+MEMORY = int(float(os.environ.get("MEMORY", 4.0)) / 8 * 1024**3)
 
 
 def shuffle_and_close(buf, f):
@@ -37,8 +37,7 @@ def shuffle_and_close(buf, f):
 
 
 def shuffle(input, output: TextIO, memory=MEMORY):
-    """Shuffle using temporary file
-    """
+    """Shuffle using temporary file"""
     files = []
     files.append(tempfile.NamedTemporaryFile(mode="w", delete=False))
     total_bytes = 0

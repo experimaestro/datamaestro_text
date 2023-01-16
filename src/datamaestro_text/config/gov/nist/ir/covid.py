@@ -41,7 +41,8 @@ sources, all of which are hereby incorporated by reference""",
     checker=HashCheck("80d664e496b8b7e50a39c6f6bb92e0ef"),
 )
 @dataset(
-    d_cord19.Documents, url="https://ir.nist.gov/covidSubmit/index.html",
+    d_cord19.Documents,
+    url="https://ir.nist.gov/covidSubmit/index.html",
 )
 def cord19_round5_metadata(data):
     """Cord 19 metadata (round 5)
