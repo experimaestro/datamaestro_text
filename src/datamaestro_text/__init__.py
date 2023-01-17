@@ -1,6 +1,6 @@
 import datamaestro
 
-# from .version import
+from .version import version, version_tuple
 
 
 class Repository(datamaestro.Repository):
