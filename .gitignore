@@ -8,3 +8,4 @@ test-reports/
 .mypy_cache/
 .eggs/
 docs/build
+src/datamaestro_text/version.py

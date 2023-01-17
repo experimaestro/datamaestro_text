@@ -4,9 +4,10 @@ from pathlib import Path
 from typing import Callable, Dict, Iterator, List, Optional, Tuple
 import random
 from experimaestro import Config
-from datamaestro.definitions import argument, datatasks, Param, Meta
+from datamaestro.definitions import datatasks, Param, Meta
 from dataclasses import dataclass
-from datamaestro.data import Base, documentation
+from datamaestro.data import Base
+from datamaestro.data.huggingface import HuggingFaceDataset
 
 
 @dataclass()
@@ -210,8 +211,23 @@ class TrainingTripletsLines(TrainingTriplets):
                 yield q, pos, neg
 
 
-class HuggingFaceTrainingTriplets(HuggingFaceDataset):
-    """Triplet for training IR systems: query / query ID, positive document, negative document
+@dataclass()
+class PairwiseSample:
+    """A a query with positive and negative samples"""
+
+    query: str
+    """The query (text or ID)"""
+
+    positives: List[str]
+    """Relevant documents (text or ID)"""
+
+    negatives: Dict[str, List[str]]
+    """Non relevant documents (text or ID), organized in a dictionary where keys
+    are the algorithm used to retrieve the negatives"""
+
+
+class PairwiseSampleDataset(Base):
+    """Datasets where each record is a query with positive and negative samples
 
     attributes:
 
@@ -219,6 +235,7 @@ class HuggingFaceTrainingTriplets(HuggingFaceDataset):
     """
 
     ids: Meta[bool]
+    """Whether data are texts or IDs"""
 
-    def iter(self) -> Iterator[Tuple[str, str, str]]:
+    def iter(self) -> Iterator[PairwiseSample]:
         raise NotImplementedError()
