@@ -150,7 +150,7 @@ class AdhocRun(Base):
 
 @datatasks("information retrieval")
 class Adhoc(Base):
-    """An Adhoc IR collection"""
+    """An Adhoc IR collection with documents, topics and their assessments"""
 
     documents: Param[AdhocDocuments]
     """The set of documents"""

@@ -43,6 +43,13 @@ Runs
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocRunWithText
 
 
+Results
+-------
+
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecAdhocResults
+    :members: get_results
+
+
 Reranking
 ---------
 

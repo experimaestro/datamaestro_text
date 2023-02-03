@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from datamaestro.definitions import argument, Option
 from datamaestro.data import Base
 from experimaestro import documentation, Param, Config
@@ -44,7 +44,7 @@ class TrecAdhocRun(AdhocRun):
 
 
 class TrecAdhocResults(Base):
-    """Adhoc results"""
+    """Adhoc results (TREC format)"""
 
     metrics: Param[List[Measure]]
     """List of reported metrics"""
@@ -54,6 +54,20 @@ class TrecAdhocResults(Base):
 
     detailed: Param[Optional[Path]]
     """Results per topic (if any)"""
+
+    def get_results(self) -> Dict[str, float]:
+        """Returns the results as a dictionary {metric_name: value}"""
+        import re
+
+        re_spaces = re.compile(r"\s+")
+
+        results = {}
+        with self.results.open("rt") as fp:
+            for line in fp.readlines():
+                metric, _, value = re_spaces.split(line.strip())
+                results[metric] = value
+
+        return results
 
 
 class TipsterCollection(AdhocDocuments):
