@@ -13,7 +13,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-from xpmir import version
+from datamaestro_text import version
 
 # -- Project information -----------------------------------------------------
 
