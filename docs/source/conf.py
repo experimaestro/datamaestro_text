@@ -13,16 +13,16 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+from xpmir import version
 
 # -- Project information -----------------------------------------------------
 
 project = "Datamaestro Text"
-copyright = "2021, Benjamin Piwowarski"
+copyright = "2023, Benjamin Piwowarski"
 author = "Benjamin Piwowarski"
 
 # The full version, including alpha/beta/rc tags
-release = "2021-10-12"
+release = version
 
 
 # -- General configuration ---------------------------------------------------

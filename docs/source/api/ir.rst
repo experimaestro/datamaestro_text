@@ -12,7 +12,7 @@ Topics
 ------
 
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocTopics
-    :members: iter
+    :members: iter, count
 
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocTopics
 
@@ -20,8 +20,10 @@ Topics
 
 Documents
 ---------
+.. autoclass:: datamaestro_text.data.ir.AdhocDocument
 
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocDocuments
+    :members: iter_documents, iter_ids, documentcount
 .. autoxpmconfig:: datamaestro_text.data.ir.cord19.Documents
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocDocuments
 
@@ -41,7 +43,7 @@ Runs
 
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocRun
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocRunWithText
-
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecAdhocRun
 
 Results
 -------
@@ -70,7 +72,7 @@ Training triplets
 
 
 .. autoxpmconfig:: datamaestro_text.data.ir.TrainingTriplets
-    :members:
+    :members: iter
 
 .. autoxpmconfig:: datamaestro_text.data.ir.PairwiseSampleDataset
     :members: iter

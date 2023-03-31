@@ -125,6 +125,8 @@ class AdhocIndex(AdhocDocumentStore):
 
 
 class AdhocTopics(Base):
+    """A set of topics with associated IDs"""
+
     def iter(self) -> Iterator[AdhocTopic]:
         """Returns an iterator over topics"""
         raise NotImplementedError()
