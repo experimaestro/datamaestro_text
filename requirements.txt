@@ -1,1 +1,1 @@
-datamaestro>=0.8.12
+datamaestro>=0.8.16
