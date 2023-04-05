@@ -1,4 +1,4 @@
-# See documentation on http://experimaestro.github.io/datamaestro/
+# See documentation on https://datamaestro.readthedocs.io
 
 from datamaestro.data import File
 from datamaestro.data.ml import Supervised

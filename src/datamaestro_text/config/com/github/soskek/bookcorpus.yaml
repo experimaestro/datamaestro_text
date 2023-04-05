@@ -1,7 +1,9 @@
-# # See documentation on http://experimaestro.github.io/datamaestro/
+# Just for reference (needs to be converted to python definition)
+
+# # See documentation on https://datamaestro.readthedocs.io
 
 # # Configuration
-# # See http://experimaestro.github.io/datamaestro/configuration/
+# # See https://datamaestro.readthedocs.ioconfiguration/
 
 # name: BookCorpus
 # web: https://github.com/soskek/bookcorpus
@@ -27,7 +29,7 @@
 #   that showcase the diversity of tasks our model can be used for.
 
 # # Describe how to download
-# # See http://experimaestro.github.io/datamaestro/download/
+# # See https://datamaestro.readthedocs.iodownload/
 
 # download: !@/manual:DownloadPath
 #   howto: Use the script in https://github.com/soskek/bookcorpus

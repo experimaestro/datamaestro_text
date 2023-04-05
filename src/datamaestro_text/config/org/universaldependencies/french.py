@@ -42,10 +42,10 @@ def gsd(ds) -> Supervised:
 
 # --- partut
 
-# # See documentation on http://experimaestro.github.io/datamaestro/
+# # See documentation on https://datamaestro.readthedocs.io
 
 # # Configuration
-# # See http://experimaestro.github.io/datamaestro/configuration/
+# # See https://datamaestro.readthedocs.ioconfiguration/
 
 # name: UD_French-ParTUT
 # web: https://github.com/UniversalDependencies/UD_French-ParTUT
@@ -60,7 +60,7 @@ def gsd(ds) -> Supervised:
 
 
 # # Describe how to download
-# # See http://experimaestro.github.io/datamaestro/download/
+# # See https://datamaestro.readthedocs.iodownload/
 
 # download: !@/archive:Zip
 #   url: https://codeload.github.com/UniversalDependencies/UD_French-ParTUT/zip/master

@@ -150,6 +150,16 @@ class AdhocRun(Base):
     pass
 
 
+class AdhocResults(Base):
+    def get_results(self) -> Dict[str, float]:
+        """Returns the aggregated results
+
+        :return: Returns a dictionary where each metric (keys) is associated
+            with a value
+        """
+        raise NotImplementedError()
+
+
 @datatasks("information retrieval")
 class Adhoc(Base):
     """An Adhoc IR collection with documents, topics and their assessments"""

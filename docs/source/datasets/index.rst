@@ -9,3 +9,4 @@ Datamaestro Text Datasets
    ir
    recommendation
    embeddings
+   conversation

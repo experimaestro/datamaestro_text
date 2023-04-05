@@ -8,6 +8,7 @@ from datamaestro_text.data.ir import (
     AdhocTopics,
     AdhocAssessments,
     AdhocRun,
+    AdhocResults,
     Measure,
 )
 
@@ -43,7 +44,7 @@ class TrecAdhocRun(AdhocRun):
     pass
 
 
-class TrecAdhocResults(Base):
+class TrecAdhocResults(AdhocResults):
     """Adhoc results (TREC format)"""
 
     metrics: Param[List[Measure]]
