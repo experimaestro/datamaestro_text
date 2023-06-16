@@ -32,5 +32,5 @@ def main(archive):
     return {
         "train": CanardDataset(path=archive / "train.json"),
         "validation": CanardDataset(path=archive / "dev.json"),
-        "test": CanardDataset(path=archive / "dev.json"),
+        "test": CanardDataset(path=archive / "test.json"),
     }
