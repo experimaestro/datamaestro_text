@@ -5,7 +5,7 @@ from datamaestro.download.archive import zipdownloader
 from datamaestro.utils import HashCheck
 
 from datamaestro.data.ml import Supervised
-from datamaestro_text.data.conversation import CanardDataset
+from datamaestro_text.data.conversation.canard import CanardDataset
 
 
 @datatags("conversation", "context", "query")

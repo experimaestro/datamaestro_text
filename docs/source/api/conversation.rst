@@ -13,3 +13,13 @@ Contextual query reformulation
 
 .. autoxpmconfig:: CanardDataset
     :members: iter
+
+.. autoclass:: OrConvQADatasetAnswer
+    :members:
+.. autoclass:: OrConvQADatasetHistoryEntry
+    :members:
+.. autoclass:: OrConvQADataset
+    :members:
+
+.. autoxpmconfig:: OrConvQADataset
+    :members: iter
