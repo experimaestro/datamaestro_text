@@ -1,64 +1,31 @@
 """Generic data types for information retrieval"""
 
 from pathlib import Path
-from typing import Callable, Dict, Iterator, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, NamedTuple
 import random
 from experimaestro import Config
 from datamaestro.definitions import datatasks, Param, Meta
 from dataclasses import dataclass
 from datamaestro.data import Base
-from datamaestro.data.huggingface import HuggingFaceDataset
 
 
-@dataclass()
-class AdhocTopic:
-    """The most generic topic: an ID with some text"""
-
-    qid: str
-    """Query identifier"""
-
-    text: str
-    """The main query text"""
-
-    metadata: Dict[str, str]
-    """Extra-information about the query"""
-
-
-@dataclass(frozen=True)
-class AdhocAssessment:
-    """Adhoc assessments associate a document ID with a relevance"""
-
-    #: Document identifier
-    docno: str
-
-    #: Relevance (> 0 if relevant)
-    rel: float
-
-
-@dataclass()
-class AdhocAssessedTopic:
-    qid: str
-    assessments: List[AdhocAssessment]
-
-
-@dataclass()
-class AdhocDocument:
-    """A document with an identifier"""
-
-    docid: str
-    text: str
-    internal_docid: Optional[int] = None
+AdhocDocument = NamedTuple
+AdhocTopic = NamedTuple
+AdhocAssessment = NamedTuple
 
 
 class AdhocDocuments(Base):
-    """A set of documents with identifiers"""
+    """A set of documents with identifiers
+
+    See `IR Datasets <https://ir-datasets.com/index.html>`_ for the list of query classes
+    """
 
     count: Meta[Optional[int]]
     """Number of documents"""
 
-    def iter(self) -> Iterator[AdhocDocument]:
-        """(deprecated, use iter_documents) Returns an iterator over adhoc documents"""
-        raise NotImplementedError("No document iterator")
+    def iter(self) -> Iterator:
+        """Returns an iterator over documents"""
+        raise self.iter_documents()
 
     def iter_documents(self) -> Iterator[AdhocDocument]:
         return self.iter()
@@ -86,20 +53,18 @@ class AdhocDocumentStore(AdhocDocuments):
     - return the number of documents
     """
 
-    def document_text(self, docid: str) -> str:
-        """Returns the text of the document given its id"""
-        raise NotImplementedError(f"document_text() for {self.__class__}")
-
     def docid_internal2external(self, docid: int):
         """Converts an internal collection ID (integer) to an external ID"""
         raise NotImplementedError()
 
-    def document(self, internal_docid: int) -> AdhocDocument:
+    def document_int(self, internal_docid: int):
         """Returns a document given its internal ID"""
         docid = self.docid_internal2external(internal_docid)
-        return AdhocDocument(
-            docid, self.document_text(docid), internal_docid=internal_docid
-        )
+        return self.document(docid)
+
+    def document_ext(self, docid: str):
+        """Returns a document given its external ID"""
+        raise NotImplementedError(f"document() in {self.__class__}")
 
     def iter_sample(
         self, randint: Optional[Callable[[int], int]]
@@ -125,9 +90,12 @@ class AdhocIndex(AdhocDocumentStore):
 
 
 class AdhocTopics(Base):
-    """A set of topics with associated IDs"""
+    """A set of topics with associated IDs
 
-    def iter(self) -> Iterator[AdhocTopic]:
+    See `IR Datasets <https://ir-datasets.com/index.html>`_ for the list of query classes
+    """
+
+    def iter(self) -> Iterator:
         """Returns an iterator over topics"""
         raise NotImplementedError()
 
@@ -137,9 +105,12 @@ class AdhocTopics(Base):
 
 
 class AdhocAssessments(Base):
-    """Ad-hoc assessements (qrels)"""
+    """Ad-hoc assessements (qrels)
 
-    def iter(self) -> Iterator[AdhocAssessedTopic]:
+    See `IR Datasets <https://ir-datasets.com/index.html>`_ for the list of qrels classes
+    """
+
+    def iter(self) -> Iterator:
         """Returns an iterator over assessments"""
         raise NotImplementedError()
 
@@ -223,7 +194,7 @@ class TrainingTripletsLines(TrainingTriplets):
                 yield q, pos, neg
 
 
-@dataclass()
+@dataclass(kw_only=True)
 class PairwiseSample:
     """A a query with positive and negative samples"""
 

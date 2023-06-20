@@ -50,6 +50,7 @@ class TrainingTripletsID(ir.TrainingTripletsLines):
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         queries = {}
         for query in self.topics.iter():
+            # FIXME: query.text
             queries[query.qid] = query.text
 
         for qid, pos, neg in read_tsv(self.path):

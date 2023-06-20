@@ -1,6 +1,35 @@
+[project]
+name = "datamaestro-text"
+requires-python = ">=3.8"
+keywords = ["dataset manager", "information retrieval", "experiments"]
+description = "Datamaestro module for text-related datasets"
+dynamic = ["version", "readme", "dependencies"]
+license = {text = "GPL-3"}
+authors = [
+    { name = "Benjamin Piwowarski",  email = "benjamin@piwowarski.fr" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+homepage = "https://github.com/experimaestro/datamaestro_text"
+documentation = "https://datamaestro-text.readthedocs.io/en/latest/"
+repository = "https://github.com/experimaestro/datamaestro_text"
+
 [tool.setuptools_scm]
 write_to = "src/datamaestro_text/version.py"
 fallback_version = "0.0.0-dev"
 
 [build-system]
 requires = ["setuptools", "setuptools-scm", "wheel"]  # PEP 508 specifications.
+
+[project.entry-points."datamaestro.repositories"]
+text = "datamaestro_text:Repository"
+irds = "datamaestro_text.datasets.irds:Repository"
