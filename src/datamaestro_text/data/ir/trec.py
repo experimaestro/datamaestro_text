@@ -4,8 +4,8 @@ from datamaestro.data import Base
 from experimaestro import documentation, Param, Config
 from pathlib import Path
 from datamaestro_text.data.ir import (
-    AdhocDocuments,
-    AdhocTopics,
+    Documents,
+    Topics,
     AdhocAssessments,
     AdhocRun,
     AdhocResults,
@@ -13,7 +13,7 @@ from datamaestro_text.data.ir import (
 )
 
 
-class TrecAdhocTopics(AdhocTopics):
+class TrecTopics(Topics):
     path: Option[Path]
     parts: Option[List[str]]
 
@@ -71,5 +71,5 @@ class TrecAdhocResults(AdhocResults):
         return results
 
 
-class TipsterCollection(AdhocDocuments):
+class TipsterCollection(Documents):
     path: Param[Path]

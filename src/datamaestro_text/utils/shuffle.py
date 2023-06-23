@@ -21,58 +21,87 @@
 
 import os
 import tempfile
-import random
+from pathlib import Path
+import atexit
+import numpy
 import logging
-from typing import TextIO
+from typing import TextIO, Optional
 
-# need better way to estimate this given overhead for str. setting to
-# 0.5GB uses rougly 4GB of ram.
-MEMORY = int(float(os.environ.get("MEMORY", 4.0)) / 8 * 1024**3)
+# Use 1GB
+MEMORY = 1024**3
 
 
-def shuffle_and_close(buf, f):
+def shuffle_and_close(random, buf, f):
     random.shuffle(buf)
     f.writelines(buf)
     f.close()
 
 
-def shuffle(input, output: TextIO, memory=MEMORY):
+def shuffle(
+    input,
+    output: TextIO,
+    *,
+    memory=MEMORY,
+    random=None,
+    tmp_path: Optional[Path] = None
+):
     """Shuffle using temporary file"""
+    if random is None:
+        random = numpy.random.RandomState()
     files = []
     files.append(tempfile.NamedTemporaryFile(mode="w", delete=False))
+    rm_files = [files[-1].name]
     total_bytes = 0
     total_lines = 0
     buf = []
     bytes_used = 0
 
+    def remove_files():
+        logging.info("Removing files")
+        for path in rm_files:
+            if os.path.exists(path):
+                os.unlink(path)
+
+    # In case of crash, remove the files
+    atexit.register(remove_files)
+
+    # Create the temporary files
     for line in input:
         bytes_used += len(line)
         total_bytes += len(line)
         total_lines += 1
         buf.append(line)
         if bytes_used >= memory:
-            shuffle_and_close(buf, files[-1])
-            files.append(tempfile.NamedTemporaryFile(mode="w", delete=False))
+            shuffle_and_close(random, buf, files[-1])
+            files.append(
+                tempfile.NamedTemporaryFile(mode="w", delete=False, dir=tmp_path)
+            )
+            rm_files.append(files[-1].name)
+
             buf = []
             bytes_used = 0
+
     if buf:
-        shuffle_and_close(buf, files[-1])
+        shuffle_and_close(random, buf, files[-1])
 
     buf = []
     avg_bytes_per_line = total_bytes / float(total_lines)
     logging.info("Output from %d temporary files", len(files))
+
     files = [open(f.name) for f in files]
     while files:
-        rm_files = []
         lines_per_file = int((memory / avg_bytes_per_line) / len(files))
         for f in files:
             lines = f.readlines(lines_per_file)
-            if not lines:
-                rm_files.append(f)
             buf += lines
+            if not lines:
+                files.remove(f)
+                os.unlink(f.name)
+                rm_files.remove(f.name)
+
         random.shuffle(buf)
         output.writelines(buf)
         buf = []
-        for f in rm_files:
-            files.remove(f)
-            os.unlink(f.name)
+
+    remove_files()
+    atexit.unregister(remove_files)

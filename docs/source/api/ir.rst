@@ -2,6 +2,11 @@ Information Retrieval API
 =========================
 
 
+Data objects
+------------
+
+.. automodule:: datamaestro_text.data.ir.data
+   :members:
 
 Collection
 ----------
@@ -11,21 +16,21 @@ Collection
 Topics
 ------
 
-.. autoxpmconfig:: datamaestro_text.data.ir.AdhocTopics
+.. autoxpmconfig:: datamaestro_text.data.ir.Topics
     :members: iter, count
 
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocTopics
+.. autoxpmconfig:: datamaestro_text.data.ir.csv.Topics
 
-.. autoclass:: datamaestro_text.data.ir.AdhocTopic
+.. autoclass:: datamaestro_text.data.ir.Topic
 
 Documents
 ---------
-.. autoclass:: datamaestro_text.data.ir.AdhocDocument
+.. autoclass:: datamaestro_text.data.ir.Document
 
-.. autoxpmconfig:: datamaestro_text.data.ir.AdhocDocuments
+.. autoxpmconfig:: datamaestro_text.data.ir.Documents
     :members: iter_documents, iter_ids, documentcount
 .. autoxpmconfig:: datamaestro_text.data.ir.cord19.Documents
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocDocuments
+.. autoxpmconfig:: datamaestro_text.data.ir.csv.Documents
 
 Assessments
 -----------
@@ -60,7 +65,7 @@ Reranking
 Document Index
 ---------------
 
-.. autoxpmconfig:: datamaestro_text.data.ir.AdhocDocumentStore
+.. autoxpmconfig:: datamaestro_text.data.ir.DocumentStore
     :members: documentcount, document_text, docid_internal2external, document, iter_sample
 
 .. autoxpmconfig:: datamaestro_text.data.ir.AdhocIndex

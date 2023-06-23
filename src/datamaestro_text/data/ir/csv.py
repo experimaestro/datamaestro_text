@@ -2,8 +2,9 @@ from pathlib import Path
 from typing import Iterator, Tuple
 
 from experimaestro import Param, Option, Constant, Meta
-from datamaestro.definitions import argument, constant, datatags, datatasks
+from datamaestro.definitions import argument
 import datamaestro_text.data.ir as ir
+from datamaestro_text.data.ir.data import GenericTopic
 from datamaestro_text.interfaces.plaintext import read_tsv
 
 
@@ -16,14 +17,14 @@ class AdhocRunWithText(ir.AdhocRun):
 
 @argument("path", type=Path)
 @argument("separator", type=str, default="\t", ignored=True)
-class AdhocTopics(ir.AdhocTopics):
+class Topics(ir.Topics):
     "Pairs of query id - query using a separator"
 
     def iter(self):
-        return (ir.AdhocTopic(qid, title, {}) for qid, title in read_tsv(self.path))
+        return (GenericTopic(qid, title) for qid, title in read_tsv(self.path))
 
 
-class AdhocDocuments(ir.AdhocDocuments):
+class Documents(ir.Documents):
     "One line per document, format pid<SEP>text"
 
     path: Param[Path]
@@ -43,15 +44,14 @@ class TrainingTripletsID(ir.TrainingTripletsLines):
     """
 
     separator: Option[str] = "\t"
-    documents: Param[ir.AdhocDocuments]
-    topics: Param[ir.AdhocTopics]
+    documents: Param[ir.Documents]
+    topics: Param[ir.Topics]
     ids: Constant[bool] = True
 
     def iter(self) -> Iterator[Tuple[str, str, str]]:
         queries = {}
         for query in self.topics.iter():
-            # FIXME: query.text
-            queries[query.qid] = query.text
+            queries[query.get_id()] = query.get_text()
 
         for qid, pos, neg in read_tsv(self.path):
             yield queries[qid], pos, neg

@@ -16,9 +16,9 @@ from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
 from datamaestro_text.data.ir import RerankAdhoc, Adhoc
 from datamaestro_text.data.ir.csv import (
-    AdhocTopics,
+    Topics,
     AdhocRunWithText,
-    AdhocDocuments,
+    Documents,
     TrainingTriplets,
     TrainingTripletsID,
 )
@@ -53,7 +53,7 @@ def collection_etc(data):
 
 @lua
 @reference("data", collection_etc)
-@dataset(AdhocDocuments, size="2.9GB")
+@dataset(Documents, size="2.9GB")
 def collection(data):
     """MS-Marco documents
 
@@ -88,7 +88,7 @@ def train_run(run):
     files=["queries.train.tsv"],
     checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
 )
-@dataset(AdhocTopics)
+@dataset(Topics)
 def train_queries(queries):
     return {"path": queries / "queries.train.tsv"}
 
@@ -194,7 +194,7 @@ def train_texttriples_full(triples):
     files=["queries.dev.tsv"],
     checker=HashCheck("c177b2795d5f2dcc524cf00fcd973be1", md5),
 )
-@dataset(AdhocTopics)
+@dataset(Topics)
 def dev_queries(queries):
     return {"path": queries / "queries.dev.tsv"}
 
@@ -264,7 +264,7 @@ def eval_withrun(run):
 
 
 @reference("data", collection_etc)
-@dataset(AdhocTopics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+@dataset(Topics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def dev_small_queries(data):
     return {"path": data.path / "queries.dev.small.tsv"}
 
@@ -286,7 +286,7 @@ def dev_small(collection, topics, qrels):
 
 
 @reference("data", collection_etc)
-@dataset(AdhocTopics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+@dataset(Topics, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def eval_queries_small(data):
     return {"path": data.path / "queries.eval.small.tsv"}
 
@@ -302,7 +302,7 @@ def eval_queries_small(data):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-test2019-queries.tsv.gz",
     checker=HashCheck("756e60d714cee28d3b552289d6272f1d", md5),
 )
-@dataset(AdhocTopics)
+@dataset(Topics)
 def trec2019_test_queries(queries):
     return {"path": queries}
 
@@ -367,7 +367,7 @@ def trec2019_test_withrun(trec2019, run):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/msmarco-test2020-queries.tsv.gz",
     checker=HashCheck("00a406fb0d14ed3752d70d1e4eb98600", md5),
 )
-@dataset(AdhocTopics, size="12K")
+@dataset(Topics, size="12K")
 def trec2020_test_queries(queries):
     """TREC Deep Learning 2019 (topics)
 

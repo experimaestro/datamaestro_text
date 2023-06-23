@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional
 import re
 
-from datamaestro_text.data.ir import (
+from datamaestro_text.data.ir.data import (
     AdhocAssessedTopic,
-    AdhocAssessment,
-    AdhocTopic,
+    SimpleAdhocAssessment,
+    Topic,
 )
 
 # --- Assessments
@@ -24,7 +24,7 @@ def parse_qrels(path: Path):
                     yield AdhocAssessedTopic(_qid, assessments)
                 _qid = qid
                 assessments = []
-            assessments.append(AdhocAssessment(docno, int(rel)))
+            assessments.append(SimpleAdhocAssessment(docno, int(rel)))
 
         yield AdhocAssessedTopic(_qid, assessments)
 
@@ -33,7 +33,7 @@ def parse_qrels(path: Path):
 
 
 @dataclass()
-class TrecAdhocTopic(AdhocTopic):
+class TrecTopic(Topic):
     description: str
     narrative: str
 
@@ -55,7 +55,7 @@ def parse_query_format(file, xml_prefix=None):
                 continue
             elif line.startswith("</top>"):
                 if num:
-                    yield TrecAdhocTopic(
+                    yield TrecTopic(
                         num, cleanup(title), {}, cleanup(desc), cleanup(narr)
                     )
                 num, title, desc, narr, reading = None, None, None, None, None

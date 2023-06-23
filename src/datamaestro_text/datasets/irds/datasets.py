@@ -7,8 +7,8 @@ from datamaestro.definitions import AbstractDataset
 from .data import (
     AdhocAssessments,
     AdhocRun,
-    AdhocDocuments,
-    AdhocTopics,
+    Documents,
+    Topics,
     Adhoc,
     IRDSId,
     TrainingTriplets,
@@ -55,7 +55,7 @@ class Dataset(AbstractDataset):
         return self.__class__.__configtype__
 
 
-class Qrels(Dataset):
+class QrelsDataset(Dataset):
     SUFFIX = "qrels"
     configtype = AdhocAssessments
 
@@ -64,21 +64,21 @@ class Qrels(Dataset):
         next(self.irds_ds.qrels_iter())
         return True
 
-    def _prepare(self, download=False) -> AdhocDocuments:
+    def _prepare(self, download=False) -> Documents:
         return AdhocAssessments(id=self.fullid)
 
 
-class Queries(Dataset):
+class QueriesDataset(Dataset):
     SUFFIX = "queries"
-    configtype = AdhocTopics
+    configtype = Topics
 
     def download(self, force=False):
         # Triggers download
         next(self.irds_ds.queries_iter())
         return True
 
-    def _prepare(self, download=False) -> AdhocDocuments:
-        return AdhocTopics(id=self.fullid)
+    def _prepare(self, download=False) -> Documents:
+        return Topics(id=self.fullid)
 
 
 # class ScoredDocuments(Dataset):
@@ -86,26 +86,25 @@ class Queries(Dataset):
 #     base = ScoredDocuments
 
 
-class Documents(Dataset):
+class DocumentsDataset(Dataset):
     SUFFIX = "documents"
-    configtype = AdhocDocuments
+    configtype = Documents
 
     def download(self, force=False):
         # Triggers download
         next(self.irds_ds.docs_iter())
         return True
 
-    def _prepare(self, download=False) -> AdhocDocuments:
-        return AdhocDocuments(id=self.fullid)
+    def _prepare(self, download=False) -> Documents:
+        return Documents(id=self.fullid)
 
 
 class TrainingTripletsDataset(Dataset):
     SUFFIX = "docpairs"
 
-    def _prepare(self, download=False) -> AdhocDocuments:
+    def _prepare(self, download=False) -> Documents:
         return TrainingTriplets(
             id=self.fullid,
-            ids=True,
         )
 
 
@@ -114,16 +113,16 @@ class AdhocRunDataset(Dataset):
     base = AdhocRun
     configtype = AdhocRun
 
-    def _prepare(self, download=False) -> AdhocDocuments:
+    def _prepare(self, download=False) -> Documents:
         return AdhocRun(id=self.fullid)
 
 
 class Collection(Dataset):
     base = Adhoc
-    assessements: Qrels
-    topics: Queries
+    assessements: QrelsDataset
+    topics: QueriesDataset
 
-    def _prepare(self, download=False) -> AdhocDocuments:
+    def _prepare(self, download=False) -> Documents:
         return Adhoc(
             id=self.fullid,
             topics=self.topics.prepare(download),
@@ -190,10 +189,10 @@ def build(repository):
                     ds.documentation()["desc"],
                 )
                 datasets[cid] = module
-                add(cid, Documents(repository, dataset_id, ds))
+                add(cid, DocumentsDataset(repository, dataset_id, ds))
 
             if ds.has_queries():
-                queries = Queries(repository, dataset_id, ds)
+                queries = QueriesDataset(repository, dataset_id, ds)
                 add(cid, queries)
 
             if ds.has_docpairs():
@@ -203,7 +202,7 @@ def build(repository):
                 add(cid, AdhocRunDataset(repository, dataset_id, ds))
 
             if ds.has_qrels():
-                qrels = Qrels(repository, dataset_id, ds)
+                qrels = QrelsDataset(repository, dataset_id, ds)
                 add(cid, qrels)
 
             if qrels and queries:

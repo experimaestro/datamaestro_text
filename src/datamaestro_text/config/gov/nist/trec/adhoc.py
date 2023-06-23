@@ -13,7 +13,7 @@ from datamaestro.definitions import dataset
 
 from datamaestro_text.data.ir.trec import (
     TipsterCollection,
-    TrecAdhocTopics,
+    TrecTopics,
     TrecAdhocAssessments,
 )
 from datamaestro_text.data.ir import Adhoc
@@ -51,7 +51,7 @@ def trec1_documents(documents):
     "http://trec.nist.gov/data/topics_eng/topics.51-100.gz",
     transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1")),
 )
-@dataset(TrecAdhocTopics, id="1.topics", url="")
+@dataset(TrecTopics, id="1.topics", url="")
 def trec1_topics(topics):
     return {"path": topics, "parts": ["desc"]}
 
@@ -83,7 +83,7 @@ def trec1(documents, topics, assessments):
     "http://trec.nist.gov/data/topics_eng/topics.101-150.gz",
     transforms=TransformList(Gunzip(), Replace(r"Number:(\s+)0", r"Number: \1")),
 )
-@dataset(TrecAdhocTopics, id="2.topics")
+@dataset(TrecTopics, id="2.topics")
 def trec2_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -111,7 +111,7 @@ def trec2(documents, topics, assessments):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.151-200.gz")
-@dataset(TrecAdhocTopics, id="3.topics")
+@dataset(TrecTopics, id="3.topics")
 def trec3_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -158,7 +158,7 @@ def trec4_documents(documents):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.201-250.gz")
-@dataset(TrecAdhocTopics, id="4.topics")
+@dataset(TrecTopics, id="4.topics")
 def trec4_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -203,7 +203,7 @@ def trec5_documents(documents):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.251-300.gz")
-@dataset(TrecAdhocTopics, id="5.topics")
+@dataset(TrecTopics, id="5.topics")
 def trec5_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -244,7 +244,7 @@ def trec6_documents(documents):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.301-350.gz")
-@dataset(TrecAdhocTopics, id="6.topics")
+@dataset(TrecTopics, id="6.topics")
 def trec6_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -284,7 +284,7 @@ def trec7_documents(documents):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.351-400.gz")
-@dataset(TrecAdhocTopics, id="7.topics")
+@dataset(TrecTopics, id="7.topics")
 def trec7_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -311,7 +311,7 @@ def trec7(documents, topics, assessments):
 
 
 @filedownloader("topics.sgml", "http://trec.nist.gov/data/topics_eng/topics.401-450.gz")
-@dataset(TrecAdhocTopics, id="8.topics")
+@dataset(TrecTopics, id="8.topics")
 def trec8_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -338,7 +338,7 @@ def trec8(documents, topics, assessments):
 
 
 @filedownloader("topics", "http://trec.nist.gov/data/robust/04.testset.gz")
-@dataset(TrecAdhocTopics, id="robust.2004.topics")
+@dataset(TrecTopics, id="robust.2004.topics")
 def robust2004_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
@@ -364,7 +364,7 @@ def robust2004(documents, topics, assessments):
 
 
 @filedownloader("topics", "http://trec.nist.gov/data/robust/05/05.50.topics.txt")
-@dataset(TrecAdhocTopics, id="robust.2005.topics")
+@dataset(TrecTopics, id="robust.2005.topics")
 def robust2005_topics(topics):
     return {"path": topics, "parts": ["title", "desc"]}
 
