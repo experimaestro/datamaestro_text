@@ -4,7 +4,7 @@ from typing import Iterator, Tuple
 from experimaestro import Param, Option, Constant, Meta
 from datamaestro.definitions import argument
 import datamaestro_text.data.ir as ir
-from datamaestro_text.data.ir.data import GenericTopic
+from datamaestro_text.data.ir.base import GenericTopic
 from datamaestro_text.interfaces.plaintext import read_tsv
 
 

@@ -10,7 +10,7 @@ from datamaestro.definitions import datatasks, Param, Meta
 from dataclasses import dataclass
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
-from .data import (
+from .base import (
     Document,
     Topic,
     AdhocAssessment,

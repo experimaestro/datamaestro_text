@@ -7,7 +7,7 @@ from experimaestro.compat import cached_property
 from typing import Any, Iterator, Tuple
 from experimaestro import Option
 import datamaestro_text.data.ir as ir
-from datamaestro_text.data.ir.data import (
+from datamaestro_text.data.ir.base import (
     Topic,
     Document,
     GenericDocument,

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional
 import re
 
-from datamaestro_text.data.ir.data import (
+from datamaestro_text.data.ir.base import (
     AdhocAssessedTopic,
     SimpleAdhocAssessment,
     Topic,
