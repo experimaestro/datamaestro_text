@@ -5,7 +5,7 @@ Information Retrieval API
 Data objects
 ------------
 
-.. automodule:: datamaestro_text.data.ir.data
+.. automodule:: datamaestro_text.data.ir.base
    :members:
 
 Collection
