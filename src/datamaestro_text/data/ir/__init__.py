@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 from functools import cached_property
 from pathlib import Path
+from attrs import define
 from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
 import random
 from experimaestro import Config
@@ -238,7 +239,7 @@ class TrainingTripletsLines(TrainingTriplets):
         return IDDocument if self.doc_ids else TextDocument
 
 
-@dataclass(kw_only=True)
+@define(kw_only=True)
 class PairwiseSample:
     """A a query with positive and negative samples"""
 
