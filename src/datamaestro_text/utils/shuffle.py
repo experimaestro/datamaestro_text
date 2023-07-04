@@ -25,7 +25,7 @@ from pathlib import Path
 import atexit
 import numpy
 import logging
-from typing import TextIO, Optional
+from typing import TextIO, Optional, List
 
 # Use 1GB
 MEMORY = 1024**3
@@ -35,6 +35,13 @@ def shuffle_and_close(random, buf, f):
     random.shuffle(buf)
     f.writelines(buf)
     f.close()
+
+
+def add_temporary_file(tmp_path: Path, files: List, rm_files: List[str]):
+    tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=False, dir=tmp_path)
+    logging.info("Adding temporary file %s", tmp_file.name)
+    files.append(tmp_file)
+    rm_files.append(tmp_file.name)
 
 
 def shuffle(
@@ -49,12 +56,9 @@ def shuffle(
     if random is None:
         random = numpy.random.RandomState()
     files = []
-    files.append(tempfile.NamedTemporaryFile(mode="w", delete=False))
-    rm_files = [files[-1].name]
-    total_bytes = 0
-    total_lines = 0
-    buf = []
-    bytes_used = 0
+
+    # --- Files to remove
+    rm_files = []
 
     def remove_files():
         logging.info("Removing files")
@@ -65,6 +69,13 @@ def shuffle(
     # In case of crash, remove the files
     atexit.register(remove_files)
 
+    # Let's go
+    add_temporary_file(tmp_path, files, rm_files)
+    total_bytes = 0
+    total_lines = 0
+    buf = []
+    bytes_used = 0
+
     # Create the temporary files
     for line in input:
         bytes_used += len(line)
@@ -73,10 +84,7 @@ def shuffle(
         buf.append(line)
         if bytes_used >= memory:
             shuffle_and_close(random, buf, files[-1])
-            files.append(
-                tempfile.NamedTemporaryFile(mode="w", delete=False, dir=tmp_path)
-            )
-            rm_files.append(files[-1].name)
+            add_temporary_file(tmp_path, files, rm_files)
 
             buf = []
             bytes_used = 0
