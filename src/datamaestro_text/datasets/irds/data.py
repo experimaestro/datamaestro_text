@@ -1,10 +1,11 @@
+import logging
+from typing import Any, Iterator, Tuple, Type
+import attrs
 import ir_datasets
 from ir_datasets.formats import GenericDoc, GenericQuery, GenericDocPair
-import logging
-import attrs
+import ir_datasets.datasets as _irds
 from experimaestro import Config
 from experimaestro.compat import cached_property
-from typing import Any, Iterator, Tuple
 from experimaestro import Option
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
@@ -17,6 +18,7 @@ from datamaestro_text.data.ir.base import (
     IDDocument,
     IDTopic,
 )
+import datamaestro_text.data.ir.formats as formats
 
 
 # Interface between ir_datasets and datamaestro:
@@ -64,11 +66,18 @@ class AdhocAssessments(ir.AdhocAssessments, IRDSId):
         return qrels.values()
 
 
-def tuple_constructor(cls):
-    def constructor(entry):
-        return cls(*tuple(entry))
+class tuple_constructor:
+    def __init__(self, target_cls: Type, *fields: str):
+        self.target_cls = target_cls
+        self.fields = fields
 
-    return constructor
+    def check(self, source_cls: Type):
+        assert (
+            source_cls._fields == self.fields
+        ), f"Internal error: Fields do not match ({source_cls._fields} and {self.fields})"
+
+    def __call__(self, entry):
+        return self.target_cls(*tuple(entry))
 
 
 @attrs.define()
@@ -77,7 +86,12 @@ class IRDSDocumentWrapper(ir.Document):
 
 
 class Documents(ir.DocumentStore, IRDSId):
-    CONVERTERS = {GenericDoc: (GenericDocument, tuple_constructor)}
+    CONVERTERS = {
+        GenericDoc: tuple_constructor(GenericDocument, "doc_id", "text"),
+        _irds.beir.BeirCordDoc: tuple_constructor(
+            formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
+        ),
+    }
 
     """Wraps an ir datasets collection -- and provide a default text
     value depending on the collection itself"""
@@ -115,12 +129,13 @@ class Documents(ir.DocumentStore, IRDSId):
 
     @cached_property
     def document_cls(self):
-        return Documents.CONVERTERS[self.dataset.docs_cls()][0]
+        return self.converter.target_cls
 
     @cached_property
     def converter(self):
-        document_cls, constructor = Documents.CONVERTERS[self.dataset.docs_cls()]
-        return constructor(document_cls)
+        converter = Documents.CONVERTERS[self.dataset.docs_cls()]
+        converter.check(self.dataset.docs_cls())
+        return converter
 
 
 @attrs.define()
@@ -129,7 +144,12 @@ class IRDSQueryWrapper(ir.Topic):
 
 
 class Topics(ir.TopicsStore, IRDSId):
-    CONVERTERS = {GenericQuery: (GenericTopic, tuple_constructor)}
+    CONVERTERS = {
+        GenericQuery: tuple_constructor(GenericTopic, "query_id", "text"),
+        _irds.beir.BeirCovidQuery: tuple_constructor(
+            formats.TrecTopic, "query_id", "text", "query", "narrative"
+        ),
+    }
 
     def iter(self) -> Iterator[ir.Topic]:
         """Returns an iterator over topics"""
@@ -167,12 +187,13 @@ class Topics(ir.TopicsStore, IRDSId):
 
     @cached_property
     def topic_cls(self):
-        return Topics.CONVERTERS[self.dataset.queries_cls()][0]
+        return self.converter.target_cls
 
     @cached_property
     def converter(self):
-        topic_cls, constructor = Topics.CONVERTERS[self.dataset.queries_cls()]
-        return constructor(topic_cls)
+        converter = Topics.CONVERTERS[self.dataset.queries_cls()]
+        converter.check(self.dataset.queries_cls())
+        return converter
 
 
 class Adhoc(ir.Adhoc, IRDSId):
