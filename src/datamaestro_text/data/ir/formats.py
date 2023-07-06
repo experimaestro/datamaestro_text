@@ -1,3 +1,4 @@
+from typing import ClassVar
 from attrs import define
 from .base import IDHolder, Document, Topic
 
@@ -8,6 +9,11 @@ class CordDocument(IDHolder, Document):
     title: str
     url: str
     pubmed_id: str
+
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.title} {self.text}"
 
 
 @define
