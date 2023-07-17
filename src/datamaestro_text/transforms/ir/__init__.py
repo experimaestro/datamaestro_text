@@ -1,8 +1,9 @@
 import logging
 import gzip
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Type
-from experimaestro import Task, Param, Annotated, pathgenerator, Option, tqdm
+from experimaestro import Config, Task, Param, Annotated, pathgenerator, Option, tqdm
 import numpy as np
 import datamaestro_text.data.ir as ir
 from datamaestro_text.utils.shuffle import shuffle
@@ -194,3 +195,12 @@ class ShuffledTrainingTripletsLines(Task):
         with output:
             self.tmp_path.mkdir(exist_ok=True)
             shuffle(triplegenerator(), output, random=random, tmp_path=self.tmp_path)
+
+
+class TopicWrapper(Config, ABC):
+    """Modify topics on the fly using a topic wrapper"""
+
+    @abstractmethod
+    def __call__(topic: ir.Topic) -> ir.Topic:
+        """Transforms a topic into another topic"""
+        ...

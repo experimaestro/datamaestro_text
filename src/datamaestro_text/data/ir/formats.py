@@ -1,6 +1,6 @@
 from typing import ClassVar
 from attrs import define
-from .base import IDHolder, Document, Topic
+from .base import IDHolder, Document, GenericTopic
 
 
 @define
@@ -17,7 +17,10 @@ class CordDocument(IDHolder, Document):
 
 
 @define
-class TrecTopic(IDHolder, Topic):
+class TrecTopic(GenericTopic):
     text: str
     query: str
     narrative: str
+
+    def get_text(self):
+        return f"{self.query}"
