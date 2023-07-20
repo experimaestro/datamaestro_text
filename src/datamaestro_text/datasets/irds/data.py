@@ -91,6 +91,9 @@ class Documents(ir.DocumentStore, IRDSId):
         _irds.beir.BeirCordDoc: tuple_constructor(
             formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
         ),
+        _irds.beir.BeirTitleDoc: tuple_constructor(
+            formats.TitleDocument, "doc_id", "text", "title"
+        )
     }
 
     """Wraps an ir datasets collection -- and provide a default text
@@ -237,3 +240,12 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
     def count(self):
         """Returns the length or None"""
         return self.dataset.docpairs_count()
+
+
+if __name__ == "__main__":
+    from datamaestro import prepare_dataset
+
+    dataset = prepare_dataset("irds.beir.nq")
+    # dataset = prepare_dataset("irds.beir.trec-covid")
+
+    next(dataset.topics.iter())

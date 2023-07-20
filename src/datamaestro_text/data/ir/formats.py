@@ -14,6 +14,16 @@ class CordDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.text}"
+    
+
+@define
+class TitleDocument(IDHolder, Document):
+    text: str
+    title: str
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.title} {self.text}"
 
 
 @define
