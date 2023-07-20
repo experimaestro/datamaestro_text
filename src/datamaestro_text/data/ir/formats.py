@@ -24,6 +24,17 @@ class TitleDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.text}"
+    
+
+@define
+class TitleUrlDocument(IDHolder, Document):
+    text: str
+    title: str
+    url: str
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.title} {self.text}"
 
 
 @define
@@ -34,3 +45,13 @@ class TrecTopic(GenericTopic):
 
     def get_text(self):
         return f"{self.query}"
+
+
+@define
+class UrlTopic(GenericTopic):
+    text: str
+    url: str
+
+    def get_text(self):
+        return f"{self.text}"
+    

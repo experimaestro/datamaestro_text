@@ -93,6 +93,9 @@ class Documents(ir.DocumentStore, IRDSId):
         ),
         _irds.beir.BeirTitleDoc: tuple_constructor(
             formats.TitleDocument, "doc_id", "text", "title"
+        ),
+        _irds.beir.BeirTitleUrlDoc: tuple_constructor(
+            formats.TitleUrlDocument, "doc_id", "text", "title", "url"
         )
     }
 
@@ -151,6 +154,9 @@ class Topics(ir.TopicsStore, IRDSId):
         GenericQuery: tuple_constructor(GenericTopic, "query_id", "text"),
         _irds.beir.BeirCovidQuery: tuple_constructor(
             formats.TrecTopic, "query_id", "text", "query", "narrative"
+        ),
+        _irds.beir.BeirUrlQuery: tuple_constructor(
+            formats.UrlTopic, "query_id", "text", "url"
         ),
     }
 
@@ -245,7 +251,8 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
 if __name__ == "__main__":
     from datamaestro import prepare_dataset
 
-    dataset = prepare_dataset("irds.beir.nq")
-    # dataset = prepare_dataset("irds.beir.trec-covid")
+    dataset = prepare_dataset("irds.beir.nfcorpus.dev.queries")
 
-    next(dataset.topics.iter())
+    # next(dataset.iter())
+
+    next(dataset.iter())
