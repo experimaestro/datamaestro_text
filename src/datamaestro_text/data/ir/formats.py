@@ -44,7 +44,7 @@ class TrecTopic(GenericTopic):
     narrative: str
 
     def get_text(self):
-        return f"{self.query}"
+        return f"{self.text}"
 
 
 @define

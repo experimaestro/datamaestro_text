@@ -247,12 +247,9 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
         """Returns the length or None"""
         return self.dataset.docpairs_count()
 
-
-if __name__ == "__main__":
+if __name__ =="__main__":
     from datamaestro import prepare_dataset
 
-    dataset = prepare_dataset("irds.beir.nfcorpus.dev.queries")
+    dataset = prepare_dataset("irds.beir.nfcorpus.test")
 
-    # next(dataset.iter())
-
-    next(dataset.iter())
+    print()
