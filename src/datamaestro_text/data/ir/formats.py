@@ -19,7 +19,6 @@ class CordDocument(IDHolder, Document):
 
 @define
 class CordFullTextDocument(IDHolder, Document):
-    doc_id: str
     title: str
     doi: str
     date: str
