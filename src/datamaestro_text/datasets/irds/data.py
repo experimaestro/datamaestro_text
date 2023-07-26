@@ -96,6 +96,12 @@ class Documents(ir.DocumentStore, IRDSId):
         ),
         _irds.beir.BeirTitleUrlDoc: tuple_constructor(
             formats.TitleUrlDocument, "doc_id", "text", "title", "url"
+        ),
+        _irds.msmarco_document.MsMarcoDocument: tuple_constructor(
+            formats.MsMarcoDocument, "doc_id", "url", "title", "body"
+        ),
+        _irds.cord19.Cord19FullTextDoc: tuple_constructor(
+            formats.CordFullTextDocument, "doc_id", "title", "doi", "date", "abstract", "body"
         )
     }
 
