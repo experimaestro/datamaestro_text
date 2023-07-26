@@ -1,6 +1,6 @@
 from typing import ClassVar, Tuple
 from attrs import define
-from .base import IDHolder, Document, GenericTopic
+from .base import IDHolder, Document, GenericTopic, IDTopic
 from ir_datasets.datasets.cord19 import Cord19FullTextSection
 
 
@@ -44,6 +44,18 @@ class MsMarcoDocument(IDHolder, Document):
     
 
 @define
+class NFCorpusDocument(IDHolder, Document):
+    url: str
+    title: str
+    abstract: str
+
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.abstract}"
+    
+
+@define
 class TitleDocument(IDHolder, Document):
     text: str
     title: str
@@ -81,4 +93,13 @@ class UrlTopic(GenericTopic):
 
     def get_text(self):
         return f"{self.text}"
+    
+
+@define
+class NFCorpusTopic(IDTopic):
+    title: str
+    all: str
+
+    def get_text(self):
+        return f"{self.title}"
     

@@ -102,6 +102,9 @@ class Documents(ir.DocumentStore, IRDSId):
         ),
         _irds.cord19.Cord19FullTextDoc: tuple_constructor(
             formats.CordFullTextDocument, "doc_id", "title", "doi", "date", "abstract", "body"
+        ),
+        _irds.nfcorpus.NfCorpusDoc: tuple_constructor(
+            formats.NFCorpusDocument, "doc_id", "url", "title", "abstract"
         )
     }
 
@@ -164,6 +167,9 @@ class Topics(ir.TopicsStore, IRDSId):
         _irds.beir.BeirUrlQuery: tuple_constructor(
             formats.UrlTopic, "query_id", "text", "url"
         ),
+        _irds.nfcorpus.NfCorpusQuery: tuple_constructor(
+            formats.NFCorpusTopic, "query_id", "title", "all"
+        )
     }
 
     def iter(self) -> Iterator[ir.Topic]:
@@ -256,6 +262,8 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
 if __name__ =="__main__":
     from datamaestro import prepare_dataset
 
-    dataset = prepare_dataset("irds.beir.nfcorpus.test")
+    dataset = prepare_dataset("irds.nfcorpus.train")
+
+    test = next(dataset.topics.iter())
 
     print()
