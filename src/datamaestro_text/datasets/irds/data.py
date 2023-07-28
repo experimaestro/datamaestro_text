@@ -121,6 +121,9 @@ class Documents(ir.DocumentStore, IRDSId):
         TrecParsedDoc: tuple_constructor(
             formats.TrecParsedDocument, "doc_id", "title", "body", "marked_up_doc"
         ),
+        _irds.wapo.WapoDoc: tuple_constructor(
+            formats.WapoDocument, "doc_id", "url", "title", "author", "published_date", "kicker", "body", "body_paras_html", "body_media"
+        )
     }
 
     """Wraps an ir datasets collection -- and provide a default text
@@ -186,7 +189,7 @@ class Topics(ir.TopicsStore, IRDSId):
             formats.NFCorpusTopic, "query_id", "title", "all"
         ),
         TrecQuery: tuple_constructor(
-            formats.TrecQuery, "query_id", "title", "description", "narrative"
+            formats.TrecTopic, "query_id", "title", "description", "narrative"
         ),
     }
 
@@ -281,7 +284,7 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
 if __name__ == "__main__":
     from datamaestro import prepare_dataset
 
-    dataset = prepare_dataset("irds.nfcorpus.train")
+    dataset = prepare_dataset("irds.wapo.v2.trec-core-2018")
 
     test = next(dataset.topics.iter())
 

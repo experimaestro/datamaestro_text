@@ -1,5 +1,6 @@
 from typing import ClassVar, Tuple
 from attrs import define
+from ir_datasets.datasets.wapo import WapoDocMedia
 from .base import IDHolder, Document, GenericTopic, IDTopic
 from ir_datasets.datasets.cord19 import Cord19FullTextSection
 
@@ -86,6 +87,23 @@ class TrecParsedDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.body}"
+    
+
+@define
+class WapoDocument(IDHolder, Document):
+    url: str
+    title: str
+    author: str
+    published_date: int
+    kicker: str
+    body: str
+    body_paras_html: Tuple[str, ...]
+    body_media: Tuple[WapoDocMedia, ...]
+
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.body}"
 
 
 @define
@@ -117,7 +135,7 @@ class NFCorpusTopic(IDTopic):
 
 
 @define
-class TrecQuery(IDTopic):
+class TrecTopic(IDTopic):
     title: str
     description: str
     narrative: str
