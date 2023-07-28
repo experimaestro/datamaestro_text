@@ -186,7 +186,7 @@ def build(repository):
                 module = Datasets(
                     cid,
                     ds.documentation().get("pretty_name", cid),
-                    ds.documentation()["desc"],
+                    ds.documentation().get("desc", None),
                 )
                 datasets[cid] = module
                 add(cid, DocumentsDataset(repository, dataset_id, ds))
