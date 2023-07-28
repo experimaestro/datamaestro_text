@@ -15,7 +15,7 @@ class CordDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.text}"
-    
+
 
 @define
 class CordFullTextDocument(IDHolder, Document):
@@ -29,7 +29,7 @@ class CordFullTextDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.abstract}"
-    
+
 
 @define
 class MsMarcoDocument(IDHolder, Document):
@@ -41,7 +41,7 @@ class MsMarcoDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.body}"
-    
+
 
 @define
 class NFCorpusDocument(IDHolder, Document):
@@ -53,7 +53,7 @@ class NFCorpusDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.abstract}"
-    
+
 
 @define
 class TitleDocument(IDHolder, Document):
@@ -63,7 +63,7 @@ class TitleDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.text}"
-    
+
 
 @define
 class TitleUrlDocument(IDHolder, Document):
@@ -74,6 +74,18 @@ class TitleUrlDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.title} {self.text}"
+
+
+@define
+class TrecParsedDocument(IDHolder, Document):
+    title: str
+    body: str
+    marked_up_doc: bytes
+
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.title} {self.body}"
 
 
 @define
@@ -93,7 +105,7 @@ class UrlTopic(GenericTopic):
 
     def get_text(self):
         return f"{self.text}"
-    
+
 
 @define
 class NFCorpusTopic(IDTopic):
@@ -102,4 +114,13 @@ class NFCorpusTopic(IDTopic):
 
     def get_text(self):
         return f"{self.title}"
-    
+
+
+@define
+class TrecQuery(IDTopic):
+    title: str
+    description: str
+    narrative: str
+
+    def get_text(self):
+        return f"{self.description}"

@@ -2,7 +2,13 @@ import logging
 from typing import Any, Iterator, Tuple, Type
 import attrs
 import ir_datasets
-from ir_datasets.formats import GenericDoc, GenericQuery, GenericDocPair
+from ir_datasets.formats import (
+    GenericDoc,
+    GenericQuery,
+    GenericDocPair,
+    TrecParsedDoc,
+    TrecQuery,
+)
 import ir_datasets.datasets as _irds
 from experimaestro import Config
 from experimaestro.compat import cached_property
@@ -101,11 +107,20 @@ class Documents(ir.DocumentStore, IRDSId):
             formats.MsMarcoDocument, "doc_id", "url", "title", "body"
         ),
         _irds.cord19.Cord19FullTextDoc: tuple_constructor(
-            formats.CordFullTextDocument, "doc_id", "title", "doi", "date", "abstract", "body"
+            formats.CordFullTextDocument,
+            "doc_id",
+            "title",
+            "doi",
+            "date",
+            "abstract",
+            "body",
         ),
         _irds.nfcorpus.NfCorpusDoc: tuple_constructor(
             formats.NFCorpusDocument, "doc_id", "url", "title", "abstract"
-        )
+        ),
+        TrecParsedDoc: tuple_constructor(
+            formats.TrecParsedDocument, "doc_id", "title", "body", "marked_up_doc"
+        ),
     }
 
     """Wraps an ir datasets collection -- and provide a default text
@@ -169,7 +184,10 @@ class Topics(ir.TopicsStore, IRDSId):
         ),
         _irds.nfcorpus.NfCorpusQuery: tuple_constructor(
             formats.NFCorpusTopic, "query_id", "title", "all"
-        )
+        ),
+        TrecQuery: tuple_constructor(
+            formats.TrecQuery, "query_id", "title", "description", "narrative"
+        ),
     }
 
     def iter(self) -> Iterator[ir.Topic]:
@@ -259,7 +277,8 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
         """Returns the length or None"""
         return self.dataset.docpairs_count()
 
-if __name__ =="__main__":
+
+if __name__ == "__main__":
     from datamaestro import prepare_dataset
 
     dataset = prepare_dataset("irds.nfcorpus.train")
