@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Iterator, Tuple, Type
+from typing import Any, Iterator, Tuple, Type, List
 import attrs
 import ir_datasets
 from ir_datasets.formats import GenericDoc, GenericQuery, GenericDocPair
@@ -123,6 +123,10 @@ class Documents(ir.DocumentStore, IRDSId):
 
     def document_ext(self, docid: str) -> Document:
         return self.converter(self.store.get(docid))
+
+    def documents_ext(self, docids: List[str]) -> Document:
+        """Returns documents given their external IDs (optimized for batch)"""
+        return [self.converter(doc) for doc in self.store.get_many_iter(docids)]
 
     def document_int(self, ix):
         return self.converter(self.dataset.docs_iter()[ix])
