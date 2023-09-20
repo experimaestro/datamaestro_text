@@ -117,8 +117,7 @@ class TweetDoc(IDHolder, Document):
     source_content_type: str
 
     def get_text(self):
-        return f"{self.text if self.lang == 'en' else ''}"
-
+        return f"{self.text}"
 
 @define
 class TrecTopic(GenericTopic):
