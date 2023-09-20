@@ -123,6 +123,9 @@ class Documents(ir.DocumentStore, IRDSId):
         ),
         _irds.wapo.WapoDoc: tuple_constructor(
             formats.WapoDocument, "doc_id", "url", "title", "author", "published_date", "kicker", "body", "body_paras_html", "body_media"
+        ),
+        _irds.tweets2013_ia.TweetDoc: tuple_constructor(
+            formats.TweetDoc, "doc_id", "text", "user_id", "created_at", "lang", "reply_doc_id", "retweet_doc_id", "source", "source_content_type"
         )
     }
 
@@ -189,8 +192,14 @@ class Topics(ir.TopicsStore, IRDSId):
             formats.NFCorpusTopic, "query_id", "title", "all"
         ),
         TrecQuery: tuple_constructor(
-            formats.TrecTopic, "query_id", "title", "description", "narrative"
+            formats.TrecQuery, "query_id", "title", "description", "narrative"
         ),
+        _irds.tweets2013_ia.TrecMb13Query: tuple_constructor(
+            formats.TrecMb13Query, "query_id", "query", "time", "tweet_time"
+        ),
+        _irds.tweets2013_ia.TrecMb14Query: tuple_constructor(
+            formats.TrecMb14Query, "query_id", "query", "time", "tweet_time", "description"
+        )
     }
 
     def iter(self) -> Iterator[ir.Topic]:
