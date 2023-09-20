@@ -132,13 +132,12 @@ class NFCorpusTopic(IDTopic):
 
     def get_text(self):
         return f"{self.title}"
-
+    
 
 @define
-class TrecTopic(IDTopic):
-    title: str
-    description: str
-    narrative: str
+class TrecBackgroundLinkingTopic(IDTopic):
+    doc_id: str
+    url: str
 
     def get_text(self):
-        return f"{self.description}"
+        return f"{self.doc_id}"

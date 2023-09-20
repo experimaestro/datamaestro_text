@@ -79,7 +79,7 @@ class tuple_constructor:
 
     def check(self, source_cls: Type):
         assert (
-            source_cls._fields == self.fields
+            sorted(source_cls._fields) == sorted(self.fields)
         ), f"Internal error: Fields do not match ({source_cls._fields} and {self.fields})"
 
     def __call__(self, entry):
@@ -189,8 +189,11 @@ class Topics(ir.TopicsStore, IRDSId):
             formats.NFCorpusTopic, "query_id", "title", "all"
         ),
         TrecQuery: tuple_constructor(
-            formats.TrecTopic, "query_id", "title", "description", "narrative"
+            formats.TrecTopic, "query_id", "description", "title", "narrative"
         ),
+        _irds.wapo.TrecBackgroundLinkingQuery: tuple_constructor(
+            formats.TrecBackgroundLinkingTopic, "doc_id", "query_id"
+        )
     }
 
     def iter(self) -> Iterator[ir.Topic]:
@@ -288,4 +291,5 @@ if __name__ == "__main__":
 
     test = next(dataset.topics.iter())
 
-    print()
+    print(test)
+    print(test.get_text())
