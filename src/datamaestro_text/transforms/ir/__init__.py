@@ -18,7 +18,7 @@ def getpathname(context, config):
 
 
 class StoreTrainingTripletTopicAdapter(ir.TrainingTriplets):
-    """Retrieve an adhoc topic from a topic store and returns triplets with those"""
+    """Retrieve an adhoc topic text from a topic store (given the topic ID)"""
 
     id: Param[str] = ""
 
@@ -50,7 +50,7 @@ class StoreTrainingTripletTopicAdapter(ir.TrainingTriplets):
 
 
 class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
-    """Retrieve an adhoc topic from a topic store and returns triplets with those"""
+    """Transforms training triplets to add the document text from a document store"""
 
     id: Param[str] = ""
 
