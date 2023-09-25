@@ -82,6 +82,14 @@ class DocumentStore(Documents):
         """Returns a document given its external ID"""
         raise NotImplementedError(f"document() in {self.__class__}")
 
+    def documents_ext(self, docids: List[str]) -> Document:
+        """Returns documents given their external ID
+
+        By default, just look using `document_ext`, but some store might
+        optimize batch retrieval
+        """
+        return [self.document_ext(docid) for docid in docids]
+
     def iter_sample(
         self, randint: Optional[Callable[[int], int]]
     ) -> Iterator[Document]:
