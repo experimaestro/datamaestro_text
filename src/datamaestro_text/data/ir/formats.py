@@ -104,7 +104,20 @@ class WapoDocument(IDHolder, Document):
 
     def get_text(self):
         return f"{self.body}"
+    
+@define
+class TweetDoc(IDHolder, Document):
+    text: str
+    user_id: str
+    created_at: str
+    lang: str
+    reply_doc_id: str
+    retweet_doc_id: str
+    source: bytes
+    source_content_type: str
 
+    def get_text(self):
+        return f"{self.text}"
 
 @define
 class TrecTopic(GenericTopic):
@@ -135,10 +148,29 @@ class NFCorpusTopic(IDTopic):
 
 
 @define
-class TrecTopic(IDTopic):
+class TrecQuery(IDTopic):
     title: str
     description: str
     narrative: str
 
     def get_text(self):
         return f"{self.description}"
+
+@define
+class TrecMb13Query(IDTopic):
+    query: str
+    time: str
+    tweet_time: str
+
+    def get_text(self):
+        return f"{self.query}"
+    
+@define
+class TrecMb14Query(IDTopic):
+    query: str
+    time: str
+    tweet_time: str
+    description: str
+
+    def get_text(self):
+        return f"{self.query}"
