@@ -11,6 +11,7 @@ from datamaestro.definitions import datatasks, Param, Meta
 from dataclasses import dataclass
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
+from datamaestro_text.utils.iter import BatchIterator
 from .base import (
     Document,
     Topic,
@@ -82,7 +83,7 @@ class DocumentStore(Documents):
         """Returns a document given its external ID"""
         raise NotImplementedError(f"document() in {self.__class__}")
 
-    def documents_ext(self, docids: List[str]) -> Document:
+    def documents_ext(self, docids: List[str]) -> List[Document]:
         """Returns documents given their external ID
 
         By default, just look using `document_ext`, but some store might
@@ -201,7 +202,16 @@ class TrainingTriplets(Base):
     negative document"""
 
     def iter(self) -> Iterator[Tuple[Topic, Document, Document]]:
+        """Returns an iterator"""
         raise NotImplementedError(f"For class {self.__class__}")
+
+    def batch_iter(self, size: int) -> Iterator[List[Tuple[Topic, Document, Document]]]:
+        """Returns an iterator over batches of triplets
+
+        The default implementation just concatenates triplets using `iter`, but
+        some classes might use more efficient ways to provide batches of data
+        """
+        return BatchIterator(self.iter(), size)
 
     def count(self):
         """Returns the number of triplets or None"""
