@@ -65,9 +65,19 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
 
     def iter(self):
         for topic, doc1, doc2 in self.data.iter():
-            yield topic, self.store.document_ext(
-                doc1.get_id()
-            ), self.store.document_ext(doc2.get_id())
+            doc1, doc2 = self.store.documents_ext(doc1.get_id(), doc2.get_id())
+            yield topic, doc1, doc2
+
+    def batch_iter(self, size: int):
+        for triplets in self.data.batch_iter(size):
+            docids = []
+            for topic, doc1, doc2 in triplets:
+                docids.extend(doc1.get_id(), doc2.get_id())
+            docs_iter = iter(self.store.documents_ext(docids))
+            for triplet in triplets:
+                triplet[1] = next(docs_iter)
+                triplet[2] = next(docs_iter)
+            yield triplets
 
     def count(self):
         return self.data.count()

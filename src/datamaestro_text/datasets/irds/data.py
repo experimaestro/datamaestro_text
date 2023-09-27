@@ -162,7 +162,8 @@ class Documents(ir.DocumentStore, IRDSId):
 
     def documents_ext(self, docids: List[str]) -> Document:
         """Returns documents given their external IDs (optimized for batch)"""
-        return [self.converter(doc) for doc in self.store.get_many_iter(docids)]
+        retrieved = self.store.get_many(docids)
+        return [self.converter(retrieved[docid]) for docid in docids]
 
     def document_int(self, ix):
         return self.converter(self.dataset.docs_iter()[ix])
