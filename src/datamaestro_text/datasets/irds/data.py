@@ -118,8 +118,12 @@ class Documents(ir.DocumentStore, IRDSId):
     def store(self):
         return self.dataset.docs_store()
 
+    @cached_property
+    def _docs(self):
+        return self.dataset.docs_iter()
+
     def docid_internal2external(self, ix: int):
-        return self.dataset.docs_iter()[ix].doc_id
+        return self._docs[ix].doc_id
 
     def document_ext(self, docid: str) -> Document:
         return self.converter(self.store.get(docid))
@@ -130,7 +134,7 @@ class Documents(ir.DocumentStore, IRDSId):
         return [self.converter(retrieved[docid]) for docid in docids]
 
     def document_int(self, ix):
-        return self.converter(self.dataset.docs_iter()[ix])
+        return self.converter(self._docs[ix])
 
     @cached_property
     def document_cls(self):

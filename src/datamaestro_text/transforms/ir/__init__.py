@@ -65,7 +65,7 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
 
     def iter(self):
         for topic, doc1, doc2 in self.data.iter():
-            doc1, doc2 = self.store.documents_ext(doc1.get_id(), doc2.get_id())
+            doc1, doc2 = self.store.documents_ext([doc1.get_id(), doc2.get_id()])
             yield topic, doc1, doc2
 
     def batch_iter(self, size: int):
