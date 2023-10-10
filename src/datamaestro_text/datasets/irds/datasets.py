@@ -34,7 +34,7 @@ class Dataset(AbstractDataset):
 
     @property
     def description(self):
-        return self.irds_ds.documentation()["desc"]
+        return self.irds_ds.documentation().get("desc", "")
 
     def hasfiles(self):
         return False
@@ -186,7 +186,7 @@ def build(repository):
                 module = Datasets(
                     cid,
                     ds.documentation().get("pretty_name", cid),
-                    ds.documentation()["desc"],
+                    ds.documentation().get("desc", ""),
                 )
                 datasets[cid] = module
                 add(cid, DocumentsDataset(repository, dataset_id, ds))
