@@ -297,13 +297,3 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
     def count(self):
         """Returns the length or None"""
         return self.dataset.docpairs_count()
-
-
-if __name__ == "__main__":
-    from datamaestro import prepare_dataset
-
-    dataset = prepare_dataset("irds.wapo.v2.trec-core-2018")
-
-    test = next(dataset.topics.iter())
-
-    print()
