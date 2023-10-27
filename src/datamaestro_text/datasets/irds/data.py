@@ -72,9 +72,10 @@ class tuple_constructor:
         self.fields = fields
 
     def check(self, source_cls: Type):
-        assert (
-            source_cls._fields == self.fields
-        ), f"Internal error: Fields do not match ({source_cls._fields} and {self.fields})"
+        assert source_cls._fields == self.fields, (
+            "Internal error: Fields do not match, "
+            f"source({source_cls.__qualname__})={source_cls._fields} [vs] target={self.fields}"
+        )
 
     def __call__(self, entry):
         return self.target_cls(*tuple(entry))
@@ -90,6 +91,9 @@ class Documents(ir.DocumentStore, IRDSId):
         GenericDoc: tuple_constructor(GenericDocument, "doc_id", "text"),
         _irds.beir.BeirCordDoc: tuple_constructor(
             formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
+        ),
+        _irds.miracl.MiraclDoc: tuple_constructor(
+            formats.DocumentWithTitle, "doc_id", "title", "text"
         ),
     }
 
