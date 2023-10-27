@@ -2,7 +2,13 @@ import logging
 from typing import Any, Iterator, Tuple, Type, List
 import attrs
 import ir_datasets
-from ir_datasets.formats import GenericDoc, GenericQuery, GenericDocPair
+from ir_datasets.formats import (
+    GenericDoc,
+    GenericQuery,
+    GenericDocPair,
+    TrecParsedDoc,
+    TrecQuery,
+)
 import ir_datasets.datasets as _irds
 from experimaestro import Config
 from experimaestro.compat import cached_property
@@ -95,6 +101,54 @@ class Documents(ir.DocumentStore, IRDSId):
         _irds.miracl.MiraclDoc: tuple_constructor(
             formats.DocumentWithTitle, "doc_id", "title", "text"
         ),
+        _irds.beir.BeirTitleDoc: tuple_constructor(
+            formats.TitleDocument, "doc_id", "text", "title"
+        ),
+        _irds.beir.BeirTitleUrlDoc: tuple_constructor(
+            formats.TitleUrlDocument, "doc_id", "text", "title", "url"
+        ),
+        _irds.msmarco_document.MsMarcoDocument: tuple_constructor(
+            formats.MsMarcoDocument, "doc_id", "url", "title", "body"
+        ),
+        _irds.cord19.Cord19FullTextDoc: tuple_constructor(
+            formats.CordFullTextDocument,
+            "doc_id",
+            "title",
+            "doi",
+            "date",
+            "abstract",
+            "body",
+        ),
+        _irds.nfcorpus.NfCorpusDoc: tuple_constructor(
+            formats.NFCorpusDocument, "doc_id", "url", "title", "abstract"
+        ),
+        TrecParsedDoc: tuple_constructor(
+            formats.TrecParsedDocument, "doc_id", "title", "body", "marked_up_doc"
+        ),
+        _irds.wapo.WapoDoc: tuple_constructor(
+            formats.WapoDocument,
+            "doc_id",
+            "url",
+            "title",
+            "author",
+            "published_date",
+            "kicker",
+            "body",
+            "body_paras_html",
+            "body_media",
+        ),
+        _irds.tweets2013_ia.TweetDoc: tuple_constructor(
+            formats.TweetDoc,
+            "doc_id",
+            "text",
+            "user_id",
+            "created_at",
+            "lang",
+            "reply_doc_id",
+            "retweet_doc_id",
+            "source",
+            "source_content_type",
+        ),
     }
 
     """Wraps an ir datasets collection -- and provide a default text
@@ -161,6 +215,26 @@ class Topics(ir.TopicsStore, IRDSId):
         GenericQuery: tuple_constructor(GenericTopic, "query_id", "text"),
         _irds.beir.BeirCovidQuery: tuple_constructor(
             formats.TrecTopic, "query_id", "text", "query", "narrative"
+        ),
+        _irds.beir.BeirUrlQuery: tuple_constructor(
+            formats.UrlTopic, "query_id", "text", "url"
+        ),
+        _irds.nfcorpus.NfCorpusQuery: tuple_constructor(
+            formats.NFCorpusTopic, "query_id", "title", "all"
+        ),
+        TrecQuery: tuple_constructor(
+            formats.TrecQuery, "query_id", "title", "description", "narrative"
+        ),
+        _irds.tweets2013_ia.TrecMb13Query: tuple_constructor(
+            formats.TrecMb13Query, "query_id", "query", "time", "tweet_time"
+        ),
+        _irds.tweets2013_ia.TrecMb14Query: tuple_constructor(
+            formats.TrecMb14Query,
+            "query_id",
+            "query",
+            "time",
+            "tweet_time",
+            "description",
         ),
     }
 
