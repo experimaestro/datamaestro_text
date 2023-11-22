@@ -18,6 +18,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
 [project.urls]
 homepage = "https://github.com/experimaestro/datamaestro_text"
 documentation = "https://datamaestro-text.readthedocs.io/en/latest/"
