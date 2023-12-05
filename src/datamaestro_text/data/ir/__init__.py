@@ -95,7 +95,7 @@ class DocumentStore(Documents):
         self, randint: Optional[Callable[[int], int]]
     ) -> Iterator[Document]:
         """Sample documents from the dataset"""
-        length = self.count()
+        length = self.documentcount()
         randint = randint or (lambda max: random.randint(0, max - 1))
         while True:
             yield self.document_int(randint(length))
