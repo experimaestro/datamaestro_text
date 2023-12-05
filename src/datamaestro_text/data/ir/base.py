@@ -13,7 +13,7 @@ class BaseHolder:
             f"{type(self)} cannot extract a single text: " "you should use an adapter"
         )
 
-    def get_id(self):
+    def get_id(self) -> str:
         raise RuntimeError(f"{type(self)} has no ID: " "you should use an adapter")
 
 
