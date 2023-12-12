@@ -131,6 +131,20 @@ class TweetDoc(IDHolder, Document):
 
 
 @define
+class OrConvQADocument(IDHolder, Document):
+    id: str
+    title: str
+    text: str
+    aid: str
+    bid: int
+
+    has_text: ClassVar[bool] = True
+
+    def get_text(self):
+        return f"{self.title} {self.text}"
+
+
+@define
 class TrecTopic(GenericTopic):
     text: str
     query: str

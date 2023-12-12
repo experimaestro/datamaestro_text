@@ -1,7 +1,9 @@
 import logging
-from typing import Any, Iterator, Tuple, Type, List
+from pathlib import Path
+from typing import Any, Iterator, NamedTuple, Tuple, Type, List
 import attrs
 import ir_datasets
+from ir_datasets.indices import PickleLz4FullStore
 from ir_datasets.formats import (
     GenericDoc,
     GenericQuery,
@@ -10,7 +12,7 @@ from ir_datasets.formats import (
     TrecQuery,
 )
 import ir_datasets.datasets as _irds
-from experimaestro import Config
+from experimaestro import Config, Param
 from experimaestro.compat import cached_property
 from experimaestro import Option
 import datamaestro_text.data.ir as ir
@@ -206,6 +208,67 @@ if hasattr(_irds, "miracl"):
     Documents.CONVERTERS[_irds.miracl.MiraclDoc] = tuple_constructor(
         formats.DocumentWithTitle, "doc_id", "title", "text"
     )
+
+
+# Fix while PR https://github.com/allenai/ir_datasets/pull/252
+# is not in.
+class DMPickleLz4FullStore(PickleLz4FullStore):
+    def get_many(self, doc_ids, field=None):
+        result = {}
+        field_idx = self._doc_cls._fields.index(field) if field is not None else None
+        for doc in self.get_many_iter(doc_ids):
+            if field is not None:
+                result[getattr(doc, self._id_field)] = doc[field_idx]
+            else:
+                result[getattr(doc, self._id_field)] = doc
+        return result
+
+
+class LZ4DocumentStore(ir.DocumentStore):
+    """A LZ4-based document store"""
+
+    path: Param[Path]
+
+    #: Lookup field
+    lookup_field: Param[str]
+
+    # Extra indexed fields (e.g. URLs)
+    index_fields: List[str]
+
+    @cached_property
+    def store(self):
+        return DMPickleLz4FullStore(
+            self.path, None, self.data_cls, self.lookup_field, self.index_fields
+        )
+
+    @cached_property
+    def _docs(self):
+        return self.store.__iter__()
+
+    def docid_internal2external(self, ix: int):
+        return getattr(self._docs[ix], self.store._id_field)
+
+    def document_ext(self, docid: str) -> Document:
+        return self.converter(self.store.get(docid))
+
+    def documents_ext(self, docids: List[str]) -> Document:
+        """Returns documents given their external IDs (optimized for batch)"""
+        retrieved = self.store.get_many(docids)
+        return [self.converter(retrieved[docid]) for docid in docids]
+
+    def converter(self, data):
+        """Converts a document from LZ4 tuples to any other format"""
+        # By default, use identity
+        return data
+
+    def iter(self) -> Iterator[Document]:
+        """Returns an iterator over documents"""
+        return map(self.converter, self.store.__iter__())
+
+    def documentcount(self):
+        if self.count:
+            return self.count
+        return self.store.count()
 
 
 @attrs.define()
