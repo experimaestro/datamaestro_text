@@ -1,2 +1,3 @@
 datamaestro>=0.8.16
+ir_datasets
 attrs
