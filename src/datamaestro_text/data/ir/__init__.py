@@ -261,8 +261,8 @@ class TrainingTripletsLines(TrainingTriplets):
 class PairwiseSample:
     """A a query with positive and negative samples"""
 
-    topic: Topic
-    """The topic"""
+    topics: List[Topic]
+    """The topic(s)"""
 
     positives: List[Document]
     """Relevant documents"""
