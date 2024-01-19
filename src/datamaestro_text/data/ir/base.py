@@ -42,7 +42,7 @@ class InternalIDHolder(BaseHolder):
     has_internal_id: ClassVar[bool] = True
 
     def get_internal_id(self) -> int:
-        return self.id
+        return self.internal_id
 
 
 @define(slots=False)
