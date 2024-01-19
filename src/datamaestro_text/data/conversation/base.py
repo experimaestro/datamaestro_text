@@ -3,26 +3,26 @@ from typing import Generic, Iterator, List, Optional, TypeVar, get_origin, get_a
 from attr import define
 from datamaestro.data import Base
 
-
-@define(kw_only=True, slots=False)
-class Entry:
-    query: str
-    """The query issued by the user"""
+from datamaestro_text.data.ir.base import Topic
 
 
-@define(kw_only=True, slots=False)
+class Entry(Topic):
+    pass
+
+
+@define(slots=False)
 class DecontextualizedEntry(Entry):
     decontextualized_query: str
     """Human rewritten query"""
 
 
-@define(kw_only=True, slots=False)
+@define(slots=False)
 class AnswerEntry(Entry):
     answer: str
     """The system answer"""
 
 
-@define(kw_only=True, slots=False)
+@define(slots=False)
 class RetrievedEntry(Entry):
     """List of retrieved documents and their relevance"""
 

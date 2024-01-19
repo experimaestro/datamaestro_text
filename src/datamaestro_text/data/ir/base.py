@@ -6,6 +6,7 @@ class BaseHolder:
     """Base class for topics and documents"""
 
     has_id: ClassVar[bool] = False
+    has_internal_id: ClassVar[bool] = False
     has_text: ClassVar[bool] = False
 
     def get_text(self):
@@ -13,12 +14,17 @@ class BaseHolder:
             f"{type(self)} cannot extract a single text: " "you should use an adapter"
         )
 
-    def get_id(self):
+    def get_id(self) -> str:
         raise RuntimeError(f"{type(self)} has no ID: " "you should use an adapter")
 
+    def get_internal_id(self) -> int:
+        raise RuntimeError(
+            f"{type(self)} has no internal ID: " "you should use an adapter"
+        )
 
-@define()
-class IDHolder:
+
+@define(slots=False)
+class IDHolder(BaseHolder):
     """Base data class for ID only data structures"""
 
     id: str
@@ -28,29 +34,23 @@ class IDHolder:
         return self.id
 
 
-@define()
-class TextHolder:
+@define(slots=False)
+class InternalIDHolder(BaseHolder):
+    """Base data class for ID only data structures"""
+
+    internal_id: int
+    has_internal_id: ClassVar[bool] = True
+
+    def get_internal_id(self) -> int:
+        return self.internal_id
+
+
+@define(slots=False)
+class TextHolder(BaseHolder):
     """Base data class for text only data structures"""
 
     text: str
     has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return self.text
-
-
-@define()
-class TextAndIDHolder:
-    """Base data class for ID and text data structures"""
-
-    id: str
-    text: str
-
-    has_id: ClassVar[bool] = True
-    has_text: ClassVar[bool] = True
-
-    def get_id(self):
-        return self.id
 
     def get_text(self):
         return self.text
@@ -62,18 +62,33 @@ class Document(BaseHolder):
     pass
 
 
-@define()
+@define(slots=False)
 class TextDocument(TextHolder, Document):
     """Documents with text"""
 
 
-@define()
+@define(slots=False)
 class IDDocument(IDHolder, Document):
     """Documents with ID"""
 
 
-@define()
-class GenericDocument(TextAndIDHolder, Document):
+@define(slots=False)
+class InternalIDDocument(InternalIDHolder, Document):
+    """Documents with ID"""
+
+
+@define(slots=False)
+class FullIDDocument(InternalIDHolder, IDHolder, Document):
+    """Documents with internal and external ID"""
+
+
+@define(slots=False)
+class GenericDocument(TextHolder, IDHolder, Document):
+    """Documents with ID and text"""
+
+
+@define(slots=False)
+class FullGenericDocument(TextHolder, IDHolder, InternalIDHolder, Document):
     """Documents with ID and text"""
 
 
@@ -81,33 +96,33 @@ class Topic(BaseHolder):
     pass
 
 
-@define()
-class GenericTopic(TextAndIDHolder, Topic):
+@define(slots=False)
+class GenericTopic(TextHolder, IDHolder, Topic):
     pass
 
 
-@define()
+@define(slots=False)
 class TextTopic(TextHolder, Topic):
     pass
 
 
-@define()
+@define(slots=False)
 class IDTopic(IDHolder, Topic):
     pass
 
 
-@define()
+@define(slots=False)
 class AdhocAssessment:
     doc_id: str
 
 
-@define()
+@define(slots=False)
 class SimpleAdhocAssessment(AdhocAssessment):
     rel: float
     """Relevance (> 0 if relevant)"""
 
 
-@define()
+@define(slots=False)
 class AdhocAssessedTopic:
     topic_id: str
     """The topic ID"""
