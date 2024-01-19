@@ -73,6 +73,11 @@ class IDDocument(IDHolder, Document):
 
 
 @define(slots=False)
+class InternalIDDocument(InternalIDHolder, Document):
+    """Documents with ID"""
+
+
+@define(slots=False)
 class FullIDDocument(InternalIDHolder, IDHolder, Document):
     """Documents with internal and external ID"""
 
