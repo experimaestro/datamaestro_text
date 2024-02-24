@@ -4,22 +4,22 @@ from abc import ABC, abstractmethod
 from functools import cached_property
 from pathlib import Path
 from attrs import define
-from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
+from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type, Union
 import random
 from experimaestro import Config
 from datamaestro.definitions import datatasks, Param, Meta
-from dataclasses import dataclass
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
 from datamaestro_text.utils.iter import BatchIterator
+from datamaestro.record import Record
 from .base import (
-    Document,
     Topic,
     AdhocAssessment,
     IDTopic,
     IDDocument,
     TextTopic,
     TextDocument,
+    TopicRecord,
 )
 
 
@@ -32,11 +32,11 @@ class Documents(Base):
     count: Meta[Optional[int]]
     """Number of documents"""
 
-    def iter(self) -> Iterator[Document]:
+    def iter(self) -> Iterator[Record]:
         """Returns an iterator over documents"""
         raise self.iter_documents()
 
-    def iter_documents(self) -> Iterator[Document]:
+    def iter_documents(self) -> Iterator[Record]:
         return self.iter()
 
     def iter_ids(self) -> Iterator[str]:
@@ -56,7 +56,7 @@ class Documents(Base):
         raise NotImplementedError(f"For class {self.__class__}")
 
     @property
-    def document_cls(self) -> Type[Document]:
+    def document_cls(self) -> Type[Record]:
         """The class for documents"""
         raise NotImplementedError(f"For class {self.__class__}")
 
@@ -114,12 +114,16 @@ class AdhocIndex(DocumentStore):
         raise NotImplementedError(f"For class {self.__class__}")
 
 
-class Topics(Base):
+class Topics(Base, ABC):
     """A set of topics with associated IDs"""
 
-    def iter(self) -> Iterator[Topic]:
+    @abstractmethod
+    def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
-        raise NotImplementedError(f"For class {self.__class__}")
+        ...
+
+    def __iter__(self):
+        return self.iter()
 
     def count(self) -> Optional[int]:
         """Returns the number of topics if known"""
@@ -138,11 +142,11 @@ class TopicsStore(Topics):
     """Adhoc topics store"""
 
     @abstractmethod
-    def topic_int(self, internal_topic_id: int) -> Topic:
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
         """Returns a document given its internal ID"""
 
     @abstractmethod
-    def topic_ext(self, external_topic_id: int) -> Topic:
+    def topic_ext(self, external_topic_id: int) -> TopicRecord:
         """Returns a document given its external ID"""
 
 

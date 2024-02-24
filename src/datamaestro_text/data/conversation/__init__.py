@@ -1,1 +1,7 @@
-from .base import Entry, ConversationDataset, Conversation, AnswerEntry, DecontextualizedEntry
+from .base import (
+    ConversationDataset,
+    ConversationEntry,
+    AnswerEntry,
+    DecontextualizedRecord,
+    ConversationTopicRecord,
+)

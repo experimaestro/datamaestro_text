@@ -1,5 +1,5 @@
 from attrs import define
-from typing import ClassVar, List
+from typing import ClassVar, Generic, List, TypeVar
 
 
 class BaseHolder:
@@ -62,6 +62,27 @@ class Document(BaseHolder):
     pass
 
 
+DocumentType = TypeVar("DocumentType", bound=Document)
+
+
+@define
+class DocumentRecord(Generic[DocumentType]):
+    document: DocumentType
+
+    @staticmethod
+    def from_text(text: str) -> "DocumentRecord[TextDocument]":
+        return DocumentRecord(TextDocument(text))
+
+
+@define()
+class ScoredDocumentRecord(DocumentRecord[DocumentType]):
+    """A document record when training models"""
+
+    score: float
+    """A retrieval score associated with this record (e.g. of the first-stage
+    retriever)"""
+
+
 @define(slots=False)
 class TextDocument(TextHolder, Document):
     """Documents with text"""
@@ -93,7 +114,8 @@ class FullGenericDocument(TextHolder, IDHolder, InternalIDHolder, Document):
 
 
 class Topic(BaseHolder):
-    pass
+    def as_record(self):
+        return TopicRecord(self)
 
 
 @define(slots=False)
@@ -109,6 +131,21 @@ class TextTopic(TextHolder, Topic):
 @define(slots=False)
 class IDTopic(IDHolder, Topic):
     pass
+
+
+TopicType = TypeVar("TopicType", bound=Topic)
+
+
+@define(slots=False)
+class TopicRecord(Generic[TopicType]):
+    topic: TopicType
+
+    @staticmethod
+    def from_text(text: str) -> "TopicRecord[TextDocument]":
+        return TopicRecord(TextDocument(text))
+
+    def as_record(self):
+        return self
 
 
 @define(slots=False)

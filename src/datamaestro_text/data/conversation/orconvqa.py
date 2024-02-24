@@ -1,14 +1,18 @@
-from typing import Iterator, List, Optional
+from functools import cached_property
+from typing import Iterator, List, Optional, Union
 from attr import define
 import json
 from datamaestro.data import File
 
+from datamaestro_text.data.ir.base import GenericTopic, TopicRecord
+
 from .base import (
     AnswerEntry,
-    Conversation,
-    DecontextualizedEntry,
+    ConversationEntry,
+    ConversationTree,
     RetrievedEntry,
-    Conversation,
+    SimpleDecontextualizedRecord,
+    SingleConversationTree,
 )
 from . import ConversationDataset
 
@@ -53,13 +57,18 @@ class OrConvQADatasetEntry:
     """Relevance status for evidences"""
 
 
-@define(kw_only=True, slots=False)
-class OrConvQAEntry(DecontextualizedEntry, RetrievedEntry, AnswerEntry):
-    """Entry"""
+@define
+class OrConvQATopicRecord(SimpleDecontextualizedRecord, TopicRecord):
+    pass
 
 
-class OrConvQADataset(ConversationDataset[OrConvQAEntry], File):
-    def iter(self) -> Iterator[OrConvQADatasetEntry]:
+@define
+class OrConvQAAnswerEntry(RetrievedEntry, AnswerEntry):
+    pass
+
+
+class OrConvQADataset(ConversationDataset, File):
+    def entries(self) -> Iterator[OrConvQADatasetEntry]:
         """Iterates over re-written query with their context"""
         with self.path.open("rt") as fp:
             for line in fp.readlines():
@@ -80,26 +89,43 @@ class OrConvQADataset(ConversationDataset[OrConvQAEntry], File):
                     ],
                 )
 
-    def iter_conversations(self) -> Iterator[Conversation[OrConvQAEntry]]:
-        current: Optional[Conversation] = None
+    def __iter__(self) -> Iterator[ConversationTree]:
+        history: List[ConversationEntry] = []
+        current_id: Optional[str] = None
 
-        for entry in self.iter():
-            # Check if current conversation
+        for entry in self.entries():
+            # Creates a new conversation if needed
             cid, query_no = entry.query_id.rsplit("#", 1)
-            if current is None or cid != current.id:
-                if current is not None:
-                    yield current
-                current = Conversation(id=cid, history=[])
+            if cid != current_id:
+                if current_id is not None:
+                    history.reverse()
+                    yield SingleConversationTree(current_id, history)
+
+                current_id = cid
+                history = []
 
             # Add to current
-            current.history.append(
-                OrConvQAEntry(
-                    query=entry.query,
-                    decontextualized_query=entry.rewrite,
+            history.append(
+                OrConvQATopicRecord(GenericTopic(query_no, entry.query), entry.rewrite)
+            )
+            history.append(
+                OrConvQAAnswerEntry(
                     answer=entry.answer.text,
                     documents=entry.evidences,
                     document_relevances=entry.retrieval_labels,
                 )
             )
 
-        yield current
+        # Yields the last one
+        history.reverse()
+        yield SingleConversationTree(current_id, history)
+
+    @cached_property
+    def trees(self):
+        return list(self.__iter__())
+
+    def __len__(self):
+        return len(self.trees)
+
+    def get(self, key: int):
+        return self.trees[key]

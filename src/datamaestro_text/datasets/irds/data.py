@@ -1,6 +1,9 @@
+from abc import ABC, abstractmethod
+from functools import partial
 import logging
 from pathlib import Path
 from typing import Any, Iterator, NamedTuple, Tuple, Type, List
+from attr import define
 import attrs
 import ir_datasets
 from ir_datasets.indices import PickleLz4FullStore
@@ -18,6 +21,7 @@ from experimaestro import Option
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
     Topic,
+    TopicRecord,
     Document,
     GenericDocument,
     GenericTopic,
@@ -166,12 +170,6 @@ class Documents(ir.DocumentStore, IRDSId):
         return self.dataset.docs_count()
 
     @cached_property
-    def converter(self):
-        return Documents.CONVERTERS.get(
-            self.dataset.docs_cls(), lambda doc: IRDSDocumentWrapper(doc)
-        )
-
-    @cached_property
     def store(self):
         return self.dataset.docs_store()
 
@@ -276,6 +274,62 @@ class IRDSQueryWrapper(ir.Topic):
     query: Any
 
 
+class TopicsHandler(ABC):
+    @abstractmethod
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
+        """Returns a document given its internal ID"""
+        ...
+
+    @abstractmethod
+    def topic_ext(self, external_topic_id: str) -> TopicRecord:
+        """Returns a document given its external ID"""
+        ...
+
+    @abstractmethod
+    def iter(self) -> Iterator[TopicRecord]:
+        """Returns an iterator over topics"""
+        ...
+
+
+class SimpleTopicsHandler(TopicsHandler):
+    def __init__(self, converter, dataset):
+        self.converter = converter
+        self.dataset = dataset
+        self.target_cls = converter.target_cls
+        converter.check(dataset.queries_cls())
+
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
+        """Returns a document given its internal ID"""
+        return self.topics_list[internal_topic_id]
+
+    def topic_ext(self, external_topic_id: int) -> TopicRecord:
+        """Returns a document given its external ID"""
+        return self.topics_map[external_topic_id]
+
+    def iter(self) -> Iterator[TopicRecord]:
+        """Returns an iterator over topics"""
+        for query in self.dataset.queries_iter():
+            yield self.converter(query).as_record()
+
+    @cached_property
+    def topics_map(self):
+        return self.topics[0]
+
+    @cached_property
+    def topics_list(self):
+        return self.topics[1]
+
+    @cached_property
+    def topics(self):
+        topic_map = {}
+        topic_list = []
+        for query in self.dataset.iter():
+            topic_list.append(query)
+            topic_map[query.get_id()] = query
+
+        return topic_map, topic_list
+
+
 class Topics(ir.TopicsStore, IRDSId):
     CONVERTERS = {
         GenericQuery: tuple_constructor(GenericTopic, "query_id", "text"),
@@ -304,49 +358,126 @@ class Topics(ir.TopicsStore, IRDSId):
         ),
     }
 
-    def iter(self) -> Iterator[ir.Topic]:
-        """Returns an iterator over topics"""
-        for query in self.dataset.queries_iter():
-            yield self.converter(query)
+    HANDLERS = {
+        cls: partial(SimpleTopicsHandler, converter)
+        for cls, converter in CONVERTERS.items()
+    }
 
     def count(self):
         return self.dataset.queries_count()
 
-    def topic_int(self, internal_topic_id: int) -> Topic:
-        """Returns a document given its internal ID"""
-        return self.topics_list[internal_topic_id]
-
-    def topic_ext(self, external_topic_id: int) -> Topic:
-        """Returns a document given its external ID"""
-        return self.topics_map[external_topic_id]
-
-    @cached_property
-    def topics_map(self):
-        return self.topics[0]
-
-    @cached_property
-    def topics_list(self):
-        return self.topics[1]
-
-    @cached_property
-    def topics(self):
-        topic_map = {}
-        topic_list = []
-        for query in self.iter():
-            topic_list.append(query)
-            topic_map[query.get_id()] = query
-
-        return topic_map, topic_list
-
     @cached_property
     def topic_cls(self):
-        return self.converter.target_cls
+        return self.handler.target_cls
 
     @cached_property
-    def converter(self):
-        converter = Topics.CONVERTERS[self.dataset.queries_cls()]
-        converter.check(self.dataset.queries_cls())
-        return converter
+    def handler(self):
+        handler = Topics.HANDLERS[self.dataset.queries_cls()](self.dataset)
+        return handler
+
+    def topic_int(self, internal_topic_id: int) -> Topic:
+        """Returns a document given its internal ID"""
+        return self.handler.topic_int(internal_topic_id)
+
+    def topic_ext(self, external_topic_id: str) -> Topic:
+        """Returns a document given its external ID"""
+        return self.handler.topic_ext(external_topic_id)
+
+    def iter(self) -> Iterator[ir.Topic]:
+        """Returns an iterator over topics"""
+        return self.handler.iter()
+
+
+if hasattr(_irds.trec_cast, "Cast2022Query"):
+    from datamaestro_text.data.conversation.base import (
+        ConversationTreeNode,
+        DecontextualizedDictRecord,
+        ConversationTopicRecord,
+    )
+
+    class CastTopicsHandler(TopicsHandler):
+        def __init__(self, dataset):
+            self.dataset = dataset
+
+        @property
+        @abstractmethod
+        def records(self):
+            ...
+
+        @cached_property
+        def ext2records(self):
+            return {record.topic.get_id(): record for record in self.records}
+
+        def topic_int(self, internal_topic_id: int) -> TopicRecord:
+            """Returns a document given its internal ID"""
+            return self.records[internal_topic_id]
+
+        def topic_ext(self, external_topic_id: str) -> TopicRecord:
+            """Returns a document given its external ID"""
+            return self.ext2records[external_topic_id]
+
+        def iter(self) -> Iterator[ir.Topic]:
+            """Returns an iterator over topics"""
+            return iter(self.records)
+
+    class Cast2020TopicsHandler(CastTopicsHandler):
+        @cached_property
+        def records(self):
+            try:
+                topic_number = None
+                node = None
+                conversation = []
+                records = []
+
+                @define(slots=False)
+                class Cast2020TopicRecord(
+                    DecontextualizedDictRecord, ConversationTopicRecord
+                ):
+                    pass
+
+                for (
+                    query
+                ) in self.dataset.queries_iter():  # type: _irds.trec_cast.Cast2020Query
+                    topic = GenericTopic(query.query_id, query.raw_utterance)
+                    if topic_number == query.topic_number:
+                        node = node.add(ConversationTreeNode(topic))
+                    else:
+                        conversation = []
+                        node = ConversationTreeNode(topic)
+                        topic_number = query.topic_number
+
+                    records.append(
+                        Cast2020TopicRecord(
+                            topic,
+                            node.conversation(skip_self=True),
+                            "manual",
+                            {
+                                "manual": query.manual_rewritten_utterance,
+                                "auto": query.automatic_rewritten_utterance,
+                            },
+                        )
+                    )
+
+                    conversation.append(node)
+                    node = node.add(
+                        ConversationTreeNode(
+                            IDDocument(query.manual_canonical_result_id)
+                        )
+                    )
+                    conversation.append(node)
+            except Exception:
+                logging.exception()
+
+            return records
+
+    Topics.HANDLERS.update(
+        {
+            # _irds.trec_cast.Cast2019Query: Cast2019TopicsHandler,
+            _irds.trec_cast.Cast2020Query: Cast2020TopicsHandler,
+            # _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
+            # _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler
+        }
+    )
 
 
 class Adhoc(ir.Adhoc, IRDSId):

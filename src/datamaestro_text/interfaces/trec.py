@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, NamedTuple, Optional
+from typing import Iterator, Optional
 import re
 
 from datamaestro_text.data.ir.base import (
@@ -12,7 +12,7 @@ from datamaestro_text.data.ir.base import (
 # --- Assessments
 
 
-def parse_qrels(path: Path):
+def parse_qrels(path: Path) -> Iterator[AdhocAssessedTopic]:
     with path.open("rt") as fp:
         _qid = None
         assessments = []
@@ -42,7 +42,7 @@ def cleanup(s: Optional[str]) -> str:
     return s.replace("\t", " ").strip() if s is not None else ""
 
 
-def parse_query_format(file, xml_prefix=None):
+def parse_query_format(file, xml_prefix=None) -> Iterator[TrecTopic]:
     """Parse TREC XML query format"""
     if xml_prefix is None:
         xml_prefix = ""

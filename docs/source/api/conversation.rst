@@ -3,6 +3,29 @@ Conversation API
 
 .. currentmodule:: datamaestro_text.data.conversation
 
+Data classes
+------------
+
+.. autoclass:: Entry
+    :members:
+
+.. autoclass:: DecontextualizedDictEntry
+    :members:
+
+.. autoclass:: AnswerEntry
+    :members:
+
+.. autoclass:: RetrievedEntry
+    :members:
+
+.. autoclass:: ClarifyingQuestionEntry
+    :members:
+
+
+.. autoclass:: Conversation
+
+.. autoclass:: ConversationTopic
+
 Contextual query reformulation
 ------------------------------
 
@@ -16,8 +39,10 @@ Contextual query reformulation
 
 .. autoclass:: OrConvQADatasetAnswer
     :members:
+
 .. autoclass:: OrConvQADatasetHistoryEntry
     :members:
+
 .. autoclass:: OrConvQADataset
     :members:
 
