@@ -1,7 +1,10 @@
 from .base import (
-    ConversationDataset,
-    ConversationRecord,
     AnswerEntry,
-    DecontextualizedItem,
+    ConversationDataset,
     ConversationHistory,
+    ConversationHistoryItem,
+    ConversationRecord,
+    DecontextualizedItem,
+    TopicConversationRecord,
+    AnswerConversationRecord,
 )

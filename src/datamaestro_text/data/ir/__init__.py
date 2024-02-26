@@ -13,18 +13,22 @@ from datamaestro_text.utils.files import auto_open
 from datamaestro_text.utils.iter import BatchIterator
 from datamaestro.record import Record
 from .base import (  # noqa: F401
-    AdhocAssessment,
+    # Record items
     IDItem,
     TextItem,
     TopicRecord,
     DocumentRecord,
     SimpleTextItem,
+    ScoredItem,
+    # Pre-defined usual records
     GenericTopicRecord,
     GenericDocumentRecord,
     IDTopicRecord,
     IDDocumentRecord,
     SimpleTextTopicRecord,
     SimpleTextDocumentRecord,
+    # Other things
+    AdhocAssessment,
 )
 
 

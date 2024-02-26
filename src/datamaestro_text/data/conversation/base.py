@@ -92,7 +92,7 @@ ConversationHistory = Sequence[ConversationRecord]
 
 
 @define
-class ConversationHistory(Item):
+class ConversationHistoryItem(Item):
     """A user interaction contextualized within a conversation"""
 
     history: ConversationHistory
