@@ -1,7 +1,7 @@
 from .base import (
     ConversationDataset,
-    ConversationEntry,
+    ConversationRecord,
     AnswerEntry,
-    DecontextualizedRecord,
-    ConversationTopicRecord,
+    DecontextualizedItem,
+    ConversationHistory,
 )

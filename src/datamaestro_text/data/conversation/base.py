@@ -2,15 +2,14 @@ from abc import ABC, abstractmethod
 from typing import Dict, Generic, Iterator, List, Optional, Sequence
 from attr import define
 from datamaestro.data import Base
+from datamaestro.record import Record, Item
 
-from datamaestro_text.data.ir.base import TopicRecord, TopicType
 from datamaestro_text.utils.iter import FactoryIterable, LazyList, RangeView
 
 # ---- Basic types
 
 
-@define(slots=False)
-class DecontextualizedRecord:
+class DecontextualizedItem(Item):
     """A topic record with decontextualized versions of the topic"""
 
     @abstractmethod
@@ -19,8 +18,8 @@ class DecontextualizedRecord:
         ...
 
 
-@define(slots=False)
-class SimpleDecontextualizedRecord:
+@define
+class SimpleDecontextualizedItem(DecontextualizedItem):
     """A topic record with one decontextualized version of the topic"""
 
     decontextualized_query: str
@@ -33,8 +32,7 @@ class SimpleDecontextualizedRecord:
         return self.decontextualized_query
 
 
-@define(slots=False)
-class DecontextualizedDictRecord:
+class DecontextualizedDictItem(DecontextualizedItem):
     """A conversation entry providing decontextualized version of the user query"""
 
     default_decontextualized_key: str
@@ -45,22 +43,34 @@ class DecontextualizedDictRecord:
         return self.decontextualized_queries[mode or self.default_decontextualized_key]
 
 
-class ConversationEntry:
+class ConversationRecord(Record):
     """A conversation entry"""
 
     pass
 
 
-@define(slots=False)
-class AnswerEntry(ConversationEntry):
+class TopicConversationRecord(ConversationRecord):
+    """A conversation record"""
+
+    pass
+
+
+class AnswerConversationRecord(ConversationRecord):
+    """A conversation record"""
+
+    pass
+
+
+@define
+class AnswerEntry(Item):
     """A system answer"""
 
     answer: str
     """The system answer"""
 
 
-@define(slots=False)
-class RetrievedEntry(ConversationEntry):
+@define
+class RetrievedEntry(Item):
     """List of system-retrieved documents and their relevance"""
 
     documents: List[str]
@@ -70,23 +80,20 @@ class RetrievedEntry(ConversationEntry):
     """List of retrieved documents and their relevance status"""
 
 
-@define(slots=False)
-class ClarifyingQuestionEntry(ConversationEntry):
+@define
+class ClarifyingQuestionEntry(Item):
     """A system-generated clarifying question"""
 
     pass
 
 
 #: The conversation
-ConversationHistory = Sequence[ConversationEntry]
+ConversationHistory = Sequence[ConversationRecord]
 
 
 @define
-class ConversationTopicRecord(Generic[TopicType]):
+class ConversationHistory(Item):
     """A user interaction contextualized within a conversation"""
-
-    record: TopicRecord[TopicType]
-    """The record"""
 
     history: ConversationHistory
     """The history"""
@@ -96,7 +103,7 @@ class ConversationTopicRecord(Generic[TopicType]):
 
 
 class ConversationNode:
-    def entry(self) -> ConversationEntry:
+    def entry(self) -> ConversationRecord:
         """The current conversation entry"""
         ...
 
@@ -118,16 +125,16 @@ class SingleConversationTree(ConversationTree):
     """Simple conversations, based on a sequence of entries"""
 
     id: str
-    history: Sequence[ConversationEntry]
+    history: Sequence[ConversationRecord]
 
-    def __init__(self, id: Optional[str], history: List[ConversationEntry]):
+    def __init__(self, id: Optional[str], history: List[ConversationRecord]):
         """Create a simple conversation
 
         :param history: The entries, in reverse order (i.e. more ancient first)
         """
         self.history = history or []
 
-    def add(self, entry: ConversationEntry):
+    def add(self, entry: ConversationRecord):
         self.history.insert(0, entry)
 
     def __iter__(self) -> Iterator[ConversationNode]:
@@ -140,17 +147,17 @@ class SingleConversationTreeNode(ConversationNode):
     tree: SingleConversationTree
     index: int
 
-    def entry(self) -> ConversationEntry:
+    def entry(self) -> ConversationRecord:
         return self.tree.history[self.index]
 
-    def history(self) -> Sequence[ConversationEntry]:
+    def history(self) -> Sequence[ConversationRecord]:
         return self.tree.history[self.index + 1 :]
 
 
 class ConversationTreeNode(ConversationNode, ConversationTree):
     """A conversation tree node"""
 
-    entry: ConversationEntry
+    entry: ConversationRecord
     parent: Optional["ConversationTreeNode"]
     children: List["ConversationTreeNode"]
 
@@ -185,7 +192,7 @@ class ConversationDataset(Base, ABC):
 
     @abstractmethod
     def get(self, key: int):
-        """Return an iterator over conversations"""
+        """Return the given conversation"""
         ...
 
     @abstractmethod

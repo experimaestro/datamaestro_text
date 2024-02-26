@@ -1,17 +1,25 @@
 from functools import cached_property
-from typing import Iterator, List, Optional, Union
+from typing import Iterator, List, Optional
 from attr import define
 import json
 from datamaestro.data import File
+from datamaestro.record import recordtypes
 
-from datamaestro_text.data.ir.base import GenericTopic, TopicRecord
+from datamaestro_text.data.ir.base import (
+    TopicRecord,
+    GenericTopicRecord,
+    IDItem,
+    SimpleTextItem,
+)
+
 
 from .base import (
+    AnswerConversationRecord,
     AnswerEntry,
-    ConversationEntry,
+    ConversationRecord,
     ConversationTree,
     RetrievedEntry,
-    SimpleDecontextualizedRecord,
+    SimpleDecontextualizedItem,
     SingleConversationTree,
 )
 from . import ConversationDataset
@@ -57,13 +65,13 @@ class OrConvQADatasetEntry:
     """Relevance status for evidences"""
 
 
-@define
-class OrConvQATopicRecord(SimpleDecontextualizedRecord, TopicRecord):
+@recordtypes(SimpleDecontextualizedItem)
+class OrConvQATopicRecord(GenericTopicRecord):
     pass
 
 
-@define
-class OrConvQAAnswerEntry(RetrievedEntry, AnswerEntry):
+@recordtypes(AnswerEntry, RetrievedEntry)
+class OrConvQAAnswerRecord(AnswerConversationRecord):
     pass
 
 
@@ -90,7 +98,7 @@ class OrConvQADataset(ConversationDataset, File):
                 )
 
     def __iter__(self) -> Iterator[ConversationTree]:
-        history: List[ConversationEntry] = []
+        history: List[ConversationRecord] = []
         current_id: Optional[str] = None
 
         for entry in self.entries():
@@ -106,13 +114,16 @@ class OrConvQADataset(ConversationDataset, File):
 
             # Add to current
             history.append(
-                OrConvQATopicRecord(GenericTopic(query_no, entry.query), entry.rewrite)
+                OrConvQATopicRecord(
+                    IDItem(query_no),
+                    SimpleTextItem(entry.query),
+                    SimpleDecontextualizedItem(entry.rewrite),
+                )
             )
             history.append(
-                OrConvQAAnswerEntry(
-                    answer=entry.answer.text,
-                    documents=entry.evidences,
-                    document_relevances=entry.retrieval_labels,
+                OrConvQAAnswerRecord(
+                    AnswerEntry(entry.answer.text),
+                    RetrievedEntry(entry.evidences, entry.retrieval_labels),
                 )
             )
 

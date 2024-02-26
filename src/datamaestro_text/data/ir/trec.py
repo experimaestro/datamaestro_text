@@ -3,15 +3,17 @@ from datamaestro.definitions import argument, Option
 from datamaestro.data import Base
 from experimaestro import documentation, Param, Config
 from pathlib import Path
+from datamaestro.record import Record
 from datamaestro_text.data.ir import (
     Documents,
     Topics,
-    Topic,
+    TopicRecord,
     AdhocAssessments,
     AdhocRun,
     AdhocResults,
     Measure,
 )
+from datamaestro_text.data.ir.formats import TrecTopicRecord
 
 
 class TrecTopics(Topics):
@@ -23,7 +25,7 @@ class TrecTopics(Topics):
         """Iterate over TREC adhoc topics"""
         import datamaestro_text.interfaces.trec as trec
 
-        yield from map(Topic.as_record, trec.parse_query_format(self.path))
+        yield from trec.parse_query_format(self.path)
 
 
 class TrecAdhocAssessments(AdhocAssessments):

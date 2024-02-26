@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Type
 from experimaestro import Config, Task, Param, Annotated, pathgenerator, Option, tqdm
 import numpy as np
+from datamaestro.record import Record
 import datamaestro_text.data.ir as ir
 from datamaestro_text.utils.shuffle import shuffle
 
@@ -29,24 +30,27 @@ class StoreTrainingTripletTopicAdapter(ir.TrainingTriplets):
     """Input data"""
 
     def __validate__(self):
-        assert self.data.topic_cls.has_id, "Topics have no ID"
+        assert self.data.topic_recordtype.has_type(ir.IDItem), (
+            f"Topics {self.data.topic_recordtype}"
+            f" have no ID: {self.data.topic_recordtype.itemtypes}"
+        )
 
     def iter(self):
         for topic, doc1, doc2 in self.data.iter():
-            yield self.store.topic_ext(topic.get_id()), doc1, doc2
+            yield self.store.topic_ext(topic[ir.IDItem].id), doc1, doc2
 
     def count(self):
         return self.data.count()
 
     @property
-    def topic_cls(self) -> Type[ir.Topic]:
+    def topic_recordtype(self) -> Type[Record]:
         """The class for topics"""
-        return self.store.topic_cls
+        return self.store.topic_recordtype
 
     @property
-    def document_cls(self) -> Type[ir.Document]:
+    def document_recordtype(self) -> Type[Record]:
         """The class for documents"""
-        return self.data.document_cls
+        return self.data.document_recordtype
 
 
 class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
@@ -83,14 +87,14 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
         return self.data.count()
 
     @property
-    def topic_cls(self) -> Type[ir.Topic]:
+    def topic_recordtype(self) -> Type[Record]:
         """The class for topics"""
-        return self.store.topic_cls
+        return self.store.topic_recordtype
 
     @property
-    def document_cls(self) -> Type[ir.Document]:
+    def document_recordtype(self) -> Type[Record]:
         """The class for documents"""
-        return self.data.document_cls
+        return self.data.document_recordtype
 
 
 class ShuffledTrainingTripletsLines(Task):
@@ -125,14 +129,22 @@ class ShuffledTrainingTripletsLines(Task):
 
     def __validate__(self):
         if self.topic_ids:
-            assert self.data.topic_cls.has_id, "No topic ID in the source data"
+            assert self.data.topic_recordtype.has_type(
+                ir.IDItem
+            ), f"No topic ID in the source data ({self.data.topic_recordtype})"
         else:
-            assert self.data.topic_cls.has_text, "No topic text in the source data"
+            assert self.data.topic_recordtype.has_type(
+                ir.TextItem
+            ), f"No topic text in the source data ({self.data.topic_recordtype})"
 
         if self.doc_ids:
-            assert self.data.document_cls.has_id, "No doc ID in the source data"
+            assert self.data.document_recordtype.has_type(
+                ir.IDItem
+            ), "No doc ID in the source data"
         else:
-            assert self.data.document_cls.has_text, "No doc text in the source data"
+            assert self.data.document_recordtype.has_type(
+                ir.TextItem
+            ), "No doc text in the source data"
 
     def task_outputs(self, dep):
         return dep(
@@ -158,12 +170,12 @@ class ShuffledTrainingTripletsLines(Task):
         else:
 
             def get_query(query):
-                return query.get_text()
+                return query[ir.TextItem].get_text()
 
         if self.doc_ids:
 
             def get_doc(doc):
-                return doc.get_id()
+                return doc[ir.IDItem].id
 
         else:
 
@@ -211,6 +223,5 @@ class TopicWrapper(Config, ABC):
     """Modify topics on the fly using a topic wrapper"""
 
     @abstractmethod
-    def __call__(topic: ir.Topic) -> ir.Topic:
+    def __call__(topic: ir.TopicRecord) -> ir.TopicRecord:
         """Transforms a topic into another topic"""
-        ...

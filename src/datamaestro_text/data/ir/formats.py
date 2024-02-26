@@ -1,12 +1,13 @@
 from typing import ClassVar, Tuple
 from attrs import define
+from datamaestro.record import recordtypes
 from ir_datasets.datasets.wapo import WapoDocMedia
-from .base import IDHolder, Document, GenericTopic, IDTopic
+from .base import TextItem, SimpleTextItem, IDTopicRecord
 from ir_datasets.datasets.cord19 import Cord19FullTextSection
 
 
 @define
-class CordDocument(IDHolder, Document):
+class CordDocument(TextItem):
     text: str
     title: str
     url: str
@@ -19,7 +20,7 @@ class CordDocument(IDHolder, Document):
 
 
 @define
-class DocumentWithTitle(IDHolder, Document):
+class DocumentWithTitle(TextItem):
     """Web document with title and URL"""
 
     title: str
@@ -28,7 +29,7 @@ class DocumentWithTitle(IDHolder, Document):
 
 
 @define
-class CordFullTextDocument(IDHolder, Document):
+class CordFullTextDocument(TextItem):
     title: str
     doi: str
     date: str
@@ -42,7 +43,7 @@ class CordFullTextDocument(IDHolder, Document):
 
 
 @define
-class MsMarcoDocument(IDHolder, Document):
+class MsMarcoDocument(TextItem):
     url: str
     title: str
     body: str
@@ -54,7 +55,7 @@ class MsMarcoDocument(IDHolder, Document):
 
 
 @define
-class NFCorpusDocument(IDHolder, Document):
+class NFCorpusDocument(TextItem):
     url: str
     title: str
     abstract: str
@@ -66,7 +67,7 @@ class NFCorpusDocument(IDHolder, Document):
 
 
 @define
-class TitleDocument(IDHolder, Document):
+class TitleDocument(TextItem):
     text: str
     title: str
     has_text: ClassVar[bool] = True
@@ -76,7 +77,7 @@ class TitleDocument(IDHolder, Document):
 
 
 @define
-class TitleUrlDocument(IDHolder, Document):
+class TitleUrlDocument(TextItem):
     text: str
     title: str
     url: str
@@ -87,7 +88,7 @@ class TitleUrlDocument(IDHolder, Document):
 
 
 @define
-class TrecParsedDocument(IDHolder, Document):
+class TrecParsedDocument(TextItem):
     title: str
     body: str
     marked_up_doc: bytes
@@ -99,7 +100,7 @@ class TrecParsedDocument(IDHolder, Document):
 
 
 @define
-class WapoDocument(IDHolder, Document):
+class WapoDocument(TextItem):
     url: str
     title: str
     author: str
@@ -116,7 +117,7 @@ class WapoDocument(IDHolder, Document):
 
 
 @define
-class TweetDoc(IDHolder, Document):
+class TweetDoc(TextItem):
     text: str
     user_id: str
     created_at: str
@@ -131,7 +132,7 @@ class TweetDoc(IDHolder, Document):
 
 
 @define
-class OrConvQADocument(IDHolder, Document):
+class OrConvQADocument(TextItem):
     id: str
     title: str
     text: str
@@ -145,7 +146,7 @@ class OrConvQADocument(IDHolder, Document):
 
 
 @define
-class TrecTopic(GenericTopic):
+class TrecTopic(TextItem):
     text: str
     query: str
     narrative: str
@@ -155,7 +156,7 @@ class TrecTopic(GenericTopic):
 
 
 @define
-class UrlTopic(GenericTopic):
+class UrlTopic(TextItem):
     text: str
     url: str
 
@@ -164,7 +165,7 @@ class UrlTopic(GenericTopic):
 
 
 @define
-class NFCorpusTopic(IDTopic):
+class NFCorpusTopic(TextItem):
     title: str
     all: str
 
@@ -173,7 +174,7 @@ class NFCorpusTopic(IDTopic):
 
 
 @define
-class TrecQuery(IDTopic):
+class TrecQuery(TextItem):
     title: str
     description: str
     narrative: str
@@ -183,7 +184,7 @@ class TrecQuery(IDTopic):
 
 
 @define
-class TrecMb13Query(IDTopic):
+class TrecMb13Query(TextItem):
     query: str
     time: str
     tweet_time: str
@@ -193,7 +194,7 @@ class TrecMb13Query(IDTopic):
 
 
 @define
-class TrecMb14Query(IDTopic):
+class TrecMb14Query(TextItem):
     query: str
     time: str
     tweet_time: str
@@ -201,3 +202,14 @@ class TrecMb14Query(IDTopic):
 
     def get_text(self):
         return f"{self.query}"
+
+
+@define()
+class TrecTopic(SimpleTextItem):
+    description: str
+    narrative: str
+
+
+@recordtypes(TrecTopic)
+class TrecTopicRecord(IDTopicRecord):
+    ...

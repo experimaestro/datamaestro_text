@@ -1,10 +1,11 @@
 from pathlib import Path
-from typing import Iterator, Tuple
+from typing import Iterator, Tuple, Type
 
 from experimaestro import Param, Option, Constant, Meta
 from datamaestro.definitions import argument
+from datamaestro.record import Record
 import datamaestro_text.data.ir as ir
-from datamaestro_text.data.ir.base import GenericTopic
+from datamaestro_text.data.ir.base import GenericTopicRecord, IDItem, SimpleTextItem
 from datamaestro_text.interfaces.plaintext import read_tsv
 
 
@@ -21,7 +22,15 @@ class Topics(ir.Topics):
     "Pairs of query id - query using a separator"
 
     def iter(self):
-        return (GenericTopic(qid, title) for qid, title in read_tsv(self.path))
+        return (
+            GenericTopicRecord(IDItem(qid), SimpleTextItem(title))
+            for qid, title in read_tsv(self.path)
+        )
+
+    @property
+    def topic_recordtype(self) -> Type[Record]:
+        """The class for topics"""
+        return GenericTopicRecord
 
 
 class Documents(ir.Documents):

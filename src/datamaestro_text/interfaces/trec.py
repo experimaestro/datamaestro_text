@@ -1,13 +1,14 @@
-from dataclasses import dataclass
+from attrs import define
 from pathlib import Path
 from typing import Iterator, Optional
 import re
-
+from datamaestro.record import recordtypes
 from datamaestro_text.data.ir.base import (
     AdhocAssessedTopic,
     SimpleAdhocAssessment,
-    Topic,
+    IDItem,
 )
+from datamaestro_text.data.ir.formats import TrecTopicRecord, TrecTopic
 
 # --- Assessments
 
@@ -32,17 +33,11 @@ def parse_qrels(path: Path) -> Iterator[AdhocAssessedTopic]:
 # ---- TOPICS
 
 
-@dataclass()
-class TrecTopic(Topic):
-    description: str
-    narrative: str
-
-
 def cleanup(s: Optional[str]) -> str:
     return s.replace("\t", " ").strip() if s is not None else ""
 
 
-def parse_query_format(file, xml_prefix=None) -> Iterator[TrecTopic]:
+def parse_query_format(file, xml_prefix=None) -> Iterator[TrecTopicRecord]:
     """Parse TREC XML query format"""
     if xml_prefix is None:
         xml_prefix = ""
@@ -55,8 +50,9 @@ def parse_query_format(file, xml_prefix=None) -> Iterator[TrecTopic]:
                 continue
             elif line.startswith("</top>"):
                 if num:
-                    yield TrecTopic(
-                        num, cleanup(title), {}, cleanup(desc), cleanup(narr)
+                    yield TrecTopicRecord(
+                        IDItem(num),
+                        TrecTopic(cleanup(title), cleanup(desc), cleanup(narr)),
                     )
                 num, title, desc, narr, reading = None, None, None, None, None
             elif line.startswith("<num>"):

@@ -20,15 +20,15 @@ from experimaestro.compat import cached_property
 from experimaestro import Option
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
-    Topic,
+    Record,
     TopicRecord,
-    Document,
-    GenericDocument,
-    GenericTopic,
+    DocumentRecord,
+    SimpleTextItem,
     AdhocAssessedTopic,
     SimpleAdhocAssessment,
-    IDDocument,
-    IDTopic,
+    IDItem,
+    IDTopicRecord,
+    IDDocumentRecord,
 )
 import datamaestro_text.data.ir.formats as formats
 
@@ -49,7 +49,7 @@ class IRDSId(Config):
     def dataset(self):
         return ir_datasets.load(self.irds)
 
-    def iter(self) -> Iterator[ir.Topic]:
+    def iter(self) -> Iterator[Record]:
         """Returns an iterator over topics"""
         for query in self.dataset.queries_iter():
             yield self.factory(query)
@@ -79,28 +79,28 @@ class AdhocAssessments(ir.AdhocAssessments, IRDSId):
 
 
 class tuple_constructor:
-    def __init__(self, target_cls: Type, *fields: str):
+    def __init__(self, target_cls: Type, id_field: str, *fields: str):
+        self.id_field = id_field
         self.target_cls = target_cls
         self.fields = fields
 
     def check(self, source_cls: Type):
-        assert source_cls._fields == self.fields, (
+        source_fields = tuple(f for f in source_cls._fields if f != self.id_field)
+        assert source_fields == self.fields, (
             "Internal error: Fields do not match, "
-            f"source({source_cls.__qualname__})={source_cls._fields} [vs] target={self.fields}"
+            f"source({source_cls.__qualname__})={source_fields}/{self.id_field} [vs] target={self.fields}"
         )
 
-    def __call__(self, entry):
-        return self.target_cls(*tuple(entry))
-
-
-@attrs.define()
-class IRDSDocumentWrapper(ir.Document):
-    doc: Any
+    def __call__(self, recordtype, entry):
+        values = tuple(getattr(entry, key) for key in self.fields)
+        return recordtype(
+            IDItem(getattr(entry, self.id_field)), self.target_cls(*values)
+        )
 
 
 class Documents(ir.DocumentStore, IRDSId):
     CONVERTERS = {
-        GenericDoc: tuple_constructor(GenericDocument, "doc_id", "text"),
+        GenericDoc: tuple_constructor(SimpleTextItem, "doc_id", "text"),
         _irds.beir.BeirCordDoc: tuple_constructor(
             formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
         ),
@@ -160,10 +160,10 @@ class Documents(ir.DocumentStore, IRDSId):
     # List of fields
     # self.dataset.docs_cls()._fields
 
-    def iter(self) -> Iterator[ir.Document]:
+    def iter(self) -> Iterator[ir.DocumentRecord]:
         """Returns an iterator over adhoc documents"""
         for doc in self.dataset.docs_iter():
-            yield self.converter(doc)
+            yield self.converter(self.document_recordtype, doc)
 
     @property
     def documentcount(self):
@@ -180,20 +180,28 @@ class Documents(ir.DocumentStore, IRDSId):
     def docid_internal2external(self, ix: int):
         return self._docs[ix].doc_id
 
-    def document_ext(self, docid: str) -> Document:
-        return self.converter(self.store.get(docid))
+    def document_ext(self, docid: str) -> DocumentRecord:
+        return self.converter(self.document_recordtype, self.store.get(docid))
 
-    def documents_ext(self, docids: List[str]) -> Document:
+    def documents_ext(self, docids: List[str]) -> DocumentRecord:
         """Returns documents given their external IDs (optimized for batch)"""
         retrieved = self.store.get_many(docids)
-        return [self.converter(retrieved[docid]) for docid in docids]
+        return [
+            self.converter(self.document_recordtype, retrieved[docid])
+            for docid in docids
+        ]
 
     def document_int(self, ix):
-        return self.converter(self._docs[ix])
+        return self.converter(self.document_recordtype, self._docs[ix])
 
     @cached_property
-    def document_cls(self):
-        return self.converter.target_cls
+    def document_recordtype(self):
+        return DocumentRecord.from_types(
+            f"{self.converter.target_cls.__name__}Record",
+            IDItem,
+            self.converter.target_cls,
+            module=__name__,
+        )
 
     @cached_property
     def converter(self):
@@ -246,32 +254,32 @@ class LZ4DocumentStore(ir.DocumentStore):
     def docid_internal2external(self, ix: int):
         return getattr(self._docs[ix], self.store._id_field)
 
-    def document_ext(self, docid: str) -> Document:
-        return self.converter(self.store.get(docid))
+    def document_ext(self, docid: str) -> DocumentRecord:
+        return self.converter(self.document_recordtype, self.store.get(docid))
 
-    def documents_ext(self, docids: List[str]) -> Document:
+    def documents_ext(self, docids: List[str]) -> DocumentRecord:
         """Returns documents given their external IDs (optimized for batch)"""
         retrieved = self.store.get_many(docids)
-        return [self.converter(retrieved[docid]) for docid in docids]
+        return [
+            self.converter(self.document_recordtype, retrieved[docid])
+            for docid in docids
+        ]
 
     def converter(self, data):
         """Converts a document from LZ4 tuples to any other format"""
         # By default, use identity
         return data
 
-    def iter(self) -> Iterator[Document]:
+    def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
-        return map(self.converter, self.store.__iter__())
+        return map(
+            partial(self.converter, self.document_recordtype), self.store.__iter__()
+        )
 
     def documentcount(self):
         if self.count:
             return self.count
         return self.store.count()
-
-
-@attrs.define()
-class IRDSQueryWrapper(ir.Topic):
-    query: Any
 
 
 class TopicsHandler(ABC):
@@ -292,11 +300,11 @@ class TopicsHandler(ABC):
 
 
 class SimpleTopicsHandler(TopicsHandler):
-    def __init__(self, converter, dataset):
+    def __init__(self, converter, topics: "Topics"):
         self.converter = converter
-        self.dataset = dataset
+        self._topics = topics
         self.target_cls = converter.target_cls
-        converter.check(dataset.queries_cls())
+        converter.check(topics.dataset.queries_cls())
 
     def topic_int(self, internal_topic_id: int) -> TopicRecord:
         """Returns a document given its internal ID"""
@@ -308,8 +316,7 @@ class SimpleTopicsHandler(TopicsHandler):
 
     def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
-        for query in self.dataset.queries_iter():
-            yield self.converter(query).as_record()
+        yield from self.topics_list
 
     @cached_property
     def topics_map(self):
@@ -323,16 +330,17 @@ class SimpleTopicsHandler(TopicsHandler):
     def topics(self):
         topic_map = {}
         topic_list = []
-        for query in self.dataset.iter():
-            topic_list.append(query)
-            topic_map[query.get_id()] = query
+        for query in self._topics.dataset.queries_iter():
+            record = self.converter(self._topics.topic_recordtype, query)
+            topic_map[query.query_id] = record
+            topic_list.append(record)
 
         return topic_map, topic_list
 
 
 class Topics(ir.TopicsStore, IRDSId):
     CONVERTERS = {
-        GenericQuery: tuple_constructor(GenericTopic, "query_id", "text"),
+        GenericQuery: tuple_constructor(SimpleTextItem, "query_id", "text"),
         _irds.beir.BeirCovidQuery: tuple_constructor(
             formats.TrecTopic, "query_id", "text", "query", "narrative"
         ),
@@ -367,23 +375,28 @@ class Topics(ir.TopicsStore, IRDSId):
         return self.dataset.queries_count()
 
     @cached_property
-    def topic_cls(self):
-        return self.handler.target_cls
+    def topic_recordtype(self) -> Type[Record]:
+        return TopicRecord.from_types(
+            f"{self.handler.target_cls.__name__}Record",
+            IDItem,
+            self.handler.target_cls,
+            module=Topics.__class__.__module__,
+        )
 
     @cached_property
     def handler(self):
-        handler = Topics.HANDLERS[self.dataset.queries_cls()](self.dataset)
+        handler = Topics.HANDLERS[self.dataset.queries_cls()](self)
         return handler
 
-    def topic_int(self, internal_topic_id: int) -> Topic:
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
         """Returns a document given its internal ID"""
         return self.handler.topic_int(internal_topic_id)
 
-    def topic_ext(self, external_topic_id: str) -> Topic:
+    def topic_ext(self, external_topic_id: str) -> TopicRecord:
         """Returns a document given its external ID"""
         return self.handler.topic_ext(external_topic_id)
 
-    def iter(self) -> Iterator[ir.Topic]:
+    def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
         return self.handler.iter()
 
@@ -391,8 +404,8 @@ class Topics(ir.TopicsStore, IRDSId):
 if hasattr(_irds.trec_cast, "Cast2022Query"):
     from datamaestro_text.data.conversation.base import (
         ConversationTreeNode,
-        DecontextualizedDictRecord,
-        ConversationTopicRecord,
+        DecontextualizedDictItem,
+        ConversationHistory,
     )
 
     class CastTopicsHandler(TopicsHandler):
@@ -416,7 +429,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
             """Returns a document given its external ID"""
             return self.ext2records[external_topic_id]
 
-        def iter(self) -> Iterator[ir.Topic]:
+        def iter(self) -> Iterator[ir.TopicRecord]:
             """Returns an iterator over topics"""
             return iter(self.records)
 
@@ -429,16 +442,31 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                 conversation = []
                 records = []
 
-                @define(slots=False)
-                class Cast2020TopicRecord(
-                    DecontextualizedDictRecord, ConversationTopicRecord
-                ):
-                    pass
+                class Cast2020TopicRecord(TopicRecord):
+                    class_types = [
+                        IDItem,
+                        SimpleTextItem,
+                        DecontextualizedDictItem,
+                        ConversationHistory,
+                    ]
 
                 for (
                     query
                 ) in self.dataset.queries_iter():  # type: _irds.trec_cast.Cast2020Query
-                    topic = GenericTopic(query.query_id, query.raw_utterance)
+                    decontextualized = DecontextualizedDictItem(
+                        "manual",
+                        {
+                            "manual": query.manual_rewritten_utterance,
+                            "auto": query.automatic_rewritten_utterance,
+                        },
+                    )
+                    topic = Cast2020TopicRecord(
+                        IDItem(query.query_id),
+                        SimpleTextItem(query.raw_utterance),
+                        decontextualized,
+                        ConversationHistory(node.conversation(False)),
+                    )
+
                     if topic_number == query.topic_number:
                         node = node.add(ConversationTreeNode(topic))
                     else:
@@ -446,22 +474,12 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                         node = ConversationTreeNode(topic)
                         topic_number = query.topic_number
 
-                    records.append(
-                        Cast2020TopicRecord(
-                            topic,
-                            node.conversation(skip_self=True),
-                            "manual",
-                            {
-                                "manual": query.manual_rewritten_utterance,
-                                "auto": query.automatic_rewritten_utterance,
-                            },
-                        )
-                    )
+                    records.append(topic)
 
                     conversation.append(node)
                     node = node.add(
                         ConversationTreeNode(
-                            IDDocument(query.manual_canonical_result_id)
+                            DocumentRecord.from_id(query.manual_canonical_result_id)
                         )
                     )
                     conversation.append(node)
@@ -493,25 +511,29 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
 
     CONVERTERS = {
         GenericDocPair: lambda qid, doc1_id, doc2_id: (
-            IDTopic(qid),
-            IDDocument(doc1_id),
-            IDDocument(doc2_id),
+            IDTopicRecord.from_id(qid),
+            IDDocumentRecord.from_id(doc1_id),
+            IDDocumentRecord.from_id(doc2_id),
         )
     }
 
     @cached_property
-    def topic_cls(self):
-        return IDTopic
+    def topic_recordtype(self) -> Type[Record]:
+        """The set of records for topics"""
+        return TopicRecord.from_types("TopicIDRecord", IDItem, module=__name__)
 
     @cached_property
-    def document_cls(self):
-        return IDDocument
+    def document_recordtype(self) -> Type[Record]:
+        """The class for documents"""
+        return DocumentRecord.from_types("DocumentIDRecord", IDItem, module=__name__)
 
     @cached_property
     def converter(self):
         return TrainingTriplets.CONVERTERS[self.dataset.docpairs_cls()]
 
-    def iter(self) -> Iterator[Tuple[ir.Topic, ir.Document, ir.Document]]:
+    def iter(
+        self,
+    ) -> Iterator[Tuple[ir.TopicRecord, ir.DocumentRecord, ir.DocumentRecord]]:
         ds = self.dataset
 
         logging.info("Starting to generate triplets")
