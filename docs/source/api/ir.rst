@@ -84,7 +84,4 @@ Training triplets
 
 .. autoxpmconfig:: datamaestro_text.data.ir.TrainingTripletsLines
 
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.TrainingTriplets
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.TrainingTripletsID
-
 .. autoxpmconfig:: datamaestro_text.data.ir.huggingface.HuggingFacePairwiseSampleDataset

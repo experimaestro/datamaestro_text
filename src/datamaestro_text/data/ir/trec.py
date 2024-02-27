@@ -1,13 +1,11 @@
 from typing import Dict, List, Optional
-from datamaestro.definitions import argument, Option
 from datamaestro.data import Base
-from experimaestro import documentation, Param, Config
+from experimaestro import documentation, Param, Meta
 from pathlib import Path
 from datamaestro.record import Record
 from datamaestro_text.data.ir import (
     Documents,
     Topics,
-    TopicRecord,
     AdhocAssessments,
     AdhocRun,
     AdhocResults,
@@ -17,8 +15,8 @@ from datamaestro_text.data.ir.formats import TrecTopicRecord
 
 
 class TrecTopics(Topics):
-    path: Option[Path]
-    parts: Option[List[str]]
+    path: Meta[Path]
+    parts: Meta[List[str]]
 
     @documentation
     def iter(self):
@@ -27,9 +25,13 @@ class TrecTopics(Topics):
 
         yield from trec.parse_query_format(self.path)
 
+    @property
+    def topic_recordtype(self):
+        return TrecTopicRecord
+
 
 class TrecAdhocAssessments(AdhocAssessments):
-    path: Option[Path]
+    path: Meta[Path]
 
     def trecpath(self):
         return self.path
@@ -42,9 +44,8 @@ class TrecAdhocAssessments(AdhocAssessments):
         yield from trec.parse_qrels(self.path)
 
 
-@argument("path", type=Path)
 class TrecAdhocRun(AdhocRun):
-    pass
+    path: Param[Path]
 
 
 class TrecAdhocResults(AdhocResults):
@@ -76,3 +77,6 @@ class TrecAdhocResults(AdhocResults):
 
 class TipsterCollection(Documents):
     path: Param[Path]
+
+    def iter(self):
+        raise NotImplementedError()

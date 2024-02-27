@@ -40,37 +40,3 @@ class Documents(ir.Documents):
     separator: Meta[str] = "\t"
 
     pass
-
-
-class TrainingTripletsID(ir.TrainingTripletsLines):
-    """Training triplets (query/document IDs only)
-
-    Attributes:
-        separator: Field separator
-        documents: The documents
-        topics: The topics
-        ids: Whether documents are IDs or full text
-    """
-
-    separator: Option[str] = "\t"
-    documents: Param[ir.Documents]
-    topics: Param[ir.Topics]
-    ids: Constant[bool] = True
-
-    def iter(self) -> Iterator[Tuple[str, str, str]]:
-        queries = {}
-        for query in self.topics.iter():
-            queries[query.get_id()] = query.get_text()
-
-        for qid, pos, neg in read_tsv(self.path):
-            yield queries[qid], pos, neg
-
-
-class TrainingTriplets(ir.TrainingTriplets):
-    "Training triplets (full text)"
-    path: Param[Path]
-    separator: Meta[str] = "\t"
-    ids: Constant[bool] = True
-
-    def iter(self) -> Iterator[Tuple[str, str, str]]:
-        yield from read_tsv(self.path)

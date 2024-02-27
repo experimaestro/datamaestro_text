@@ -276,12 +276,12 @@ class TrainingTripletsLines(TrainingTriplets):
         )
 
     @cached_property
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> Type[TopicRecord]:
         """The class for topics"""
         return IDTopicRecord if self.topic_ids else SimpleTextTopicRecord
 
     @cached_property
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
         return IDDocumentRecord if self.doc_ids else SimpleTextDocumentRecord
 
@@ -290,24 +290,24 @@ class TrainingTripletsLines(TrainingTriplets):
 class PairwiseSample(ABC):
     """A a query with positive and negative samples"""
 
-    topics: List[Record]
+    topics: List[TopicRecord]
     """The topic(s)"""
 
-    positives: List[Record]
+    positives: List[DocumentRecord]
     """Relevant documents"""
 
-    negatives: Dict[str, List[Record]]
+    negatives: Dict[str, List[DocumentRecord]]
     """Non relevant documents, organized in a dictionary where keys
     are the algorithm used to retrieve the negatives"""
 
     @property
     @abstractmethod
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> Type[DocumentRecord]:
         """The class for topics"""
 
     @property
     @abstractmethod
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
 
 

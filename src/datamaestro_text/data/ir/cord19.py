@@ -35,6 +35,10 @@ class Topics(Topics, File):
                 ),
             )
 
+    @property
+    def topic_recordtype(self):
+        return TrecTopicRecord
+
 
 class Documents(Documents, GenericCSV):
     @documentation

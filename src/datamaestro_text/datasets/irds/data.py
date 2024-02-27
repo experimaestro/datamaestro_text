@@ -484,7 +484,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     )
                     conversation.append(node)
             except Exception:
-                logging.exception()
+                logging.exception("Error while computing topic records")
 
             return records
 

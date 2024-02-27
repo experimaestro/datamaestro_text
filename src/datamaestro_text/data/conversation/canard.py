@@ -48,7 +48,7 @@ class CanardAnswerRecord(AnswerConversationRecord):
 class CanardDataset(ConversationDataset, File):
     """A dataset in the CANARD JSON format"""
 
-    def iter(self) -> Iterator[CanardConversation]:
+    def entries(self) -> Iterator[CanardConversation]:
         """Iterates over re-written query with their context"""
         with self.path.open("rt") as fp:
             data = json.load(fp)
@@ -66,7 +66,7 @@ class CanardDataset(ConversationDataset, File):
         history = []
         current_id = None
 
-        for entry in self.iter():
+        for entry in self.entries():
             # Check if current conversation
             if current_id != entry.dialogue_id and current_id is not None:
                 history.reverse()

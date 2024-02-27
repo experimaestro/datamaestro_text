@@ -191,23 +191,7 @@ class ConversationDataset(Base, ABC):
     """A dataset made of conversations"""
 
     @abstractmethod
-    def get(self, key: int):
-        """Return the given conversation"""
-        ...
-
-    @abstractmethod
-    def __len__(self) -> int:
-        """Returns the number of conversation trees"""
-        ...
-
     def __iter__(self) -> Iterator[ConversationTree]:
         """Return an iterator over conversations"""
         for i in range(len(self)):
             return self.get(i)
-
-    def __getitem__(self, key):
-        """Return an iterator over conversations"""
-        if isinstance(key, int):
-            return self.get(key)
-
-        return RangeView(self, key)

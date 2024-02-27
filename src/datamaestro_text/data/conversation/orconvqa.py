@@ -130,13 +130,3 @@ class OrConvQADataset(ConversationDataset, File):
         # Yields the last one
         history.reverse()
         yield SingleConversationTree(current_id, history)
-
-    @cached_property
-    def trees(self):
-        return list(self.__iter__())
-
-    def __len__(self):
-        return len(self.trees)
-
-    def get(self, key: int):
-        return self.trees[key]
