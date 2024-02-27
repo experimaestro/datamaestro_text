@@ -16,6 +16,7 @@ from .base import (  # noqa: F401
     # Record items
     IDItem,
     TextItem,
+    InternalIDItem,
     TopicRecord,
     DocumentRecord,
     SimpleTextItem,

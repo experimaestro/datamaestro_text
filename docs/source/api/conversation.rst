@@ -32,9 +32,7 @@ Contextual query reformulation
 .. autoclass:: ContextualizedRewrittenQuery
     :members:
 
-.. autoxpmconfig:: ContextualizedQueryRewriting
-
-.. autoxpmconfig:: CanardDataset
+.. autoxpmconfig:: datamaestro_text.data.conversation.canard.CanardDataset
     :members: iter
 
 .. autoclass:: OrConvQADatasetAnswer

@@ -21,7 +21,9 @@ Topics
 
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.Topics
 
-.. autoclass:: datamaestro_text.data.ir.Topic
+.. autoxpmconfig:: datamaestro_text.transforms.ir.TopicWrapper
+
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecTopics
 
 Documents
 ---------
@@ -30,7 +32,7 @@ Documents
 .. autoxpmconfig:: datamaestro_text.data.ir.Documents
     :members: iter_documents, iter_ids, documentcount
 .. autoxpmconfig:: datamaestro_text.data.ir.cord19.Documents
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.Documents
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TipsterCollection
 
 Assessments
 -----------
@@ -85,3 +87,12 @@ Training triplets
 .. autoxpmconfig:: datamaestro_text.data.ir.TrainingTripletsLines
 
 .. autoxpmconfig:: datamaestro_text.data.ir.huggingface.HuggingFacePairwiseSampleDataset
+
+Transforms
+**********
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.StoreTrainingTripletTopicAdapter
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.StoreTrainingTripletDocumentAdapter
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.ShuffledTrainingTripletsLines
