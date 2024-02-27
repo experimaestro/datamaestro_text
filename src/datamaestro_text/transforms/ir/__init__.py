@@ -170,7 +170,7 @@ class ShuffledTrainingTripletsLines(Task):
         else:
 
             def get_query(query):
-                return query[ir.TextItem].get_text()
+                return query[ir.TextItem].text
 
         if self.doc_ids:
 
@@ -180,7 +180,7 @@ class ShuffledTrainingTripletsLines(Task):
         else:
 
             def get_doc(doc):
-                return doc.get_text()
+                return doc.text
 
         def triplegenerator():
             logging.info("Starting to output triples")

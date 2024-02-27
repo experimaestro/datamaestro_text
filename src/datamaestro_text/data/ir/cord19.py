@@ -48,5 +48,5 @@ class Documents(Documents, GenericCSV):
             for row in DictReader(fp):
                 yield CordDocumentRecord(
                     IDItem(row["cord_uid"]),
-                    DocumentWithTitle(row["title"], row["abstract"]),
+                    DocumentWithTitle(row["abstract"], row["title"]),
                 )

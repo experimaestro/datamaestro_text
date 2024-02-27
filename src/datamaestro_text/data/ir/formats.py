@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import ClassVar, Tuple
 from attrs import define
 from datamaestro.record import recordtypes
@@ -7,25 +8,22 @@ from ir_datasets.datasets.cord19 import Cord19FullTextSection
 
 
 @define
-class CordDocument(TextItem):
-    text: str
+class DocumentWithTitle(TextItem):
+    """Web document with title and body"""
+
+    body: str
+
     title: str
-    url: str
-    pubmed_id: str
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.title} {self.text}"
+    @cached_property
+    def text(self):
+        return f"{self.title} {self.body}"
 
 
 @define
-class DocumentWithTitle(TextItem):
-    """Web document with title and URL"""
-
-    title: str
-
-    text: str
+class CordDocument(DocumentWithTitle):
+    url: str
+    pubmed_id: str
 
 
 @define
@@ -36,10 +34,9 @@ class CordFullTextDocument(TextItem):
     abstract: str
     body: Tuple[Cord19FullTextSection, ...]
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.abstract}"
+    @cached_property
+    def text(self):
+        return self.abstract
 
 
 @define
@@ -48,10 +45,9 @@ class MsMarcoDocument(TextItem):
     title: str
     body: str
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.body}"
+    @cached_property
+    def text(self):
+        return self.body
 
 
 @define
@@ -60,31 +56,24 @@ class NFCorpusDocument(TextItem):
     title: str
     abstract: str
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.abstract}"
+    @cached_property
+    def text(self):
+        return self.abstract
 
 
 @define
 class TitleDocument(TextItem):
-    text: str
+    body: str
     title: str
-    has_text: ClassVar[bool] = True
 
-    def get_text(self):
-        return f"{self.title} {self.text}"
+    @cached_property
+    def text(self):
+        return f"{self.title} {self.body}"
 
 
 @define
-class TitleUrlDocument(TextItem):
-    text: str
-    title: str
+class TitleUrlDocument(TitleDocument):
     url: str
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.title} {self.text}"
 
 
 @define
@@ -93,9 +82,8 @@ class TrecParsedDocument(TextItem):
     body: str
     marked_up_doc: bytes
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
+    @cached_property
+    def text(self):
         return f"{self.title} {self.body}"
 
 
@@ -110,10 +98,9 @@ class WapoDocument(TextItem):
     body_paras_html: Tuple[str, ...]
     body_media: Tuple[WapoDocMedia, ...]
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.body}"
+    @cached_property
+    def text(self):
+        return self.body
 
 
 @define
@@ -127,22 +114,18 @@ class TweetDoc(TextItem):
     source: bytes
     source_content_type: str
 
-    def get_text(self):
-        return f"{self.text}"
-
 
 @define
 class OrConvQADocument(TextItem):
     id: str
     title: str
-    text: str
+    body: str
     aid: str
     bid: int
 
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return f"{self.title} {self.text}"
+    @cached_property
+    def text(self):
+        return f"{self.title} {self.body}"
 
 
 @define
@@ -151,36 +134,17 @@ class TrecTopic(TextItem):
     query: str
     narrative: str
 
-    def get_text(self):
-        return f"{self.text}"
-
 
 @define
 class UrlTopic(TextItem):
     text: str
     url: str
 
-    def get_text(self):
-        return f"{self.text}"
-
 
 @define
 class NFCorpusTopic(TextItem):
-    title: str
+    text: str
     all: str
-
-    def get_text(self):
-        return f"{self.title}"
-
-
-@define
-class TrecQuery(TextItem):
-    title: str
-    description: str
-    narrative: str
-
-    def get_text(self):
-        return f"{self.description}"
 
 
 @define

@@ -212,7 +212,7 @@ class Documents(ir.DocumentStore, IRDSId):
 
 if hasattr(_irds, "miracl"):
     Documents.CONVERTERS[_irds.miracl.MiraclDoc] = tuple_constructor(
-        formats.DocumentWithTitle, "doc_id", "title", "text"
+        formats.DocumentWithTitle, "doc_id", "text", "title"
     )
 
 
@@ -351,7 +351,7 @@ class Topics(ir.TopicsStore, IRDSId):
             formats.NFCorpusTopic, "query_id", "title", "all"
         ),
         TrecQuery: tuple_constructor(
-            formats.TrecQuery, "query_id", "title", "description", "narrative"
+            formats.TrecTopic, "query_id", "title", "description", "narrative"
         ),
         _irds.tweets2013_ia.TrecMb13Query: tuple_constructor(
             formats.TrecMb13Query, "query_id", "query", "time", "tweet_time"

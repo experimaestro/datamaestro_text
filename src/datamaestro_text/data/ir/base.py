@@ -6,12 +6,12 @@ from datamaestro.record import Record, Item, recordtypes
 
 class BaseRecord(Record):
     @classmethod
-    def from_text(cls, text: str):
-        return cls(SimpleTextItem(text))
+    def from_text(cls, text: str, *items: Item):
+        return cls(SimpleTextItem(text), *items)
 
     @classmethod
-    def from_id(cls, id: str):
-        return cls(IDItem(id))
+    def from_id(cls, id: str, *items: Item):
+        return cls(IDItem(id), *items)
 
 
 class TopicRecord(BaseRecord):
@@ -32,19 +32,17 @@ class ScoredItem(Item):
 
 
 class TextItem(Item, ABC):
+    @property
     @abstractmethod
-    def get_text(self) -> str:
+    def text(self) -> str:
         """Returns the text"""
 
 
 @define
-class SimpleTextItem(TextItem, ABC):
+class SimpleTextItem(TextItem):
     """A topic/document with a text record"""
 
     text: str
-
-    def get_text(self):
-        return self.text
 
 
 @define
