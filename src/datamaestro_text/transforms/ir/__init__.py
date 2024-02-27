@@ -69,14 +69,16 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
 
     def iter(self):
         for topic, doc1, doc2 in self.data.iter():
-            doc1, doc2 = self.store.documents_ext([doc1.get_id(), doc2.get_id()])
+            doc1, doc2 = self.store.documents_ext(
+                [doc1[ir.IDItem].id, doc2[ir.IDItem].id]
+            )
             yield topic, doc1, doc2
 
     def batch_iter(self, size: int):
         for triplets in self.data.batch_iter(size):
             docids = []
             for topic, doc1, doc2 in triplets:
-                docids.extend(doc1.get_id(), doc2.get_id())
+                docids.extend(doc1[ir.IDItem].id, doc2[ir.IDItem].id)
             docs_iter = iter(self.store.documents_ext(docids))
             for triplet in triplets:
                 triplet[1] = next(docs_iter)
@@ -165,7 +167,7 @@ class ShuffledTrainingTripletsLines(Task):
         if self.topic_ids:
 
             def get_query(query):
-                return query.get_id()
+                return query[ir.IDItem].id
 
         else:
 

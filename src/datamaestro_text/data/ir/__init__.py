@@ -55,7 +55,7 @@ class Documents(Base):
         By default, use iter_documents, which is not really efficient.
         """
         for doc in self.iter():
-            yield doc.get_id()
+            yield doc[IDItem].id
 
     @property
     def documentcount(self):

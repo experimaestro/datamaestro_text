@@ -419,7 +419,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
 
         @cached_property
         def ext2records(self):
-            return {record.topic.get_id(): record for record in self.records}
+            return {record[IDItem].id: record for record in self.records}
 
         def topic_int(self, internal_topic_id: int) -> TopicRecord:
             """Returns a document given its internal ID"""
