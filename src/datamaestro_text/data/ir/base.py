@@ -108,11 +108,11 @@ class SimpleTextDocumentRecord(DocumentRecord):
 class GenericDocumentRecord(DocumentRecord):
     @classmethod
     def create(cls, id: str, text: str, *items: Item):
-        return GenericDocumentRecord(IDItem(id), SimpleTextItem(text), *items)
+        return cls(IDItem(id), SimpleTextItem(text), *items)
 
 
 @recordtypes(IDItem, TextItem)
 class GenericTopicRecord(TopicRecord):
     @classmethod
     def create(cls, id: str, text: str, *items: Item):
-        return GenericDocumentRecord(IDItem(id), SimpleTextItem(text), *items)
+        return cls(IDItem(id), SimpleTextItem(text), *items)
