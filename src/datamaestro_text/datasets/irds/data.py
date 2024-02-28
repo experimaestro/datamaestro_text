@@ -160,6 +160,12 @@ class Documents(ir.DocumentStore, IRDSId):
     # List of fields
     # self.dataset.docs_cls()._fields
 
+    def __getstate__(self):
+        return (self.id, self.irds)
+
+    def __setstate__(self, state):
+        self.id, self.irds = state
+
     def iter(self) -> Iterator[ir.DocumentRecord]:
         """Returns an iterator over adhoc documents"""
         for doc in self.dataset.docs_iter():

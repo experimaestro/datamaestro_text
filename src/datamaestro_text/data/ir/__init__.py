@@ -42,11 +42,11 @@ class Documents(Base):
     count: Meta[Optional[int]]
     """Number of documents"""
 
-    def iter(self) -> Iterator[Record]:
+    def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
         raise self.iter_documents()
 
-    def iter_documents(self) -> Iterator[Record]:
+    def iter_documents(self) -> Iterator[DocumentRecord]:
         return self.iter()
 
     def iter_ids(self) -> Iterator[str]:
@@ -67,7 +67,7 @@ class Documents(Base):
 
     @property
     @abstractmethod
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
         ...
 
@@ -94,7 +94,7 @@ class DocumentStore(Documents):
         """Returns a document given its external ID"""
         raise NotImplementedError(f"document() in {self.__class__}")
 
-    def documents_ext(self, docids: List[str]) -> List[Record]:
+    def documents_ext(self, docids: List[str]) -> List[DocumentRecord]:
         """Returns documents given their external ID
 
         By default, just look using `document_ext`, but some store might
@@ -102,7 +102,9 @@ class DocumentStore(Documents):
         """
         return [self.document_ext(docid) for docid in docids]
 
-    def iter_sample(self, randint: Optional[Callable[[int], int]]) -> Iterator[Record]:
+    def iter_sample(
+        self, randint: Optional[Callable[[int], int]]
+    ) -> Iterator[DocumentRecord]:
         """Sample documents from the dataset"""
         length = self.documentcount
         randint = randint or (lambda max: random.randint(0, max - 1))
@@ -127,7 +129,7 @@ class Topics(Base, ABC):
     """A set of topics with associated IDs"""
 
     @abstractmethod
-    def iter(self) -> Iterator[Record]:
+    def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
         ...
 
@@ -140,7 +142,7 @@ class Topics(Base, ABC):
 
     @property
     @abstractmethod
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> Type[TopicRecord]:
         """The class for topics"""
 
 
@@ -151,11 +153,11 @@ class TopicsStore(Topics):
     """Adhoc topics store"""
 
     @abstractmethod
-    def topic_int(self, internal_topic_id: int) -> Record:
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
         """Returns a document given its internal ID"""
 
     @abstractmethod
-    def topic_ext(self, external_topic_id: int) -> Record:
+    def topic_ext(self, external_topic_id: int) -> TopicRecord:
         """Returns a document given its external ID"""
 
 
