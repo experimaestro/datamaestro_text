@@ -3,7 +3,7 @@ from typing import Dict, Generic, Iterator, List, Optional, Sequence
 from attr import define
 from datamaestro.data import Base
 from datamaestro.record import Record, Item
-
+from datamaestro_text.data.ir import TopicRecord
 from datamaestro_text.utils.iter import FactoryIterable, LazyList, RangeView
 
 # ---- Basic types
@@ -32,6 +32,7 @@ class SimpleDecontextualizedItem(DecontextualizedItem):
         return self.decontextualized_query
 
 
+@define
 class DecontextualizedDictItem(DecontextualizedItem):
     """A conversation entry providing decontextualized version of the user query"""
 
@@ -49,7 +50,7 @@ class ConversationRecord(Record):
     pass
 
 
-class TopicConversationRecord(ConversationRecord):
+class TopicConversationRecord(ConversationRecord, TopicRecord):
     """A conversation record"""
 
     pass

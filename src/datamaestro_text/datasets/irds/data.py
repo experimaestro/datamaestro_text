@@ -2,9 +2,7 @@ from abc import ABC, abstractmethod
 from functools import partial
 import logging
 from pathlib import Path
-from typing import Any, Iterator, NamedTuple, Tuple, Type, List
-from attr import define
-import attrs
+from typing import Iterator, Tuple, Type, List
 import ir_datasets
 from ir_datasets.indices import PickleLz4FullStore
 from ir_datasets.formats import (
@@ -18,6 +16,7 @@ import ir_datasets.datasets as _irds
 from experimaestro import Config, Param
 from experimaestro.compat import cached_property
 from experimaestro import Option
+from datamaestro.record import recordtypes
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
     Record,
@@ -411,7 +410,9 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
     from datamaestro_text.data.conversation.base import (
         ConversationTreeNode,
         DecontextualizedDictItem,
-        ConversationHistory,
+        RetrievedEntry,
+        AnswerConversationRecord,
+        ConversationHistoryItem,
     )
 
     class CastTopicsHandler(TopicsHandler):
@@ -439,6 +440,16 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
             """Returns an iterator over topics"""
             return iter(self.records)
 
+    @recordtypes(
+        IDItem, SimpleTextItem, DecontextualizedDictItem, ConversationHistoryItem
+    )
+    class Cast2020TopicRecord(TopicRecord):
+        ...
+
+    @recordtypes(RetrievedEntry)
+    class Cast2020ResponseRecord(AnswerConversationRecord):
+        ...
+
     class Cast2020TopicsHandler(CastTopicsHandler):
         @cached_property
         def records(self):
@@ -448,17 +459,11 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                 conversation = []
                 records = []
 
-                class Cast2020TopicRecord(TopicRecord):
-                    class_types = [
-                        IDItem,
-                        SimpleTextItem,
-                        DecontextualizedDictItem,
-                        ConversationHistory,
-                    ]
-
                 for (
                     query
-                ) in self.dataset.queries_iter():  # type: _irds.trec_cast.Cast2020Query
+                ) in (
+                    self.dataset.dataset.queries_iter()
+                ):  # type: _irds.trec_cast.Cast2020Query
                     decontextualized = DecontextualizedDictItem(
                         "manual",
                         {
@@ -470,7 +475,9 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                         IDItem(query.query_id),
                         SimpleTextItem(query.raw_utterance),
                         decontextualized,
-                        ConversationHistory(node.conversation(False)),
+                        ConversationHistoryItem(
+                            node.conversation(False) if node else []
+                        ),
                     )
 
                     if topic_number == query.topic_number:
@@ -485,12 +492,15 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     conversation.append(node)
                     node = node.add(
                         ConversationTreeNode(
-                            DocumentRecord.from_id(query.manual_canonical_result_id)
+                            Cast2020ResponseRecord(
+                                RetrievedEntry(query.manual_canonical_result_id)
+                            )
                         )
                     )
                     conversation.append(node)
             except Exception:
                 logging.exception("Error while computing topic records")
+                raise
 
             return records
 
