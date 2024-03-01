@@ -113,8 +113,12 @@ class AdhocRunDataset(Dataset):
     base = AdhocRun
     configtype = AdhocRun
 
-    def _prepare(self, download=False) -> Documents:
+    def _prepare(self, download=False) -> AdhocRun:
         return AdhocRun(id=self.fullid)
+
+    @property
+    def configtype(self):
+        return AdhocRun
 
 
 class Collection(Dataset):
@@ -129,6 +133,10 @@ class Collection(Dataset):
             assessments=self.assessments.prepare(download),
             documents=self.documents.prepare(download),
         )
+
+    @property
+    def configtype(self):
+        return Adhoc
 
 
 class Datasets:
