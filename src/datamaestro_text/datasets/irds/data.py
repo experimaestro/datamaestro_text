@@ -400,7 +400,6 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
         ConversationTreeNode,
         DecontextualizedDictItem,
         RetrievedEntry,
-        AnswerConversationRecord,
         ConversationHistoryItem,
     )
 
