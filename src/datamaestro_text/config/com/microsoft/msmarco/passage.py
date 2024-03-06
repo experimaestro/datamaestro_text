@@ -14,13 +14,11 @@ from datamaestro.download.single import filedownloader
 from datamaestro.download import reference
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import tardownloader
-from datamaestro_text.data.ir import RerankAdhoc, Adhoc
+from datamaestro_text.data.ir import RerankAdhoc, Adhoc, TrainingTripletsLines
 from datamaestro_text.data.ir.csv import (
     Topics,
     AdhocRunWithText,
     Documents,
-    TrainingTriplets,
-    TrainingTripletsID,
 )
 from datamaestro_text.data.ir.trec import TrecAdhocAssessments
 from datamaestro.utils import HashCheck
@@ -138,16 +136,14 @@ def train_withrun(train, run):
     url="https://msmarco.blob.core.windows.net/msmarcoranking/qidpidtriples.train.full.2.tsv.gz",
     checker=HashCheck("4e58f45f82f3fe99e3239ecffd8ed371", md5),
 )
-@reference("collection", collection)
-@reference("topics", train_queries)
 @dataset(
-    TrainingTripletsID,
+    TrainingTripletsLines,
     url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
     size="5.7GB",
 )
-def train_idtriples(topics, collection, triples):
+def train_idtriples(triples):
     """Full training triples (query, positive passage, negative passage) with IDs"""
-    return {"path": triples, "topics": topics, "documents": collection}
+    return {"path": triples, "doc_ids": True, "topic_ids": True}
 
 
 @filedownloader(
@@ -157,7 +153,7 @@ def train_idtriples(topics, collection, triples):
     checker=HashCheck("c13bf99ff23ca691105ad12eab837f84", md5),
 )
 @dataset(
-    TrainingTriplets,
+    TrainingTripletsLines,
     url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
     size="27.1GB",
 )
@@ -173,7 +169,7 @@ def train_texttriples_small(triples):
     checker=HashCheck("8d509d484ea1971e792b812ae4800c6f", md5),
 )
 @dataset(
-    TrainingTriplets,
+    TrainingTripletsLines,
     url="https://github.com/microsoft/MSMARCO-Passage-Ranking",
     size="272.2GB",
 )

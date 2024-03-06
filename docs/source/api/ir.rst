@@ -20,8 +20,15 @@ Topics
     :members: iter, count
 
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.Topics
+.. autoxpmconfig:: datamaestro_text.data.ir.TopicsStore
 
-.. autoclass:: datamaestro_text.data.ir.Topic
+.. autoxpmconfig:: datamaestro_text.transforms.ir.TopicWrapper
+
+Dataset-specific Topics
+-----------------------
+
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecTopics
+.. autoxpmconfig:: datamaestro_text.data.ir.cord19.Topics
 
 Documents
 ---------
@@ -30,7 +37,10 @@ Documents
 .. autoxpmconfig:: datamaestro_text.data.ir.Documents
     :members: iter_documents, iter_ids, documentcount
 .. autoxpmconfig:: datamaestro_text.data.ir.cord19.Documents
+.. autoxpmconfig:: datamaestro_text.data.ir.trec.TipsterCollection
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.Documents
+.. autoxpmconfig:: datamaestro_text.data.ir.stores.OrConvQADocumentStore
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.LZ4DocumentStore
 
 Assessments
 -----------
@@ -50,11 +60,18 @@ Runs
 .. autoxpmconfig:: datamaestro_text.data.ir.csv.AdhocRunWithText
 .. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecAdhocRun
 
+
 Results
 -------
 
+.. autoxpmconfig:: datamaestro_text.data.ir.AdhocResults
 .. autoxpmconfig:: datamaestro_text.data.ir.trec.TrecAdhocResults
     :members: get_results
+
+Evaluation
+----------
+
+.. autoxpmconfig:: datamaestro_text.data.ir.Measure
 
 
 Reranking
@@ -84,7 +101,13 @@ Training triplets
 
 .. autoxpmconfig:: datamaestro_text.data.ir.TrainingTripletsLines
 
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.TrainingTriplets
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.TrainingTripletsID
-
 .. autoxpmconfig:: datamaestro_text.data.ir.huggingface.HuggingFacePairwiseSampleDataset
+
+Transforms
+**********
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.StoreTrainingTripletTopicAdapter
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.StoreTrainingTripletDocumentAdapter
+
+.. autoxpmconfig:: datamaestro_text.transforms.ir.ShuffledTrainingTripletsLines

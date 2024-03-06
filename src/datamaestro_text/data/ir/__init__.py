@@ -8,18 +8,23 @@ from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
 import random
 from experimaestro import Config
 from datamaestro.definitions import datatasks, Param, Meta
-from dataclasses import dataclass
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
 from datamaestro_text.utils.iter import BatchIterator
-from .base import (
-    Document,
-    Topic,
+from datamaestro.record import record_type, RecordType
+from .base import (  # noqa: F401
+    # Record items
+    IDItem,
+    TextItem,
+    InternalIDItem,
+    TopicRecord,
+    DocumentRecord,
+    SimpleTextItem,
+    ScoredItem,
+    # Create records
+    create_record,
+    # Other things
     AdhocAssessment,
-    IDTopic,
-    IDDocument,
-    TextTopic,
-    TextDocument,
 )
 
 
@@ -32,11 +37,11 @@ class Documents(Base):
     count: Meta[Optional[int]]
     """Number of documents"""
 
-    def iter(self) -> Iterator[Document]:
+    def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
         raise self.iter_documents()
 
-    def iter_documents(self) -> Iterator[Document]:
+    def iter_documents(self) -> Iterator[DocumentRecord]:
         return self.iter()
 
     def iter_ids(self) -> Iterator[str]:
@@ -45,7 +50,7 @@ class Documents(Base):
         By default, use iter_documents, which is not really efficient.
         """
         for doc in self.iter():
-            yield doc.get_id()
+            yield doc[IDItem].id
 
     @property
     def documentcount(self):
@@ -56,9 +61,10 @@ class Documents(Base):
         raise NotImplementedError(f"For class {self.__class__}")
 
     @property
-    def document_cls(self) -> Type[Document]:
+    @abstractmethod
+    def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
-        raise NotImplementedError(f"For class {self.__class__}")
+        ...
 
 
 class DocumentStore(Documents):
@@ -74,16 +80,16 @@ class DocumentStore(Documents):
         """Converts an internal collection ID (integer) to an external ID"""
         raise NotImplementedError(f"For class {self.__class__}")
 
-    def document_int(self, internal_docid: int) -> Document:
+    def document_int(self, internal_docid: int) -> DocumentRecord:
         """Returns a document given its internal ID"""
         docid = self.docid_internal2external(internal_docid)
         return self.document(docid)
 
-    def document_ext(self, docid: str) -> Document:
+    def document_ext(self, docid: str) -> DocumentRecord:
         """Returns a document given its external ID"""
         raise NotImplementedError(f"document() in {self.__class__}")
 
-    def documents_ext(self, docids: List[str]) -> List[Document]:
+    def documents_ext(self, docids: List[str]) -> List[DocumentRecord]:
         """Returns documents given their external ID
 
         By default, just look using `document_ext`, but some store might
@@ -93,7 +99,7 @@ class DocumentStore(Documents):
 
     def iter_sample(
         self, randint: Optional[Callable[[int], int]]
-    ) -> Iterator[Document]:
+    ) -> Iterator[DocumentRecord]:
         """Sample documents from the dataset"""
         length = self.documentcount
         randint = randint or (lambda max: random.randint(0, max - 1))
@@ -114,21 +120,25 @@ class AdhocIndex(DocumentStore):
         raise NotImplementedError(f"For class {self.__class__}")
 
 
-class Topics(Base):
+class Topics(Base, ABC):
     """A set of topics with associated IDs"""
 
-    def iter(self) -> Iterator[Topic]:
+    @abstractmethod
+    def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
-        raise NotImplementedError(f"For class {self.__class__}")
+        ...
+
+    def __iter__(self):
+        return self.iter()
 
     def count(self) -> Optional[int]:
         """Returns the number of topics if known"""
         return None
 
     @property
-    def topic_cls(self) -> Type[Topic]:
+    @abstractmethod
+    def topic_recordtype(self) -> Type[TopicRecord]:
         """The class for topics"""
-        raise NotImplementedError(f"For class {self.__class__}")
 
 
 AdhocTopics = Topics
@@ -138,11 +148,11 @@ class TopicsStore(Topics):
     """Adhoc topics store"""
 
     @abstractmethod
-    def topic_int(self, internal_topic_id: int) -> Topic:
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
         """Returns a document given its internal ID"""
 
     @abstractmethod
-    def topic_ext(self, external_topic_id: int) -> Topic:
+    def topic_ext(self, external_topic_id: int) -> TopicRecord:
         """Returns a document given its external ID"""
 
 
@@ -197,15 +207,18 @@ class Measure(Config):
     pass
 
 
-class TrainingTriplets(Base):
+Triplets = Tuple[TopicRecord, DocumentRecord, DocumentRecord]
+
+
+class TrainingTriplets(Base, ABC):
     """Triplet for training IR systems: query / query ID, positive document,
     negative document"""
 
-    def iter(self) -> Iterator[Tuple[Topic, Document, Document]]:
-        """Returns an iterator"""
+    def iter(self) -> Iterator[Triplets]:
+        """Returns an iterator over (topic, document 1, document) triplets"""
         raise NotImplementedError(f"For class {self.__class__}")
 
-    def batch_iter(self, size: int) -> Iterator[List[Tuple[Topic, Document, Document]]]:
+    def batch_iter(self, size: int) -> Iterator[List[Triplets]]:
         """Returns an iterator over batches of triplets
 
         The default implementation just concatenates triplets using `iter`, but
@@ -218,14 +231,16 @@ class TrainingTriplets(Base):
         return None
 
     @property
-    def topic_cls(self) -> Type[Topic]:
-        """The class for topics"""
-        raise NotImplementedError(f"For class {self.__class__}")
+    @abstractmethod
+    def topic_recordtype(self) -> RecordType:
+        """The set of records for topics"""
+        ...
 
     @property
-    def document_cls(self) -> Type[Document]:
+    @abstractmethod
+    def document_recordtype(self) -> RecordType:
         """The class for documents"""
-        raise NotImplementedError(f"For class {self.__class__}")
+        ...
 
 
 class TrainingTripletsLines(TrainingTriplets):
@@ -240,50 +255,53 @@ class TrainingTripletsLines(TrainingTriplets):
     topic_ids: Meta[bool]
     """True if we have query IDs"""
 
-    def iter(self) -> Iterator[Tuple[Topic, Document, Document]]:
+    def iter(self) -> Iterator[Triplets]:
         with auto_open(self.path, "rt") as fp:
             for line in fp:
                 q, pos, neg = line.strip().split(self.sep)
-                yield self.topic_cls(q), self.document_cls(pos), self.document_cls(neg)
+                yield self._topic(q), self._doc(pos), self._doc(neg)
 
     @cached_property
-    def topic_cls(self) -> Type[Topic]:
+    def _doc(self):
+        return lambda doc: self.document_recordtype(
+            IDItem(doc) if self.doc_ids else SimpleTextItem(doc)
+        )
+
+    @cached_property
+    def _topic(self):
+        return lambda q: self.topic_recordtype(
+            IDItem(q) if self.topic_ids else SimpleTextItem(q)
+        )
+
+    @cached_property
+    def topic_recordtype(self) -> Type[TopicRecord]:
         """The class for topics"""
-        return IDTopic if self.topic_ids else TextTopic
+        return record_type(IDItem) if self.topic_ids else record_type(SimpleTextItem)
 
     @cached_property
-    def document_cls(self) -> Type[Document]:
+    def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
-        return IDDocument if self.doc_ids else TextDocument
+        return record_type(IDItem) if self.doc_ids else record_type(SimpleTextItem)
 
 
 @define(kw_only=True)
-class PairwiseSample:
+class PairwiseSample(ABC):
     """A a query with positive and negative samples"""
 
-    topics: List[Topic]
+    topics: List[TopicRecord]
     """The topic(s)"""
 
-    positives: List[Document]
+    positives: List[DocumentRecord]
     """Relevant documents"""
 
-    negatives: Dict[str, List[Document]]
+    negatives: Dict[str, List[DocumentRecord]]
     """Non relevant documents, organized in a dictionary where keys
     are the algorithm used to retrieve the negatives"""
 
-    @property
-    def topic_cls(self):
-        """The class for topics"""
-        raise NotImplementedError(f"For class {self.__class__}")
 
-    @property
-    def document_cls(self):
-        """The class for documents"""
-        raise NotImplementedError(f"For class {self.__class__}")
-
-
-class PairwiseSampleDataset(Base):
+class PairwiseSampleDataset(Base, ABC):
     """Datasets where each record is a query with positive and negative samples"""
 
+    @abstractmethod
     def iter(self) -> Iterator[PairwiseSample]:
-        raise NotImplementedError(f"For class {self.__class__}")
+        ...

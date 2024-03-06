@@ -1,8 +1,11 @@
-from typing import Iterator, List, Optional
+from typing import Iterator, List
 from attr import define
 import json
 from datamaestro.data import File
-from .base import Conversation, DecontextualizedEntry
+from .base import (
+    ConversationTree,
+    SingleConversationTree,
+)
 from . import ConversationDataset
 
 
@@ -26,15 +29,10 @@ class CanardConversation:
     """Question number"""
 
 
-@define(kw_only=True, slots=False)
-class CanardEntry(DecontextualizedEntry):
-    """Entry"""
-
-
 class CanardDataset(ConversationDataset, File):
-    """A dataset in the CANARD json format"""
+    """A dataset in the CANARD JSON format"""
 
-    def iter(self) -> Iterator[CanardConversation]:
+    def entries(self) -> Iterator[CanardConversation]:
         """Iterates over re-written query with their context"""
         with self.path.open("rt") as fp:
             data = json.load(fp)
@@ -48,19 +46,19 @@ class CanardDataset(ConversationDataset, File):
                 query_no=entry["Question_no"],
             )
 
-    def iter_conversations(self) -> Iterator[Conversation[CanardEntry]]:
-        current: Optional[Conversation] = None
+    def __iter__(self) -> Iterator[ConversationTree]:
+        history = []
+        current_id = None
 
-        for entry in self.iter():
+        for entry in self.entries():
             # Check if current conversation
-            cid = entry.dialogue_id
-            if current is None or cid != current.id:
-                if current is not None:
-                    yield current
-                current = Conversation(id=cid, history=[])
+            if current_id != entry.dialogue_id and current_id is not None:
+                history.reverse()
+                yield SingleConversationTree(current_id, history)
 
             # Add to current
-            current.history.append(
+            history.append(
+                # FIXME: not working anymore
                 CanardEntry(
                     query=entry.query,
                     decontextualized_query=entry.rewrite,

@@ -1,131 +1,74 @@
+from abc import ABC, abstractmethod
 from attrs import define
-from typing import ClassVar, List
+from typing import List
+from datamaestro.record import Record, Item, record_type
 
 
-class BaseHolder:
-    """Base class for topics and documents"""
-
-    has_id: ClassVar[bool] = False
-    has_internal_id: ClassVar[bool] = False
-    has_text: ClassVar[bool] = False
-
-    def get_text(self):
-        raise RuntimeError(
-            f"{type(self)} cannot extract a single text: " "you should use an adapter"
-        )
-
-    def get_id(self) -> str:
-        raise RuntimeError(f"{type(self)} has no ID: " "you should use an adapter")
-
-    def get_internal_id(self) -> int:
-        raise RuntimeError(
-            f"{type(self)} has no internal ID: " "you should use an adapter"
-        )
+TopicRecord = DocumentRecord = Record
 
 
-@define(slots=False)
-class IDHolder(BaseHolder):
-    """Base data class for ID only data structures"""
+@define()
+class ScoredItem(Item):
+    """A score associated with the document"""
 
-    id: str
-    has_id: ClassVar[bool] = True
-
-    def get_id(self):
-        return self.id
+    score: float
+    """A retrieval score associated with this record (e.g. of the first-stage
+    retriever)"""
 
 
-@define(slots=False)
-class InternalIDHolder(BaseHolder):
-    """Base data class for ID only data structures"""
-
-    internal_id: int
-    has_internal_id: ClassVar[bool] = True
-
-    def get_internal_id(self) -> int:
-        return self.internal_id
+class TextItem(Item, ABC):
+    @property
+    @abstractmethod
+    def text(self) -> str:
+        """Returns the text"""
 
 
-@define(slots=False)
-class TextHolder(BaseHolder):
-    """Base data class for text only data structures"""
+@define
+class SimpleTextItem(TextItem):
+    """A topic/document with a text record"""
 
     text: str
-    has_text: ClassVar[bool] = True
-
-    def get_text(self):
-        return self.text
 
 
-class Document(BaseHolder):
-    """Base class for documents"""
+@define
+class InternalIDItem(Item, ABC):
+    """A topic/document with an internal ID"""
 
-    pass
-
-
-@define(slots=False)
-class TextDocument(TextHolder, Document):
-    """Documents with text"""
+    id: int
 
 
-@define(slots=False)
-class IDDocument(IDHolder, Document):
-    """Documents with ID"""
+@define
+class IDItem(Item, ABC):
+    """A topic/document with an external ID"""
+
+    id: str
 
 
-@define(slots=False)
-class InternalIDDocument(InternalIDHolder, Document):
-    """Documents with ID"""
-
-
-@define(slots=False)
-class FullIDDocument(InternalIDHolder, IDHolder, Document):
-    """Documents with internal and external ID"""
-
-
-@define(slots=False)
-class GenericDocument(TextHolder, IDHolder, Document):
-    """Documents with ID and text"""
-
-
-@define(slots=False)
-class FullGenericDocument(TextHolder, IDHolder, InternalIDHolder, Document):
-    """Documents with ID and text"""
-
-
-class Topic(BaseHolder):
-    pass
-
-
-@define(slots=False)
-class GenericTopic(TextHolder, IDHolder, Topic):
-    pass
-
-
-@define(slots=False)
-class TextTopic(TextHolder, Topic):
-    pass
-
-
-@define(slots=False)
-class IDTopic(IDHolder, Topic):
-    pass
-
-
-@define(slots=False)
+@define
 class AdhocAssessment:
     doc_id: str
 
 
-@define(slots=False)
+@define
 class SimpleAdhocAssessment(AdhocAssessment):
     rel: float
     """Relevance (> 0 if relevant)"""
 
 
-@define(slots=False)
+@define
 class AdhocAssessedTopic:
     topic_id: str
     """The topic ID"""
 
     assessments: List[AdhocAssessment]
     """List of assessments for this topic"""
+
+
+def create_record(*items: Item, id: str = None, text: str = None):
+    """Easy creation of a text/id item"""
+    extra_items = []
+    if id is not None:
+        extra_items.append(IDItem(id))
+    if text is not None:
+        extra_items.append(SimpleTextItem(text))
+    return Record(*items, *extra_items)
