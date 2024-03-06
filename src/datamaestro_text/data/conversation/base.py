@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import Dict, Generic, Iterator, List, Optional, Sequence
 from attr import define
 from datamaestro.data import Base
@@ -7,6 +8,14 @@ from datamaestro_text.data.ir import TopicRecord
 from datamaestro_text.utils.iter import FactoryIterable, LazyList, RangeView
 
 # ---- Basic types
+
+
+class EntryType(Item, Enum):
+    """Type of record"""
+
+    USER_QUERY = 0
+    SYSTEM_ANSWER = 1
+    CLARIFYING_QUESTION = 2
 
 
 class DecontextualizedItem(Item):
@@ -44,24 +53,6 @@ class DecontextualizedDictItem(DecontextualizedItem):
         return self.decontextualized_queries[mode or self.default_decontextualized_key]
 
 
-class ConversationRecord(Record):
-    """A conversation entry"""
-
-    pass
-
-
-class TopicConversationRecord(ConversationRecord, TopicRecord):
-    """A conversation record"""
-
-    pass
-
-
-class AnswerConversationRecord(ConversationRecord):
-    """A conversation record"""
-
-    pass
-
-
 @define
 class AnswerEntry(Item):
     """A system answer"""
@@ -89,7 +80,7 @@ class ClarifyingQuestionEntry(Item):
 
 
 #: The conversation
-ConversationHistory = Sequence[ConversationRecord]
+ConversationHistory = Sequence[Record]
 
 
 @define
@@ -104,7 +95,7 @@ class ConversationHistoryItem(Item):
 
 
 class ConversationNode:
-    def entry(self) -> ConversationRecord:
+    def entry(self) -> Record:
         """The current conversation entry"""
         ...
 
@@ -126,16 +117,16 @@ class SingleConversationTree(ConversationTree):
     """Simple conversations, based on a sequence of entries"""
 
     id: str
-    history: Sequence[ConversationRecord]
+    history: Sequence[Record]
 
-    def __init__(self, id: Optional[str], history: List[ConversationRecord]):
+    def __init__(self, id: Optional[str], history: List[Record]):
         """Create a simple conversation
 
         :param history: The entries, in reverse order (i.e. more ancient first)
         """
         self.history = history or []
 
-    def add(self, entry: ConversationRecord):
+    def add(self, entry: Record):
         self.history.insert(0, entry)
 
     def __iter__(self) -> Iterator[ConversationNode]:
@@ -148,17 +139,17 @@ class SingleConversationTreeNode(ConversationNode):
     tree: SingleConversationTree
     index: int
 
-    def entry(self) -> ConversationRecord:
+    def entry(self) -> Record:
         return self.tree.history[self.index]
 
-    def history(self) -> Sequence[ConversationRecord]:
+    def history(self) -> Sequence[Record]:
         return self.tree.history[self.index + 1 :]
 
 
 class ConversationTreeNode(ConversationNode, ConversationTree):
     """A conversation tree node"""
 
-    entry: ConversationRecord
+    entry: Record
     parent: Optional["ConversationTreeNode"]
     children: List["ConversationTreeNode"]
 

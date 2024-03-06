@@ -3,8 +3,6 @@ from .base import (
     ConversationDataset,
     ConversationHistory,
     ConversationHistoryItem,
-    ConversationRecord,
     DecontextualizedItem,
-    TopicConversationRecord,
-    AnswerConversationRecord,
+    EntryType,
 )

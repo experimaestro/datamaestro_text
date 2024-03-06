@@ -12,10 +12,9 @@ from datamaestro_text.data.ir.base import (
 
 
 from .base import (
-    AnswerConversationRecord,
     AnswerEntry,
-    ConversationRecord,
     ConversationTree,
+    EntryType,
     RetrievedEntry,
     SimpleDecontextualizedItem,
     SingleConversationTree,
@@ -86,7 +85,7 @@ class OrConvQADataset(ConversationDataset, File):
                 )
 
     def __iter__(self) -> Iterator[ConversationTree]:
-        history: List[ConversationRecord] = []
+        history: List[Record] = []
         current_id: Optional[str] = None
 
         for entry in self.entries():
@@ -106,12 +105,14 @@ class OrConvQADataset(ConversationDataset, File):
                     IDItem(query_no),
                     SimpleTextItem(entry.query),
                     SimpleDecontextualizedItem(entry.rewrite),
+                    EntryType.USER_QUERY,
                 )
             )
             history.append(
                 Record(
                     AnswerEntry(entry.answer.text),
                     RetrievedEntry(entry.evidences, entry.retrieval_labels),
+                    EntryType.SYSTEM_ANSWER,
                 )
             )
 
