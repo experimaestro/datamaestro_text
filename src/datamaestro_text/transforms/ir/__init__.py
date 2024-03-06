@@ -65,7 +65,7 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
     """Input data"""
 
     def __validate__(self):
-        assert self.data.document_recordtype.has_type(ir.IDItem), "Documents have no ID"
+        assert self.data.document_recordtype.has(ir.IDItem), "Documents have no ID"
 
     def iter(self):
         for topic, doc1, doc2 in self.data.iter():
