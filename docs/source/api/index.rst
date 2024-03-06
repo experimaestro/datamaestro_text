@@ -6,3 +6,6 @@ Datamaestro Text API
     text
     ir
     conversation
+    embeddings
+    recommendation
+    nlp

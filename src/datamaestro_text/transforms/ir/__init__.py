@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Type
 from experimaestro import Config, Task, Param, Annotated, pathgenerator, Option, tqdm
 import numpy as np
-from datamaestro.record import Record
+from datamaestro.record import RecordType
 import datamaestro_text.data.ir as ir
 from datamaestro_text.utils.shuffle import shuffle
 
@@ -30,7 +30,7 @@ class StoreTrainingTripletTopicAdapter(ir.TrainingTriplets):
     """Input data"""
 
     def __validate__(self):
-        assert self.data.topic_recordtype.has_type(ir.IDItem), (
+        assert self.data.topic_recordtype.has(ir.IDItem), (
             f"Topics {self.data.topic_recordtype}"
             f" have no ID: {self.data.topic_recordtype.itemtypes}"
         )
@@ -43,12 +43,12 @@ class StoreTrainingTripletTopicAdapter(ir.TrainingTriplets):
         return self.data.count()
 
     @property
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> RecordType:
         """The class for topics"""
         return self.store.topic_recordtype
 
     @property
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> RecordType:
         """The class for documents"""
         return self.data.document_recordtype
 
@@ -89,12 +89,12 @@ class StoreTrainingTripletDocumentAdapter(ir.TrainingTriplets):
         return self.data.count()
 
     @property
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> RecordType:
         """The class for topics"""
         return self.store.topic_recordtype
 
     @property
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> RecordType:
         """The class for documents"""
         return self.data.document_recordtype
 
@@ -131,20 +131,20 @@ class ShuffledTrainingTripletsLines(Task):
 
     def __validate__(self):
         if self.topic_ids:
-            assert self.data.topic_recordtype.has_type(
+            assert self.data.topic_recordtype.has(
                 ir.IDItem
             ), f"No topic ID in the source data ({self.data.topic_recordtype})"
         else:
-            assert self.data.topic_recordtype.has_type(
+            assert self.data.topic_recordtype.has(
                 ir.TextItem
             ), f"No topic text in the source data ({self.data.topic_recordtype})"
 
         if self.doc_ids:
-            assert self.data.document_recordtype.has_type(
+            assert self.data.document_recordtype.has(
                 ir.IDItem
             ), "No doc ID in the source data"
         else:
-            assert self.data.document_recordtype.has_type(
+            assert self.data.document_recordtype.has(
                 ir.TextItem
             ), "No doc text in the source data"
 

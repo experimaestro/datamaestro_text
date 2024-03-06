@@ -11,7 +11,7 @@ from datamaestro.definitions import datatasks, Param, Meta
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
 from datamaestro_text.utils.iter import BatchIterator
-from datamaestro.record import Record
+from datamaestro.record import record_type, RecordType
 from .base import (  # noqa: F401
     # Record items
     IDItem,
@@ -21,13 +21,8 @@ from .base import (  # noqa: F401
     DocumentRecord,
     SimpleTextItem,
     ScoredItem,
-    # Pre-defined usual records
-    GenericTopicRecord,
-    GenericDocumentRecord,
-    IDTopicRecord,
-    IDDocumentRecord,
-    SimpleTextTopicRecord,
-    SimpleTextDocumentRecord,
+    # Create records
+    create_record,
     # Other things
     AdhocAssessment,
 )
@@ -237,13 +232,13 @@ class TrainingTriplets(Base, ABC):
 
     @property
     @abstractmethod
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> RecordType:
         """The set of records for topics"""
         ...
 
     @property
     @abstractmethod
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> RecordType:
         """The class for documents"""
         ...
 
@@ -281,12 +276,12 @@ class TrainingTripletsLines(TrainingTriplets):
     @cached_property
     def topic_recordtype(self) -> Type[TopicRecord]:
         """The class for topics"""
-        return IDTopicRecord if self.topic_ids else SimpleTextTopicRecord
+        return record_type(IDItem) if self.topic_ids else record_type(SimpleTextItem)
 
     @cached_property
     def document_recordtype(self) -> Type[DocumentRecord]:
         """The class for documents"""
-        return IDDocumentRecord if self.doc_ids else SimpleTextDocumentRecord
+        return record_type(IDItem) if self.doc_ids else record_type(SimpleTextItem)
 
 
 @define(kw_only=True)

@@ -16,7 +16,7 @@ import ir_datasets.datasets as _irds
 from experimaestro import Config, Param
 from experimaestro.compat import cached_property
 from experimaestro import Option
-from datamaestro.record import recordtypes
+from datamaestro.record import RecordType, record_type
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
     Record,
@@ -26,8 +26,7 @@ from datamaestro_text.data.ir.base import (
     AdhocAssessedTopic,
     SimpleAdhocAssessment,
     IDItem,
-    IDTopicRecord,
-    IDDocumentRecord,
+    create_record,
 )
 import datamaestro_text.data.ir.formats as formats
 
@@ -201,12 +200,7 @@ class Documents(ir.DocumentStore, IRDSId):
 
     @cached_property
     def document_recordtype(self):
-        return DocumentRecord.from_types(
-            f"{self.converter.target_cls.__name__}Record",
-            IDItem,
-            self.converter.target_cls,
-            module=__name__,
-        )
+        return record_type(IDItem, self.converter.target_cls)
 
     @cached_property
     def converter(self):
@@ -380,13 +374,8 @@ class Topics(ir.TopicsStore, IRDSId):
         return self.dataset.queries_count()
 
     @cached_property
-    def topic_recordtype(self) -> Type[Record]:
-        return TopicRecord.from_types(
-            f"{self.handler.target_cls.__name__}Record",
-            IDItem,
-            self.handler.target_cls,
-            module=Topics.__class__.__module__,
-        )
+    def topic_recordtype(self) -> RecordType:
+        return record_type(IDItem, self.handler.target_cls)
 
     @cached_property
     def handler(self):
@@ -440,16 +429,6 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
             """Returns an iterator over topics"""
             return iter(self.records)
 
-    @recordtypes(
-        IDItem, SimpleTextItem, DecontextualizedDictItem, ConversationHistoryItem
-    )
-    class Cast2020TopicRecord(TopicRecord):
-        ...
-
-    @recordtypes(RetrievedEntry)
-    class Cast2020ResponseRecord(AnswerConversationRecord):
-        ...
-
     class Cast2020TopicsHandler(CastTopicsHandler):
         @cached_property
         def records(self):
@@ -471,7 +450,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                             "auto": query.automatic_rewritten_utterance,
                         },
                     )
-                    topic = Cast2020TopicRecord(
+                    topic = Record(
                         IDItem(query.query_id),
                         SimpleTextItem(query.raw_utterance),
                         decontextualized,
@@ -492,9 +471,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     conversation.append(node)
                     node = node.add(
                         ConversationTreeNode(
-                            Cast2020ResponseRecord(
-                                RetrievedEntry(query.manual_canonical_result_id)
-                            )
+                            Record(RetrievedEntry(query.manual_canonical_result_id))
                         )
                     )
                     conversation.append(node)
@@ -527,21 +504,21 @@ class TrainingTriplets(ir.TrainingTriplets, IRDSId):
 
     CONVERTERS = {
         GenericDocPair: lambda qid, doc1_id, doc2_id: (
-            IDTopicRecord.from_id(qid),
-            IDDocumentRecord.from_id(doc1_id),
-            IDDocumentRecord.from_id(doc2_id),
+            create_record(id=qid),
+            create_record(id=doc1_id),
+            create_record(id=doc2_id),
         )
     }
 
     @cached_property
-    def topic_recordtype(self) -> Type[Record]:
+    def topic_recordtype(self) -> RecordType:
         """The set of records for topics"""
-        return TopicRecord.from_types("TopicIDRecord", IDItem, module=__name__)
+        return record_type(IDItem)
 
     @cached_property
-    def document_recordtype(self) -> Type[Record]:
+    def document_recordtype(self) -> RecordType:
         """The class for documents"""
-        return DocumentRecord.from_types("DocumentIDRecord", IDItem, module=__name__)
+        return record_type(IDItem)
 
     @cached_property
     def converter(self):

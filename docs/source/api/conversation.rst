@@ -29,20 +29,19 @@ Data classes
 Contextual query reformulation
 ------------------------------
 
+.. autoxpmconfig:: datamaestro_text.data.conversation.base.ConversationDataset
+
 .. autoclass:: ContextualizedRewrittenQuery
     :members:
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.canard.CanardDataset
     :members: iter
 
-.. autoclass:: OrConvQADatasetAnswer
-    :members:
-
-.. autoclass:: OrConvQADatasetHistoryEntry
-    :members:
-
-.. autoclass:: OrConvQADataset
-    :members:
-
-.. autoxpmconfig:: OrConvQADataset
+.. autoxpmconfig:: datamaestro_text.data.conversation.orconvqa.OrConvQADataset
     :members: iter
+
+.. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetAnswer
+    :members:
+
+.. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetHistoryEntry
+    :members:

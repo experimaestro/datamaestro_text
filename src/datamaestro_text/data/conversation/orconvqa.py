@@ -3,11 +3,9 @@ from typing import Iterator, List, Optional
 from attr import define
 import json
 from datamaestro.data import File
-from datamaestro.record import recordtypes
+from datamaestro.record import Record
 
 from datamaestro_text.data.ir.base import (
-    TopicRecord,
-    GenericTopicRecord,
     IDItem,
     SimpleTextItem,
 )
@@ -65,16 +63,6 @@ class OrConvQADatasetEntry:
     """Relevance status for evidences"""
 
 
-@recordtypes(SimpleDecontextualizedItem)
-class OrConvQATopicRecord(GenericTopicRecord):
-    pass
-
-
-@recordtypes(AnswerEntry, RetrievedEntry)
-class OrConvQAAnswerRecord(AnswerConversationRecord):
-    pass
-
-
 class OrConvQADataset(ConversationDataset, File):
     def entries(self) -> Iterator[OrConvQADatasetEntry]:
         """Iterates over re-written query with their context"""
@@ -114,14 +102,14 @@ class OrConvQADataset(ConversationDataset, File):
 
             # Add to current
             history.append(
-                OrConvQATopicRecord(
+                Record(
                     IDItem(query_no),
                     SimpleTextItem(entry.query),
                     SimpleDecontextualizedItem(entry.rewrite),
                 )
             )
             history.append(
-                OrConvQAAnswerRecord(
+                Record(
                     AnswerEntry(entry.answer.text),
                     RetrievedEntry(entry.evidences, entry.retrieval_labels),
                 )

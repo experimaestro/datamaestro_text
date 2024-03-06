@@ -2,9 +2,9 @@ from attrs import define
 from pathlib import Path
 from typing import Iterator, Optional
 import re
-from datamaestro.record import recordtypes
 from datamaestro_text.data.ir.base import (
     AdhocAssessedTopic,
+    TopicRecord,
     SimpleAdhocAssessment,
     IDItem,
 )
@@ -37,7 +37,7 @@ def cleanup(s: Optional[str]) -> str:
     return s.replace("\t", " ").strip() if s is not None else ""
 
 
-def parse_query_format(file, xml_prefix=None) -> Iterator[TrecTopicRecord]:
+def parse_query_format(file, xml_prefix=None) -> Iterator[TopicRecord]:
     """Parse TREC XML query format"""
     if xml_prefix is None:
         xml_prefix = ""

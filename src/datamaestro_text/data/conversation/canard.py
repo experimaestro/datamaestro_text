@@ -1,16 +1,10 @@
-from typing import Iterator, List, Optional
+from typing import Iterator, List
 from attr import define
 import json
 from datamaestro.data import File
-from datamaestro.record import recordtypes
-from datamaestro_text.data.ir.base import GenericTopicRecord
 from .base import (
-    AnswerEntry,
     ConversationTree,
-    RetrievedEntry,
     SingleConversationTree,
-    SimpleDecontextualizedItem,
-    AnswerConversationRecord,
 )
 from . import ConversationDataset
 
@@ -33,16 +27,6 @@ class CanardConversation:
 
     query_no: int
     """Question number"""
-
-
-@recordtypes(SimpleDecontextualizedItem)
-class CanardTopicRecord(GenericTopicRecord):
-    pass
-
-
-@recordtypes(AnswerEntry, RetrievedEntry)
-class CanardAnswerRecord(AnswerConversationRecord):
-    pass
 
 
 class CanardDataset(ConversationDataset, File):

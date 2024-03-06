@@ -2,7 +2,7 @@ from csv import DictReader
 from typing import Iterator
 
 from datamaestro.data import File, documentation
-from datamaestro.record import recordtypes
+from datamaestro.record import Record
 from datamaestro_text.data.ir import Documents, TopicRecord, Topics, IDItem
 from datamaestro_text.data.ir.formats import (
     DocumentWithTitle,
@@ -11,12 +11,6 @@ from datamaestro_text.data.ir.formats import (
 )
 from datamaestro.data.csv import Generic as GenericCSV
 import xml.etree.ElementTree as ET
-from datamaestro_text.data.ir.base import GenericDocumentRecord
-
-
-@recordtypes(DocumentWithTitle)
-class CordDocumentRecord(GenericDocumentRecord):
-    pass
 
 
 class Topics(Topics, File):
@@ -42,11 +36,11 @@ class Topics(Topics, File):
 
 class Documents(Documents, GenericCSV):
     @documentation
-    def iter(self) -> Iterator[CordDocumentRecord]:
+    def iter(self) -> Iterator[Record]:
         """Returns an iterator over adhoc documents"""
         with self.path.open("r") as fp:
             for row in DictReader(fp):
-                yield CordDocumentRecord(
+                yield Record(
                     IDItem(row["cord_uid"]),
                     DocumentWithTitle(row["abstract"], row["title"]),
                 )

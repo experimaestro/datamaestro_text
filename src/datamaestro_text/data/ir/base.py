@@ -1,25 +1,10 @@
 from abc import ABC, abstractmethod
 from attrs import define
 from typing import List
-from datamaestro.record import Record, Item, recordtypes
+from datamaestro.record import Record, Item, record_type
 
 
-class BaseRecord(Record):
-    @classmethod
-    def from_text(cls, text: str, *items: Item):
-        return cls(SimpleTextItem(text), *items)
-
-    @classmethod
-    def from_id(cls, id: str, *items: Item):
-        return cls(IDItem(id), *items)
-
-
-class TopicRecord(BaseRecord):
-    """Topic record"""
-
-
-class DocumentRecord(BaseRecord):
-    """Document record"""
+TopicRecord = DocumentRecord = Record
 
 
 @define()
@@ -79,38 +64,11 @@ class AdhocAssessedTopic:
     """List of assessments for this topic"""
 
 
-# --- Commonly used types
-
-
-@recordtypes(IDItem)
-class IDTopicRecord(TopicRecord):
-    pass
-
-
-@recordtypes(IDItem)
-class IDDocumentRecord(DocumentRecord):
-    pass
-
-
-@recordtypes(SimpleTextItem)
-class SimpleTextTopicRecord(TopicRecord):
-    pass
-
-
-@recordtypes(SimpleTextItem)
-class SimpleTextDocumentRecord(DocumentRecord):
-    pass
-
-
-@recordtypes(IDItem, TextItem)
-class GenericDocumentRecord(DocumentRecord):
-    @classmethod
-    def create(cls, id: str, text: str, *items: Item):
-        return cls(IDItem(id), SimpleTextItem(text), *items)
-
-
-@recordtypes(IDItem, TextItem)
-class GenericTopicRecord(TopicRecord):
-    @classmethod
-    def create(cls, id: str, text: str, *items: Item):
-        return cls(IDItem(id), SimpleTextItem(text), *items)
+def create_record(*items: Item, id: str = None, text: str = None):
+    """Easy creation of a text/id item"""
+    extra_items = []
+    if id is not None:
+        extra_items.append(IDItem(id))
+    if text is not None:
+        extra_items.append(SimpleTextItem(text))
+    return Record(*items, *extra_items)

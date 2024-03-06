@@ -1,9 +1,9 @@
 from functools import cached_property
 from typing import ClassVar, Tuple
 from attrs import define
-from datamaestro.record import recordtypes
+from datamaestro.record import record_type
 from ir_datasets.datasets.wapo import WapoDocMedia
-from .base import TextItem, SimpleTextItem, IDTopicRecord
+from .base import TextItem, SimpleTextItem, IDItem
 from ir_datasets.datasets.cord19 import Cord19FullTextSection
 
 
@@ -174,6 +174,4 @@ class TrecTopic(SimpleTextItem):
     narrative: str
 
 
-@recordtypes(TrecTopic)
-class TrecTopicRecord(IDTopicRecord):
-    ...
+TrecTopicRecord = record_type(IDItem, TrecTopic)
