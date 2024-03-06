@@ -303,16 +303,6 @@ class PairwiseSample(ABC):
     """Non relevant documents, organized in a dictionary where keys
     are the algorithm used to retrieve the negatives"""
 
-    @property
-    @abstractmethod
-    def topic_recordtype(self) -> Type[DocumentRecord]:
-        """The class for topics"""
-
-    @property
-    @abstractmethod
-    def document_recordtype(self) -> Type[DocumentRecord]:
-        """The class for documents"""
-
 
 class PairwiseSampleDataset(Base, ABC):
     """Datasets where each record is a query with positive and negative samples"""
