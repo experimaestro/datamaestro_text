@@ -127,6 +127,10 @@ class OrConvQADocument(TextItem):
     def text(self):
         return f"{self.title} {self.body}"
 
+@define
+class DprW100Doc(TextItem):
+    text: str
+    title: str
 
 @define
 class TrecTopic(TextItem):
@@ -175,3 +179,8 @@ class TrecTopic(SimpleTextItem):
 
 
 TrecTopicRecord = record_type(IDItem, TrecTopic)
+
+@define
+class DprW100Query(TextItem):
+    text: str
+    answers: Tuple[str]
