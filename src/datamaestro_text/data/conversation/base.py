@@ -125,6 +125,7 @@ class SingleConversationTree(ConversationTree):
         :param history: The entries, in reverse order (i.e. more ancient first)
         """
         self.history = history or []
+        self.id = id
 
     def add(self, entry: Record):
         self.history.insert(0, entry)

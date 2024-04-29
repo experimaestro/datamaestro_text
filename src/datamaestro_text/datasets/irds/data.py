@@ -401,6 +401,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
         DecontextualizedDictItem,
         RetrievedEntry,
         ConversationHistoryItem,
+        EntryType,
     )
 
     class CastTopicsHandler(TopicsHandler):
@@ -456,6 +457,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                         ConversationHistoryItem(
                             node.conversation(False) if node else []
                         ),
+                        EntryType.USER_QUERY,
                     )
 
                     if topic_number == query.topic_number:
@@ -470,7 +472,10 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     conversation.append(node)
                     node = node.add(
                         ConversationTreeNode(
-                            Record(RetrievedEntry(query.manual_canonical_result_id))
+                            Record(
+                                RetrievedEntry(query.manual_canonical_result_id),
+                                EntryType.SYSTEM_ANSWER,
+                            )
                         )
                     )
                     conversation.append(node)
