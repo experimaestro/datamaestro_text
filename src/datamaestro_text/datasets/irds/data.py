@@ -399,7 +399,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
     from datamaestro_text.data.conversation.base import (
         ConversationTreeNode,
         DecontextualizedDictItem,
-        RetrievedEntry,
+        AnswerDocumentID,
         ConversationHistoryItem,
         EntryType,
     )
@@ -473,7 +473,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     node = node.add(
                         ConversationTreeNode(
                             Record(
-                                RetrievedEntry(query.manual_canonical_result_id),
+                                AnswerDocumentID(query.manual_canonical_result_id),
                                 EntryType.SYSTEM_ANSWER,
                             )
                         )

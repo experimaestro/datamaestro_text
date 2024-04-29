@@ -62,6 +62,13 @@ class AnswerEntry(Item):
 
 
 @define
+class AnswerDocumentID(Item):
+    """An answer as a document ID"""
+
+    document_id: str
+
+
+@define
 class RetrievedEntry(Item):
     """List of system-retrieved documents and their relevance"""
 
@@ -69,7 +76,7 @@ class RetrievedEntry(Item):
     """List of retrieved documents"""
 
     document_relevances: Optional[List[str]] = None
-    """List of retrieved documents and their relevance status"""
+    """List of relevance status (optional)"""
 
 
 @define
