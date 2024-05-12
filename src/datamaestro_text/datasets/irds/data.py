@@ -429,7 +429,6 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
             """Returns an iterator over topics"""
             return iter(self.records)
 
-    class Cast2020TopicsHandler(CastTopicsHandler):
         @cached_property
         def records(self):
             try:
@@ -438,11 +437,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                 conversation = []
                 records = []
 
-                for (
-                    query
-                ) in (
-                    self.dataset.dataset.queries_iter()
-                ):  # type: _irds.trec_cast.Cast2020Query
+                for query in self.dataset.dataset.queries_iter():
                     decontextualized = DecontextualizedDictItem(
                         "manual",
                         {
@@ -473,7 +468,7 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                     node = node.add(
                         ConversationTreeNode(
                             Record(
-                                AnswerDocumentID(query.manual_canonical_result_id),
+                                AnswerDocumentID(self.get_canonical_result_id(query)),
                                 EntryType.SYSTEM_ANSWER,
                             )
                         )
@@ -485,14 +480,43 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
 
             return records
 
+        @staticmethod
+        def get_canonical_result_id():
+            return None
+
+    class Cast2020TopicsHandler(CastTopicsHandler):
+        @staticmethod
+        def get_canonical_result_id(query: _irds.trec_cast.Cast2020Query):
+            return query.manual_canonical_result_id
+
+    class Cast2021TopicsHandler(CastTopicsHandler):
+        @staticmethod
+        def get_canonical_result_id(query: _irds.trec_cast.Cast2021Query):
+            return query.canonical_result_id
+
     Topics.HANDLERS.update(
         {
             # _irds.trec_cast.Cast2019Query: Cast2019TopicsHandler,
             _irds.trec_cast.Cast2020Query: Cast2020TopicsHandler,
-            # _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
+            _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
             # _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler
         }
     )
+
+    class CastDocHandler:
+        def check(self, cls):
+            assert issubclass(cls, _irds.trec_cast.CastDoc)
+
+        @cached_property
+        def target_cls(self):
+            return formats.TitleUrlDocument
+
+        def __call__(self, _, doc: _irds.trec_cast.CastDoc):
+            return Record(
+                IDItem(doc.doc_id), formats.SimpleTextItem(" ".join(doc.passages))
+            )
+
+    Documents.CONVERTERS[_irds.trec_cast.CastDoc] = CastDocHandler()
 
 
 class Adhoc(ir.Adhoc, IRDSId):

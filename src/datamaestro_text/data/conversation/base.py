@@ -194,4 +194,4 @@ class ConversationDataset(Base, ABC):
     def __iter__(self) -> Iterator[ConversationTree]:
         """Return an iterator over conversations"""
         for i in range(len(self)):
-            return self.get(i)
+            yield self.get(i)
