@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from functools import partial
 import logging
 from pathlib import Path
-from typing import Iterator, Tuple, Type, List
+from typing import Dict, Iterator, Tuple, Type, List
 import ir_datasets
 from ir_datasets.indices import PickleLz4FullStore
 from ir_datasets.formats import (
@@ -17,6 +17,7 @@ from experimaestro import Config, Param
 from experimaestro.compat import cached_property
 from experimaestro import Option
 from datamaestro.record import RecordType, record_type
+from datamaestro_text.data.conversation.base import AnswerEntry
 import datamaestro_text.data.ir as ir
 from datamaestro_text.data.ir.base import (
     Record,
@@ -445,22 +446,25 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                             "auto": query.automatic_rewritten_utterance,
                         },
                     )
+
+                    is_new_conversation = topic_number != query.topic_number
+
                     topic = Record(
                         IDItem(query.query_id),
                         SimpleTextItem(query.raw_utterance),
                         decontextualized,
                         ConversationHistoryItem(
-                            node.conversation(False) if node else []
+                            [] if is_new_conversation else node.conversation(False)
                         ),
                         EntryType.USER_QUERY,
                     )
 
-                    if topic_number == query.topic_number:
-                        node = node.add(ConversationTreeNode(topic))
-                    else:
+                    if is_new_conversation:
                         conversation = []
                         node = ConversationTreeNode(topic)
                         topic_number = query.topic_number
+                    else:
+                        node = node.add(ConversationTreeNode(topic))
 
                     records.append(topic)
 
@@ -494,12 +498,63 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
         def get_canonical_result_id(query: _irds.trec_cast.Cast2021Query):
             return query.canonical_result_id
 
+    class Cast2022TopicsHandler(CastTopicsHandler):
+        def __init__(self, dataset):
+            self.dataset = dataset
+
+        @cached_property
+        def records(self):
+            try:
+                records = []
+                nodes: Dict[str, ConversationTreeNode] = {}
+
+                for (
+                    query
+                ) in (
+                    self.dataset.dataset.queries_iter()
+                ):  # type: _irds.trec_cast.Cast2022Query
+                    parent = nodes[query.parent_id] if query.parent_id else None
+
+                    if query.participant == "User":
+                        topic = Record(
+                            IDItem(query.query_id),
+                            SimpleTextItem(query.raw_utterance),
+                            DecontextualizedDictItem(
+                                "manual",
+                                {
+                                    "manual": query.manual_rewritten_utterance,
+                                },
+                            ),
+                            ConversationHistoryItem(
+                                parent.conversation(False) if parent else []
+                            ),
+                            EntryType.USER_QUERY,
+                        )
+                        node = ConversationTreeNode(topic)
+                        records.append(topic)
+                    else:
+                        node = ConversationTreeNode(
+                            Record(
+                                AnswerEntry(query.response),
+                                EntryType.SYSTEM_ANSWER,
+                            )
+                        )
+
+                    nodes[query.query_id] = node
+                    if parent:
+                        parent.add(node)
+            except Exception:
+                logging.exception("Error while computing topic records")
+                raise
+
+            return records
+
     Topics.HANDLERS.update(
         {
             # _irds.trec_cast.Cast2019Query: Cast2019TopicsHandler,
             _irds.trec_cast.Cast2020Query: Cast2020TopicsHandler,
             _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
-            # _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler
+            _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler,
         }
     )
 
@@ -516,7 +571,22 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
                 IDItem(doc.doc_id), formats.SimpleTextItem(" ".join(doc.passages))
             )
 
+    class CastPassageDocHandler:
+        def check(self, cls):
+            assert issubclass(cls, _irds.trec_cast.CastPassageDoc)
+
+        @cached_property
+        def target_cls(self):
+            return formats.TitleUrlDocument
+
+        def __call__(self, _, doc: _irds.trec_cast.CastPassageDoc):
+            return Record(
+                IDItem(doc.doc_id),
+                formats.TitleUrlDocument(doc.text, doc.title, doc.url),
+            )
+
     Documents.CONVERTERS[_irds.trec_cast.CastDoc] = CastDocHandler()
+    Documents.CONVERTERS[_irds.trec_cast.CastPassageDoc] = CastPassageDocHandler()
 
 
 class Adhoc(ir.Adhoc, IRDSId):
