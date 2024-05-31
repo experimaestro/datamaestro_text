@@ -1,4 +1,3 @@
-from functools import cached_property
 from typing import Iterator, List, Optional
 from attr import define
 import json
@@ -16,7 +15,6 @@ from .base import (
     AnswerEntry,
     ConversationTree,
     EntryType,
-    RetrievedEntry,
     SimpleDecontextualizedItem,
     SingleConversationTree,
 )

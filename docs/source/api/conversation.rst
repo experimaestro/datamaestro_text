@@ -45,3 +45,11 @@ Contextual query reformulation
 
 .. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetHistoryEntry
     :members:
+
+
+
+.. autoclass:: datamaestro_text.data.conversation.orconvqa.QReCCDatasetEntry
+    :members:
+
+.. autoxpmconfig:: datamaestro_text.data.conversation.qrecc.QReCCDataset
+    :members: iter
