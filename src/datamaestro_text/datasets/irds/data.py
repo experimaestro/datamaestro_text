@@ -255,15 +255,12 @@ class LZ4DocumentStore(ir.DocumentStore):
         return getattr(self._docs[ix], self.store._id_field)
 
     def document_ext(self, docid: str) -> DocumentRecord:
-        return self.converter(self.document_recordtype, self.store.get(docid))
+        return self.converter(self.store.get(docid))
 
     def documents_ext(self, docids: List[str]) -> DocumentRecord:
         """Returns documents given their external IDs (optimized for batch)"""
         retrieved = self.store.get_many(docids)
-        return [
-            self.converter(self.document_recordtype, retrieved[docid])
-            for docid in docids
-        ]
+        return [self.converter(retrieved[docid]) for docid in docids]
 
     def converter(self, data):
         """Converts a document from LZ4 tuples to any other format"""
@@ -272,10 +269,9 @@ class LZ4DocumentStore(ir.DocumentStore):
 
     def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
-        return map(
-            partial(self.converter, self.document_recordtype), self.store.__iter__()
-        )
+        return map(self.converter, self.store.__iter__())
 
+    @cached_property
     def documentcount(self):
         if self.count:
             return self.count

@@ -3,6 +3,7 @@ from typing import List
 from experimaestro import Constant
 import attrs
 
+from datamaestro.record import Record
 from datamaestro_text.datasets.irds.data import LZ4DocumentStore
 from datamaestro_text.data.ir.formats import OrConvQADocument
 
@@ -19,4 +20,4 @@ class OrConvQADocumentStore(LZ4DocumentStore):
     data_cls = NAMED_TUPLE
 
     def converter(self, data: NAMED_TUPLE) -> OrConvQADocument:
-        return OrConvQADocument(**data._asdict())
+        return Record(OrConvQADocument(**data._asdict()))

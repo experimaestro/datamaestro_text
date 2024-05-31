@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict, Generic, Iterator, List, Optional, Sequence
+from typing import Dict, Generic, Iterator, List, Optional, Sequence, Tuple
 from attr import define
 from datamaestro.data import Base
 from datamaestro.record import Record, Item
@@ -69,14 +69,21 @@ class AnswerDocumentID(Item):
 
 
 @define
+class AnswerDocumentURL(Item):
+    """An answer as a document ID"""
+
+    url: str
+
+
+@define
 class RetrievedEntry(Item):
     """List of system-retrieved documents and their relevance"""
 
     documents: List[str]
     """List of retrieved documents"""
 
-    document_relevances: Optional[List[str]] = None
-    """List of relevance status (optional)"""
+    relevant_documents: Optional[Dict[int, Tuple[Optional[int], Optional[int]]]] = None
+    """List of relevance status (optional), with start/stop position"""
 
 
 @define
@@ -192,7 +199,7 @@ class SingleConversationTreeNode(ConversationNode):
         return (
             [SingleConversationTreeNode(self.tree, self.index - 1)]
             if self.index > 0
-            else None
+            else []
         )
 
 
