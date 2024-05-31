@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from functools import partial
 import logging
 from pathlib import Path
-from typing import Dict, Iterator, Tuple, Type, List
+from typing import Dict, Iterator, NamedTuple, Tuple, Type, List
 import ir_datasets
 from ir_datasets.indices import PickleLz4FullStore
 from ir_datasets.formats import (
@@ -13,7 +14,7 @@ from ir_datasets.formats import (
     TrecQuery,
 )
 import ir_datasets.datasets as _irds
-from experimaestro import Config, Param
+from experimaestro import Config, Param, Meta
 from experimaestro.compat import cached_property
 from experimaestro import Option
 from datamaestro.record import RecordType, record_type
@@ -216,20 +217,6 @@ if hasattr(_irds, "miracl"):
     )
 
 
-# Fix while PR https://github.com/allenai/ir_datasets/pull/252
-# is not in.
-class DMPickleLz4FullStore(PickleLz4FullStore):
-    def get_many(self, doc_ids, field=None):
-        result = {}
-        field_idx = self._doc_cls._fields.index(field) if field is not None else None
-        for doc in self.get_many_iter(doc_ids):
-            if field is not None:
-                result[getattr(doc, self._id_field)] = doc[field_idx]
-            else:
-                result[getattr(doc, self._id_field)] = doc
-        return result
-
-
 class LZ4DocumentStore(ir.DocumentStore):
     """A LZ4-based document store"""
 
@@ -243,7 +230,7 @@ class LZ4DocumentStore(ir.DocumentStore):
 
     @cached_property
     def store(self):
-        return DMPickleLz4FullStore(
+        return PickleLz4FullStore(
             self.path, None, self.data_cls, self.lookup_field, self.index_fields
         )
 
@@ -262,10 +249,10 @@ class LZ4DocumentStore(ir.DocumentStore):
         retrieved = self.store.get_many(docids)
         return [self.converter(retrieved[docid]) for docid in docids]
 
+    @abstractmethod
     def converter(self, data):
-        """Converts a document from LZ4 tuples to any other format"""
-        # By default, use identity
-        return data
+        """Converts a document from LZ4 tuples to a document record"""
+        ...
 
     def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
@@ -276,6 +263,25 @@ class LZ4DocumentStore(ir.DocumentStore):
         if self.count:
             return self.count
         return self.store.count()
+
+
+class SimpleJsonDocument(NamedTuple):
+    id: str
+    text: str
+
+
+class LZ4JSONLDocumentStore(LZ4DocumentStore):
+    jsonl_path: Meta[Path]
+    """json-l based document store
+
+    Each line is of the form
+    ```json
+    { "id": "...", "text": "..." }
+    ```
+    """
+
+    def converter(self, data):
+        return DocumentRecord(IDItem(data["id"]), SimpleTextItem(data["text"]))
 
 
 class TopicsHandler(ABC):
@@ -392,6 +398,7 @@ class Topics(ir.TopicsStore, IRDSId):
         return self.handler.iter()
 
 
+# flake8: noqa: C901
 if hasattr(_irds.trec_cast, "Cast2022Query"):
     from datamaestro_text.data.conversation.base import (
         ConversationTreeNode,
