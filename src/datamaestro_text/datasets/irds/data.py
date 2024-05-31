@@ -412,11 +412,6 @@ if hasattr(_irds.trec_cast, "Cast2022Query"):
         def __init__(self, dataset):
             self.dataset = dataset
 
-        @property
-        @abstractmethod
-        def records(self):
-            ...
-
         @cached_property
         def ext2records(self):
             return {record[IDItem].id: record for record in self.records}
