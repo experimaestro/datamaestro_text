@@ -188,7 +188,7 @@ class SingleConversationTreeNode(ConversationNode):
     def history(self) -> Sequence[Record]:
         return self.tree.history[self.index + 1 :]
 
-    def parent(self) -> ConversationNode | None:
+    def parent(self) -> Optional[ConversationNode]:
         return (
             SingleConversationTreeNode(self.tree, self.index + 1)
             if self.index < len(self.tree.history) - 1
@@ -235,7 +235,7 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
         for child in self.children:
             yield from child
 
-    def parent(self) -> ConversationNode | None:
+    def parent(self) -> Optional[ConversationNode]:
         return self.parent
 
     def children(self) -> List[ConversationNode]:
