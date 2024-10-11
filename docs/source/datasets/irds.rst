@@ -8,9 +8,10 @@ version of `ir-datasets` is more ancient or newer than the one used at generatio
 Data types
 ----------
 
-.. autoxpmconfig:: xpmir.datasets.irds.data.Topics
-.. autoxpmconfig:: xpmir.datasets.irds.data.Documents
-.. autoxpmconfig:: xpmir.datasets.irds.data.AdhocAssessments
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.Topics
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.Documents
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.AdhocAssessments
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.LZ4DocumentStore
 
 
 List of datasets

@@ -117,7 +117,6 @@ class TweetDoc(TextItem):
 
 @define
 class OrConvQADocument(TextItem):
-    id: str
     title: str
     body: str
     aid: str
@@ -126,13 +125,6 @@ class OrConvQADocument(TextItem):
     @cached_property
     def text(self):
         return f"{self.title} {self.body}"
-
-
-@define
-class TrecTopic(TextItem):
-    text: str
-    query: str
-    narrative: str
 
 
 @define

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict, Generic, Iterator, List, Optional, Sequence
+from typing import Dict, Generic, Iterator, List, Optional, Sequence, Tuple
 from attr import define
 from datamaestro.data import Base
 from datamaestro.record import Record, Item
@@ -62,14 +62,28 @@ class AnswerEntry(Item):
 
 
 @define
+class AnswerDocumentID(Item):
+    """An answer as a document ID"""
+
+    document_id: str
+
+
+@define
+class AnswerDocumentURL(Item):
+    """An answer as a document ID"""
+
+    url: str
+
+
+@define
 class RetrievedEntry(Item):
     """List of system-retrieved documents and their relevance"""
 
     documents: List[str]
     """List of retrieved documents"""
 
-    document_relevances: Optional[List[str]] = None
-    """List of retrieved documents and their relevance status"""
+    relevant_documents: Optional[Dict[int, Tuple[Optional[int], Optional[int]]]] = None
+    """List of relevance status (optional), with start/stop position"""
 
 
 @define
@@ -95,43 +109,63 @@ class ConversationHistoryItem(Item):
 
 
 class ConversationNode:
+    @abstractmethod
     def entry(self) -> Record:
         """The current conversation entry"""
         ...
 
+    @abstractmethod
     def history(self) -> ConversationHistory:
         """Preceding conversation entries, from most recent to more ancient"""
         ...
 
+    @abstractmethod
+    def parent(self) -> Optional["ConversationNode"]:
+        ...
 
-class ConversationTree:
+    @abstractmethod
+    def children(self) -> List["ConversationNode"]:
+        ...
+
+
+class ConversationTree(ABC):
+    @abstractmethod
+    def root(self) -> ConversationNode:
+        ...
+
+    @abstractmethod
     def __iter__(self) -> Iterator[ConversationNode]:
         """Iterates over conversation nodes"""
-        pass
+        ...
 
 
 # ---- A conversation tree
 
 
-class SingleConversationTree(ConversationTree):
+class SingleConversationTree(ConversationTree, ABC):
     """Simple conversations, based on a sequence of entries"""
 
     id: str
-    history: Sequence[Record]
+    history: List[Record]
 
     def __init__(self, id: Optional[str], history: List[Record]):
         """Create a simple conversation
 
-        :param history: The entries, in reverse order (i.e. more ancient first)
+        :param history: The entries, in **reverse** order (i.e. more ancient first)
         """
         self.history = history or []
+        self.id = id
 
     def add(self, entry: Record):
         self.history.insert(0, entry)
 
     def __iter__(self) -> Iterator[ConversationNode]:
-        for ix in range(len(self.history)):
+        """Iterates over the conversation (starting with the beginning)"""
+        for ix in reversed(range(len(self.history))):
             yield SingleConversationTreeNode(self, ix)
+
+    def root(self):
+        return SingleConversationTreeNode(self, len(self.history) - 1)
 
 
 @define
@@ -139,11 +173,34 @@ class SingleConversationTreeNode(ConversationNode):
     tree: SingleConversationTree
     index: int
 
+    @property
     def entry(self) -> Record:
         return self.tree.history[self.index]
 
+    @entry.setter
+    def entry(self, record: Record):
+        try:
+            self.tree.history[self.index] = record
+        except Exception as e:
+            print(e)
+            raise
+
     def history(self) -> Sequence[Record]:
         return self.tree.history[self.index + 1 :]
+
+    def parent(self) -> ConversationNode | None:
+        return (
+            SingleConversationTreeNode(self.tree, self.index + 1)
+            if self.index < len(self.tree.history) - 1
+            else []
+        )
+
+    def children(self) -> List[ConversationNode]:
+        return (
+            [SingleConversationTreeNode(self.tree, self.index - 1)]
+            if self.index > 0
+            else []
+        )
 
 
 class ConversationTreeNode(ConversationNode, ConversationTree):
@@ -178,6 +235,15 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
         for child in self.children:
             yield from child
 
+    def parent(self) -> ConversationNode | None:
+        return self.parent
+
+    def children(self) -> List[ConversationNode]:
+        return self.children
+
+    def root(self):
+        return self
+
 
 class ConversationDataset(Base, ABC):
     """A dataset made of conversations"""
@@ -186,4 +252,4 @@ class ConversationDataset(Base, ABC):
     def __iter__(self) -> Iterator[ConversationTree]:
         """Return an iterator over conversations"""
         for i in range(len(self)):
-            return self.get(i)
+            yield self.get(i)

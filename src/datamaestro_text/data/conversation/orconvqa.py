@@ -102,16 +102,26 @@ class OrConvQADataset(ConversationDataset, File):
             # Add to current
             history.append(
                 Record(
-                    IDItem(query_no),
+                    IDItem(entry.query_id),
                     SimpleTextItem(entry.query),
                     SimpleDecontextualizedItem(entry.rewrite),
                     EntryType.USER_QUERY,
                 )
             )
+
+            relevances = {}
+            for rank, relevance in enumerate(entry.retrieval_labels):
+                if relevance > 0:
+                    relevances[rank] = (entry.answer.answer_start, None)
+
+            assert (
+                len(relevances) <= 1
+            ), f"Too many relevance labels ({len(relevances)}) for {entry.query_id}"
+
             history.append(
                 Record(
                     AnswerEntry(entry.answer.text),
-                    RetrievedEntry(entry.evidences, entry.retrieval_labels),
+                    RetrievedEntry(entry.evidences, relevances),
                     EntryType.SYSTEM_ANSWER,
                 )
             )

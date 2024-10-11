@@ -25,6 +25,7 @@ from .base import (  # noqa: F401
     create_record,
     # Other things
     AdhocAssessment,
+    AdhocAssessedTopic,
 )
 
 
@@ -83,7 +84,7 @@ class DocumentStore(Documents):
     def document_int(self, internal_docid: int) -> DocumentRecord:
         """Returns a document given its internal ID"""
         docid = self.docid_internal2external(internal_docid)
-        return self.document(docid)
+        return self.document_ext(docid)
 
     def document_ext(self, docid: str) -> DocumentRecord:
         """Returns a document given its external ID"""
@@ -159,7 +160,7 @@ class TopicsStore(Topics):
 class AdhocAssessments(Base, ABC):
     """Ad-hoc assessments (qrels)"""
 
-    def iter(self) -> Iterator[AdhocAssessment]:
+    def iter(self) -> Iterator[AdhocAssessedTopic]:
         """Returns an iterator over assessments"""
         raise NotImplementedError(f"For class {self.__class__}")
 

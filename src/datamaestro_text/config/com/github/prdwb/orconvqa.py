@@ -1,11 +1,9 @@
 # See documentation on https://datamaestro.readthedocs.io
 
-from collections import namedtuple
 import gzip
 import json
 from pathlib import Path
-from typing import Iterator, NamedTuple
-import attrs
+from typing import Iterator
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.single import filedownloader
 from datamaestro.utils import HashCheck
@@ -14,10 +12,7 @@ from datamaestro.utils import HashCheck
 from datamaestro_text.data.conversation.orconvqa import OrConvQADataset
 from datamaestro.data.ml import Supervised
 
-from datamaestro_text.data.ir import DocumentStore
-from datamaestro_text.data.ir.formats import OrConvQADocument
 from datamaestro_text.data.ir.stores import OrConvQADocumentStore
-from datamaestro_text.datasets.irds.data import LZ4DocumentStore
 from datamaestro_text.datasets.irds.helpers import lz4docstore_downloader
 
 
@@ -63,7 +58,9 @@ def preprocessed(train, dev, test):
 def orConvQADocumentReader(source: Path) -> Iterator[OrConvQADocumentStore.NAMED_TUPLE]:
     with gzip.open(source, "rt") as fp:
         for line in fp:
-            yield OrConvQADocumentStore.NAMED_TUPLE(**json.loads(line))
+            data = json.loads(line)
+            data["body"] = data.pop("text")
+            yield OrConvQADocumentStore.NAMED_TUPLE(**data)
 
 
 @lz4docstore_downloader(
