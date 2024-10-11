@@ -163,6 +163,7 @@ class Documents(ir.DocumentStore, IRDSId):
             "doc_id",
             "text",
             "spans",
+            "msmarco_document_id",
         ),
     }
 

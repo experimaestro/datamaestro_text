@@ -133,9 +133,9 @@ class DprW100Doc(TextItem):
 
 @define 
 class MsMarcoV2Passage(TextItem):
-    doc_id: str
     text: str
     spans: Tuple[Tuple[int, int], ...]
+    msmarco_document_id: str
 
 @define
 class UrlTopic(TextItem):
