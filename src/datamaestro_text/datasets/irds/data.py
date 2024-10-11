@@ -158,6 +158,12 @@ class Documents(ir.DocumentStore, IRDSId):
             "text",
             "title",
         ),
+        _irds.msmarco_passage_v2.MsMarcoV2Passage: tuple_constructor(
+            formats.MsMarcoV2Passage,
+            "doc_id",
+            "text",
+            "spans",
+        ),
     }
 
     """Wraps an ir datasets collection -- and provide a default text
