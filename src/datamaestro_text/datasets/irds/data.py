@@ -152,6 +152,12 @@ class Documents(ir.DocumentStore, IRDSId):
             "source",
             "source_content_type",
         ),
+        _irds.dpr_w100.DprW100Doc: tuple_constructor(
+            formats.DprW100Doc,
+            "doc_id",
+            "text",
+            "title",
+        ),
     }
 
     """Wraps an ir datasets collection -- and provide a default text
@@ -365,6 +371,12 @@ class Topics(ir.TopicsStore, IRDSId):
             "time",
             "tweet_time",
             "description",
+        ),
+        _irds.dpr_w100.DprW100Query: tuple_constructor(
+            formats.DprW100Query,
+            "query_id",
+            "text",
+            "answers"
         ),
     }
 
