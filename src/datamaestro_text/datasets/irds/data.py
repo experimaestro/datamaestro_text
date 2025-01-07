@@ -117,6 +117,12 @@ class Documents(ir.DocumentStore, IRDSId):
         _irds.beir.BeirTitleUrlDoc: tuple_constructor(
             formats.TitleUrlDocument, "doc_id", "text", "title", "url"
         ),
+        _irds.beir.BeirToucheDoc: tuple_constructor(
+            formats.Touche2020, "doc_id", "text", "title", "stance", "url"
+        ),
+        _irds.beir.BeirSciDoc: tuple_constructor(
+            formats.SciDocs, "doc_id", "text", "title", "authors", "year", "cited_by", "references"
+        ),
         _irds.msmarco_document.MsMarcoDocument: tuple_constructor(
             formats.MsMarcoDocument, "doc_id", "url", "title", "body"
         ),
@@ -361,6 +367,12 @@ class Topics(ir.TopicsStore, IRDSId):
         ),
         TrecQuery: tuple_constructor(
             formats.TrecTopic, "query_id", "title", "description", "narrative"
+        ),
+        _irds.beir.BeirToucheQuery: tuple_constructor(
+            formats.TrecTopic, "query_id", "text", "description", "narrative"
+        ),
+        _irds.beir.BeirSciQuery: tuple_constructor(
+            formats.SciDocsTopic, "query_id", "text", "authors", "year", "cited_by", "references"
         ),
         _irds.tweets2013_ia.TrecMb13Query: tuple_constructor(
             formats.TrecMb13Query, "query_id", "query", "time", "tweet_time"
