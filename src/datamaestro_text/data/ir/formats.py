@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import ClassVar, Tuple
+from typing import ClassVar, Tuple, List
 from attrs import define
 from datamaestro.record import record_type
 from ir_datasets.datasets.wapo import WapoDocMedia
@@ -126,6 +126,22 @@ class OrConvQADocument(TextItem):
     def text(self):
         return f"{self.title} {self.body}"
 
+@define
+class Touche2020(TextItem):
+    text: str
+    title: str
+    stance: str
+    url: str
+
+@define
+class SciDocs(TextItem):
+    text: str
+    title: str
+    authors: List[str]
+    year: int
+    cited_by: List[str]
+    references: List[str]
+
 
 @define
 class UrlTopic(TextItem):
@@ -159,6 +175,13 @@ class TrecMb14Query(TextItem):
     def get_text(self):
         return f"{self.query}"
 
+@define 
+class SciDocsTopic(TextItem):
+    text: str
+    authors: List[str]
+    year: int
+    cited_by: List[str]
+    references: List[str]
 
 @define()
 class TrecTopic(SimpleTextItem):
