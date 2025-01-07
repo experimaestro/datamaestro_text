@@ -1,37 +1,44 @@
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from functools import partial
-import logging
 from pathlib import Path
-from typing import Dict, Iterator, NamedTuple, Tuple, Type, List
+from typing import Dict, Iterator, List, NamedTuple, Tuple, Type
+
 import ir_datasets
-from ir_datasets.indices import PickleLz4FullStore
+import ir_datasets.datasets as _irds
+from datamaestro.record import RecordType, record_type
+from experimaestro import Config, Meta, Option, Param
+from experimaestro.compat import cached_property
 from ir_datasets.formats import (
     GenericDoc,
-    GenericQuery,
     GenericDocPair,
+    GenericQuery,
     TrecParsedDoc,
     TrecQuery,
 )
-import ir_datasets.datasets as _irds
-from experimaestro import Config, Param, Meta
-from experimaestro.compat import cached_property
-from experimaestro import Option
-from datamaestro.record import RecordType, record_type
-from datamaestro_text.data.conversation.base import AnswerEntry
+from ir_datasets.indices import PickleLz4FullStore
+
 import datamaestro_text.data.ir as ir
+import datamaestro_text.data.ir.formats as formats
+from datamaestro_text.data.conversation.base import (
+    AnswerDocumentID,
+    AnswerEntry,
+    ConversationHistoryItem,
+    ConversationTreeNode,
+    DecontextualizedDictItem,
+    EntryType,
+)
 from datamaestro_text.data.ir.base import (
-    Record,
-    TopicRecord,
-    DocumentRecord,
-    SimpleTextItem,
     AdhocAssessedTopic,
-    SimpleAdhocAssessment,
+    DocumentRecord,
     IDItem,
+    Record,
+    SimpleAdhocAssessment,
+    SimpleTextItem,
+    TopicRecord,
     create_record,
 )
-import datamaestro_text.data.ir.formats as formats
-
 
 # Interface between ir_datasets and datamaestro:
 # provides adapted data types
@@ -398,193 +405,190 @@ class Topics(ir.TopicsStore, IRDSId):
         return self.handler.iter()
 
 
-# flake8: noqa: C901
-if hasattr(_irds.trec_cast, "Cast2022Query"):
-    from datamaestro_text.data.conversation.base import (
-        ConversationTreeNode,
-        DecontextualizedDictItem,
-        AnswerDocumentID,
-        ConversationHistoryItem,
-        EntryType,
-    )
+class CastTopicsHandler(TopicsHandler):
+    def __init__(self, dataset):
+        self.dataset = dataset
 
-    class CastTopicsHandler(TopicsHandler):
-        def __init__(self, dataset):
-            self.dataset = dataset
+    @cached_property
+    def ext2records(self):
+        return {record[IDItem].id: record for record in self.records}
 
-        @cached_property
-        def ext2records(self):
-            return {record[IDItem].id: record for record in self.records}
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
+        """Returns a document given its internal ID"""
+        return self.records[internal_topic_id]
 
-        def topic_int(self, internal_topic_id: int) -> TopicRecord:
-            """Returns a document given its internal ID"""
-            return self.records[internal_topic_id]
+    def topic_ext(self, external_topic_id: str) -> TopicRecord:
+        """Returns a document given its external ID"""
+        return self.ext2records[external_topic_id]
 
-        def topic_ext(self, external_topic_id: str) -> TopicRecord:
-            """Returns a document given its external ID"""
-            return self.ext2records[external_topic_id]
+    def iter(self) -> Iterator[ir.TopicRecord]:
+        """Returns an iterator over topics"""
+        return iter(self.records)
 
-        def iter(self) -> Iterator[ir.TopicRecord]:
-            """Returns an iterator over topics"""
-            return iter(self.records)
+    @cached_property
+    def records(self):
+        try:
+            topic_number = None
+            node = None
+            conversation = []
+            records = []
 
-        @cached_property
-        def records(self):
-            try:
-                topic_number = None
-                node = None
-                conversation = []
-                records = []
+            for query in self.dataset.dataset.queries_iter():
+                decontextualized = DecontextualizedDictItem(
+                    "manual",
+                    {
+                        "manual": query.manual_rewritten_utterance,
+                        "auto": query.automatic_rewritten_utterance,
+                    },
+                )
 
-                for query in self.dataset.dataset.queries_iter():
-                    decontextualized = DecontextualizedDictItem(
-                        "manual",
-                        {
-                            "manual": query.manual_rewritten_utterance,
-                            "auto": query.automatic_rewritten_utterance,
-                        },
+                is_new_conversation = topic_number != query.topic_number
+
+                topic = Record(
+                    IDItem(query.query_id),
+                    SimpleTextItem(query.raw_utterance),
+                    decontextualized,
+                    ConversationHistoryItem(
+                        [] if is_new_conversation else node.conversation(False)
+                    ),
+                    EntryType.USER_QUERY,
+                )
+
+                if is_new_conversation:
+                    conversation = []
+                    node = ConversationTreeNode(topic)
+                    topic_number = query.topic_number
+                else:
+                    node = node.add(ConversationTreeNode(topic))
+
+                records.append(topic)
+
+                conversation.append(node)
+                node = node.add(
+                    ConversationTreeNode(
+                        Record(
+                            AnswerDocumentID(self.get_canonical_result_id(query)),
+                            EntryType.SYSTEM_ANSWER,
+                        )
                     )
+                )
+                conversation.append(node)
+        except Exception:
+            logging.exception("Error while computing topic records")
+            raise
 
-                    is_new_conversation = topic_number != query.topic_number
+        return records
 
+    @staticmethod
+    def get_canonical_result_id():
+        return None
+
+
+class Cast2020TopicsHandler(CastTopicsHandler):
+    @staticmethod
+    def get_canonical_result_id(query: _irds.trec_cast.Cast2020Query):
+        return query.manual_canonical_result_id
+
+
+class Cast2021TopicsHandler(CastTopicsHandler):
+    @staticmethod
+    def get_canonical_result_id(query: _irds.trec_cast.Cast2021Query):
+        return query.canonical_result_id
+
+
+class Cast2022TopicsHandler(CastTopicsHandler):
+    def __init__(self, dataset):
+        self.dataset = dataset
+
+    @cached_property
+    def records(self):
+        try:
+            records = []
+            nodes: Dict[str, ConversationTreeNode] = {}
+
+            for (
+                query
+            ) in (
+                self.dataset.dataset.queries_iter()
+            ):  # type: _irds.trec_cast.Cast2022Query
+                parent = nodes[query.parent_id] if query.parent_id else None
+
+                if query.participant == "User":
                     topic = Record(
                         IDItem(query.query_id),
                         SimpleTextItem(query.raw_utterance),
-                        decontextualized,
+                        DecontextualizedDictItem(
+                            "manual",
+                            {
+                                "manual": query.manual_rewritten_utterance,
+                            },
+                        ),
                         ConversationHistoryItem(
-                            [] if is_new_conversation else node.conversation(False)
+                            parent.conversation(False) if parent else []
                         ),
                         EntryType.USER_QUERY,
                     )
-
-                    if is_new_conversation:
-                        conversation = []
-                        node = ConversationTreeNode(topic)
-                        topic_number = query.topic_number
-                    else:
-                        node = node.add(ConversationTreeNode(topic))
-
+                    node = ConversationTreeNode(topic)
                     records.append(topic)
-
-                    conversation.append(node)
-                    node = node.add(
-                        ConversationTreeNode(
-                            Record(
-                                AnswerDocumentID(self.get_canonical_result_id(query)),
-                                EntryType.SYSTEM_ANSWER,
-                            )
+                else:
+                    node = ConversationTreeNode(
+                        Record(
+                            AnswerEntry(query.response),
+                            EntryType.SYSTEM_ANSWER,
                         )
                     )
-                    conversation.append(node)
-            except Exception:
-                logging.exception("Error while computing topic records")
-                raise
 
-            return records
+                nodes[query.query_id] = node
+                if parent:
+                    parent.add(node)
+        except Exception:
+            logging.exception("Error while computing topic records")
+            raise
 
-        @staticmethod
-        def get_canonical_result_id():
-            return None
+        return records
 
-    class Cast2020TopicsHandler(CastTopicsHandler):
-        @staticmethod
-        def get_canonical_result_id(query: _irds.trec_cast.Cast2020Query):
-            return query.manual_canonical_result_id
 
-    class Cast2021TopicsHandler(CastTopicsHandler):
-        @staticmethod
-        def get_canonical_result_id(query: _irds.trec_cast.Cast2021Query):
-            return query.canonical_result_id
+Topics.HANDLERS.update(
+    {
+        # _irds.trec_cast.Cast2019Query: Cast2019TopicsHandler,
+        _irds.trec_cast.Cast2020Query: Cast2020TopicsHandler,
+        _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
+        _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler,
+    }
+)
 
-    class Cast2022TopicsHandler(CastTopicsHandler):
-        def __init__(self, dataset):
-            self.dataset = dataset
 
-        @cached_property
-        def records(self):
-            try:
-                records = []
-                nodes: Dict[str, ConversationTreeNode] = {}
+class CastDocHandler:
+    def check(self, cls):
+        assert issubclass(cls, _irds.trec_cast.CastDoc)
 
-                for (
-                    query
-                ) in (
-                    self.dataset.dataset.queries_iter()
-                ):  # type: _irds.trec_cast.Cast2022Query
-                    parent = nodes[query.parent_id] if query.parent_id else None
+    @cached_property
+    def target_cls(self):
+        return formats.TitleUrlDocument
 
-                    if query.participant == "User":
-                        topic = Record(
-                            IDItem(query.query_id),
-                            SimpleTextItem(query.raw_utterance),
-                            DecontextualizedDictItem(
-                                "manual",
-                                {
-                                    "manual": query.manual_rewritten_utterance,
-                                },
-                            ),
-                            ConversationHistoryItem(
-                                parent.conversation(False) if parent else []
-                            ),
-                            EntryType.USER_QUERY,
-                        )
-                        node = ConversationTreeNode(topic)
-                        records.append(topic)
-                    else:
-                        node = ConversationTreeNode(
-                            Record(
-                                AnswerEntry(query.response),
-                                EntryType.SYSTEM_ANSWER,
-                            )
-                        )
+    def __call__(self, _, doc: _irds.trec_cast.CastDoc):
+        return Record(
+            IDItem(doc.doc_id), formats.SimpleTextItem(" ".join(doc.passages))
+        )
 
-                    nodes[query.query_id] = node
-                    if parent:
-                        parent.add(node)
-            except Exception:
-                logging.exception("Error while computing topic records")
-                raise
 
-            return records
+class CastPassageDocHandler:
+    def check(self, cls):
+        assert issubclass(cls, _irds.trec_cast.CastPassageDoc)
 
-    Topics.HANDLERS.update(
-        {
-            # _irds.trec_cast.Cast2019Query: Cast2019TopicsHandler,
-            _irds.trec_cast.Cast2020Query: Cast2020TopicsHandler,
-            _irds.trec_cast.Cast2021Query: Cast2021TopicsHandler,
-            _irds.trec_cast.Cast2022Query: Cast2022TopicsHandler,
-        }
-    )
+    @cached_property
+    def target_cls(self):
+        return formats.TitleUrlDocument
 
-    class CastDocHandler:
-        def check(self, cls):
-            assert issubclass(cls, _irds.trec_cast.CastDoc)
+    def __call__(self, _, doc: _irds.trec_cast.CastPassageDoc):
+        return Record(
+            IDItem(doc.doc_id),
+            formats.TitleUrlDocument(doc.text, doc.title, doc.url),
+        )
 
-        @cached_property
-        def target_cls(self):
-            return formats.TitleUrlDocument
 
-        def __call__(self, _, doc: _irds.trec_cast.CastDoc):
-            return Record(
-                IDItem(doc.doc_id), formats.SimpleTextItem(" ".join(doc.passages))
-            )
-
-    class CastPassageDocHandler:
-        def check(self, cls):
-            assert issubclass(cls, _irds.trec_cast.CastPassageDoc)
-
-        @cached_property
-        def target_cls(self):
-            return formats.TitleUrlDocument
-
-        def __call__(self, _, doc: _irds.trec_cast.CastPassageDoc):
-            return Record(
-                IDItem(doc.doc_id),
-                formats.TitleUrlDocument(doc.text, doc.title, doc.url),
-            )
-
-    Documents.CONVERTERS[_irds.trec_cast.CastDoc] = CastDocHandler()
-    Documents.CONVERTERS[_irds.trec_cast.CastPassageDoc] = CastPassageDocHandler()
+Documents.CONVERTERS[_irds.trec_cast.CastDoc] = CastDocHandler()
+Documents.CONVERTERS[_irds.trec_cast.CastPassageDoc] = CastPassageDocHandler()
 
 
 class Adhoc(ir.Adhoc, IRDSId):
