@@ -385,6 +385,12 @@ class Topics(ir.TopicsStore, IRDSId):
             "text",
             "answers"
         ),
+        _irds.wapo.TrecBackgroundLinkingQuery: tuple_constructor(
+            formats.TrecBackgroundLinkingQuery,
+            "query_id",
+            "doc_id",
+            "url",
+        ),
     }
 
     HANDLERS = {

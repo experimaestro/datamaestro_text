@@ -58,7 +58,7 @@ class NFCorpusDocument(TextItem):
 
     @cached_property
     def text(self):
-        return self.abstract
+        return f"{self.title} {self.abstract}"
 
 
 @define
@@ -182,3 +182,12 @@ TrecTopicRecord = record_type(IDItem, TrecTopic)
 class DprW100Query(TextItem):
     text: str
     answers: Tuple[str]
+
+@define
+class TrecBackgroundLinkingQuery(IDItem):
+    query_id: str
+    doc_id: str
+    url: str
+
+    def get_text(self):
+        raise NotImplementedError()
