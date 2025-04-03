@@ -22,8 +22,8 @@ from datamaestro_text.data.ir.trec import TipsterCollection
 from datamaestro.download.links import linkfolder
 from datamaestro.definitions import (
     dataset,
-    DatafolderPath,
 )
+from datamaestro.context import DatafolderPath
 
 # Store meta-information
 TIPSTER = dataset(TipsterCollection, url="https://catalog.ldc.upenn.edu/LDC93T3A")

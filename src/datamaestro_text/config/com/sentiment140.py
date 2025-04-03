@@ -4,10 +4,6 @@ from datamaestro.download.archive import zipdownloader
 from datamaestro.data.ml import Supervised
 from datamaestro.utils import HashCheck
 
-# name: Sentiment140
-# web: http://help.sentiment140.com/for-students/
-
-# description: |
 
 
 @zipdownloader(

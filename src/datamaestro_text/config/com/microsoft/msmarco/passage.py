@@ -1,11 +1,11 @@
 """MS MARCO (Microsoft Machine Reading Comprehension) is a large scale dataset focused on machine reading comprehension, question answering, and passage ranking. A variant of this task will be the part of TREC and AFIRM 2019. For Updates about TREC 2019 please follow This Repository Passage Reranking task Task Given a query q and a the 1000 most relevant passages P = p1, p2, p3,... p1000, as retrieved by BM25 a succeful system is expected to rerank the most relevant passage as high as possible. For this task not all 1000 relevant items have a human labeled relevant passage. Evaluation will be done using MRR.
 
-  **Publication**:
-  Tri Nguyen, Mir Rosenberg, Xia Song, Jianfeng Gao, Saurabh Tiwary, RanganMajumder, and Li Deng. 2016.
-  MS MARCO: A Human Generated MAchineReading COmprehension Dataset. In CoCo@NIPS.
+**Publication**:
+Tri Nguyen, Mir Rosenberg, Xia Song, Jianfeng Gao, Saurabh Tiwary, RanganMajumder, and Li Deng. 2016.
+MS MARCO: A Human Generated MAchineReading COmprehension Dataset. In CoCo@NIPS.
 
 
-  See [https://github.com/microsoft/MSMARCO-Passage-Ranking](https://github.com/microsoft/MSMARCO-Passage-Ranking) for more details
+See [https://github.com/microsoft/MSMARCO-Passage-Ranking](https://github.com/microsoft/MSMARCO-Passage-Ranking) for more details
 """
 
 from datamaestro.annotations.agreement import useragreement
@@ -35,6 +35,7 @@ http://www.msmarco.org/dataset.aspx""",
 
 # --- Document collection
 
+
 # TODO: Not ideal since it would be better to have small versions right away
 # instead of downloading again the MS Marco Collection
 @lua
@@ -43,10 +44,10 @@ http://www.msmarco.org/dataset.aspx""",
     url="https://msmarco.blob.core.windows.net/msmarcoranking/collectionandqueries.tar.gz",
     checker=HashCheck("31644046b18952c1386cd4564ba2ae69", md5),
 )
-@dataset(Folder, url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
-def collection_etc(data):
+@dataset(url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
+def collection_etc(data) -> Folder:
     """Documents and some more files"""
-    return {"path": data}
+    return Folder(path=data)
 
 
 @lua
