@@ -1,15 +1,15 @@
-from pathlib import Path
-from datamaestro.data import Base, Folder, File, argument
+from typing import Optional
+from experimaestro import Param
+from datamaestro.data import Base, Folder, File
 from datamaestro.data.ml import Supervised
 
 
-@argument("train", type=Base)
-@argument("test", type=Base, required=False)
-@argument("validation", type=Base, required=False)
 class TrainingText(Supervised):
     """ "A dataset used for training with a train and a test"""
 
-    pass
+    train: Param[Base]
+    test: Param[Optional[Base]] = None
+    validation: Param[Optional[Base]] = None
 
 
 class TextFolder(Folder):
