@@ -5,6 +5,10 @@ from datamaestro.record import record_type
 from ir_datasets.datasets.wapo import WapoDocMedia
 from .base import TextItem, SimpleTextItem, IDItem
 from ir_datasets.datasets.cord19 import Cord19FullTextSection
+import html2text
+
+h = html2text.HTML2Text()
+h.ignore_links = True
 
 
 @define
@@ -100,7 +104,13 @@ class WapoDocument(TextItem):
 
     @cached_property
     def text(self):
-        return self.body
+        list_paras = []
+        for para in self.body_paras_html:
+            list_paras.append(h.handle(para))
+        self.body = "\n".join(list_paras)
+        self.body = self.body.replace("\n", " ")
+        
+        return f"{self.title} {self.body}"
 
 
 @define

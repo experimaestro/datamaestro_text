@@ -37,6 +37,7 @@ from datamaestro_text.data.ir.base import (
     SimpleAdhocAssessment,
     SimpleTextItem,
     TopicRecord,
+    UrlItem,
     create_record,
 )
 
@@ -404,12 +405,6 @@ class Topics(ir.TopicsStore, IRDSId):
             "text",
             "answers"
         ),
-        _irds.wapo.TrecBackgroundLinkingQuery: tuple_constructor(
-            formats.TrecBackgroundLinkingQuery,
-            "query_id",
-            "doc_id",
-            "url",
-        ),
     }
 
     HANDLERS = {
@@ -440,7 +435,52 @@ class Topics(ir.TopicsStore, IRDSId):
     def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
         return self.handler.iter()
+    
+class TrecBackgroundLinkingTopicsHandler(TopicsHandler):
+    def __init__(self, dataset):
+        self.dataset = dataset
+    
+    @cached_property
+    def ext2records(self):
+        return {record[IDItem].id: record for record in self.records}
 
+    def topic_int(self, internal_topic_id: int) -> TopicRecord:
+        """Returns a document given its internal ID"""
+        return self.records[internal_topic_id]
+
+    def topic_ext(self, external_topic_id: str) -> TopicRecord:
+        """Returns a document given its external ID"""
+        return self.ext2records[external_topic_id]
+
+    def iter(self) -> Iterator[ir.TopicRecord]:
+        """Returns an iterator over topics"""
+        return iter(self.records)
+
+    @cached_property
+    def records(self):
+        try:
+            records = []
+
+            for query in self.dataset.dataset.queries_iter():
+                topic =  Record(
+                    IDItem(query.query_id),
+                    # Following BEIR documentation, we use title of documents as queries: https://github.com/beir-cellar/beir/blob/main/examples/dataset/README.md#queries-and-qrels
+                    SimpleTextItem(self.dataset.dataset.docs_store().get(query.doc_id).title), 
+                    UrlItem(query.url),
+                )
+                records.append(topic)
+        except Exception:
+            logging.exception("Error while computing topic records")
+            raise
+
+        return records
+
+
+Topics.HANDLERS.update(
+    {
+        _irds.wapo.TrecBackgroundLinkingQuery: TrecBackgroundLinkingTopicsHandler
+    }
+)
 
 class CastTopicsHandler(TopicsHandler):
     def __init__(self, dataset):
