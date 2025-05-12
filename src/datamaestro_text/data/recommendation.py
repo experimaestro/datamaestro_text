@@ -1,14 +1,13 @@
-from datamaestro.data import Base, File, argument
+from experimaestro import Param
+from datamaestro.data import Base, File
 import datamaestro.data.csv as csv
 
 
-@argument("ratings", type=File)
 class RatedItems(Base):
-    pass
+    ratings: Param[File]
 
 
-@argument("links", type=csv.Generic)
-@argument("movies", type=csv.Generic)
-@argument("tags", type=csv.Generic)
 class Movielens(RatedItems):
-    pass
+    links: Param[csv.Generic]
+    movies: Param[csv.Generic]
+    tags: Param[csv.Generic]

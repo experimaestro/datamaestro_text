@@ -1,5 +1,5 @@
-from pathlib import Path
-from datamaestro.data import Base, File, argument
+from experimaestro import Meta
+from datamaestro.data import Base, File
 from datamaestro.definitions import datatags
 import numpy as np
 from typing import Tuple, List
@@ -18,9 +18,9 @@ class WordEmbeddings(Base):
         raise NotImplementedError()
 
 
-@argument("encoding", str, ignored=True, default="utf-8")
 class WordEmbeddingsText(WordEmbeddings, File):
     """Word embeddings as a text word / values"""
+    encoding: Meta[str] = "utf-8"
 
     def load(self):
         words = []
