@@ -58,7 +58,7 @@ class NFCorpusDocument(TextItem):
 
     @cached_property
     def text(self):
-        return self.abstract
+        return f"{self.title} {self.abstract}"
 
 
 @define
@@ -99,8 +99,8 @@ class WapoDocument(TextItem):
     body_media: Tuple[WapoDocMedia, ...]
 
     @cached_property
-    def text(self):
-        return self.body
+    def text(self):        
+        return f"{self.title} {self.body_paras_html}"
 
 
 @define
@@ -128,6 +128,15 @@ class OrConvQADocument(TextItem):
 
 
 @define
+class DprW100Doc(TextItem):
+    text: str
+    title: str
+
+@define 
+class MsMarcoV2Passage(TextItem):
+    text: str
+    spans: Tuple[Tuple[int, int], ...]
+    msmarco_document_id: str
 class Touche2020(TextItem):
     text: str
     title: str
@@ -194,3 +203,17 @@ class TrecTopic(SimpleTextItem):
 
 
 TrecTopicRecord = record_type(IDItem, TrecTopic)
+
+@define
+class DprW100Query(TextItem):
+    text: str
+    answers: Tuple[str]
+
+@define
+class TrecBackgroundLinkingQuery(IDItem):
+    query_id: str
+    doc_id: str
+    url: str
+
+    def get_text(self):
+        raise NotImplementedError()

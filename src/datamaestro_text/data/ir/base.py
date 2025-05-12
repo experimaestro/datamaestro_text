@@ -43,6 +43,12 @@ class IDItem(Item, ABC):
 
     id: str
 
+@define
+class UrlItem(Item):
+    """An url item"""
+
+    url: str
+
 
 @define
 class AdhocAssessment:
