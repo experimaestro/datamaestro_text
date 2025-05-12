@@ -1,9 +1,8 @@
 from datamaestro.data.csv import Generic
-from datamaestro.definitions import argument, datatasks, datatags, dataset
+from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.archive import zipdownloader
 from datamaestro.data.ml import Supervised
 from datamaestro.utils import HashCheck
-
 
 
 @zipdownloader(

@@ -126,12 +126,14 @@ class OrConvQADocument(TextItem):
     def text(self):
         return f"{self.title} {self.body}"
 
+
 @define
 class Touche2020(TextItem):
     text: str
     title: str
     stance: str
     url: str
+
 
 @define
 class SciDocs(TextItem):
@@ -175,13 +177,15 @@ class TrecMb14Query(TextItem):
     def get_text(self):
         return f"{self.query}"
 
-@define 
+
+@define
 class SciDocsTopic(TextItem):
     text: str
     authors: List[str]
     year: int
     cited_by: List[str]
     references: List[str]
+
 
 @define()
 class TrecTopic(SimpleTextItem):

@@ -11,6 +11,7 @@ from datamaestro.download.archive import zipdownloader
 from datamaestro.download.single import filedownloader
 from datamaestro_text.data.embeddings import WordEmbeddingsText
 
+
 # size: 822M
 # statistics:
 #   tokens: 6G

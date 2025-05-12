@@ -1,4 +1,4 @@
-from typing import Callable, TypeVar, Iterator, List, Union
+from typing import Callable, Sequence, TypeVar, Iterator, List, Union
 
 T = TypeVar("T")
 
@@ -45,7 +45,7 @@ class RangeView:
         return RangeView(self.source, key)
 
 
-class LazyList:
+class LazyList(Sequence):
     """Iterable-based list
 
     The list is only materialized if needed"""
@@ -62,6 +62,9 @@ class LazyList:
         # If materialized, return an iterator over the materialized list
         else:
             return iter(self.materialized_list)
+
+    def __len__(self):
+        return len(self.iterable)
 
     def __getitem__(self, index):
         # Materialize the list if accessing an index above the threshold or any slice

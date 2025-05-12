@@ -1,7 +1,5 @@
-# See documentation on https://datamaestro.readthedocs.io
-
 from datamaestro.definitions import datatasks, datatags, dataset
-from datamaestro.download.archive import zipdownloader
+from datamaestro.download.single import filedownloader
 from datamaestro.utils import HashCheck
 
 from datamaestro.data.ml import Supervised
@@ -10,14 +8,23 @@ from datamaestro_text.data.conversation.canard import CanardDataset
 
 @datatags("conversation", "context", "query")
 @datatasks("query rewriting")
-@zipdownloader(
-    "archive",
-    "https://obj.umiacs.umd.edu/elgohary/CANARD_Release.zip",
-    subpath="CANARD_Release",
-    checker=HashCheck("c9bba7c6bb898f669383415b54fd6ffd"),
+@filedownloader(
+    "train.json",
+    "https://raw.githubusercontent.com/aagohary/canard/refs/heads/master/data/release/train.json",
+    checker=HashCheck("73624ac646fb81e09b0fd7f01370ada3"),
+)
+@filedownloader(
+    "dev.json",
+    "https://raw.githubusercontent.com/aagohary/canard/refs/heads/master/data/release/dev.json",
+    checker=HashCheck("c84525631a83bc771c58ff31f4a9b601"),
+)
+@filedownloader(
+    "test.json",
+    "https://raw.githubusercontent.com/aagohary/canard/refs/heads/master/data/release/test.json",
+    checker=HashCheck("3fc14d0078e7a5056f5da571728f024e"),
 )
 @dataset(Supervised, url="https://sites.google.com/view/qanta/projects/canard", id="")
-def main(archive):
+def main(train, dev, test):
     """Question-in-context rewriting
 
     CANARD is a dataset for question-in-context rewriting that consists of
@@ -30,7 +37,7 @@ def main(archive):
     Each dataset is an instance of :class:`datamaestro_text.data.conversation.CanardDataset`
     """
     return {
-        "train": CanardDataset(path=archive / "train.json"),
-        "validation": CanardDataset(path=archive / "dev.json"),
-        "test": CanardDataset(path=archive / "test.json"),
+        "train": CanardDataset(path=train),
+        "validation": CanardDataset(path=dev),
+        "test": CanardDataset(path=test),
     }

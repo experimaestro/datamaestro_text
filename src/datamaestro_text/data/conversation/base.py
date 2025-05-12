@@ -130,6 +130,7 @@ class ConversationNode:
 
 class ConversationTree(ABC):
     """Represents a conversation tree"""
+
     @abstractmethod
     def root(self) -> ConversationNode:
         ...
@@ -193,7 +194,7 @@ class SingleConversationTreeNode(ConversationNode):
         return (
             SingleConversationTreeNode(self.tree, self.index + 1)
             if self.index < len(self.tree.history) - 1
-            else []
+            else None
         )
 
     def children(self) -> List[ConversationNode]:
@@ -208,8 +209,8 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
     """A conversation tree node"""
 
     entry: Record
-    parent: Optional["ConversationTreeNode"]
-    children: List["ConversationTreeNode"]
+    _parent: Optional["ConversationTreeNode"]
+    _children: List["ConversationTreeNode"]
 
     def __init__(self, entry):
         self.entry = entry
@@ -217,8 +218,8 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
         self.children = []
 
     def add(self, node: "ConversationTreeNode") -> "ConversationTreeNode":
-        self.children.append(node)
-        node.parent = self
+        self._children.append(node)
+        node._parent = self
         return node
 
     def conversation(self, skip_self: bool) -> ConversationHistory:
@@ -233,14 +234,14 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
     def __iter__(self) -> Iterator["ConversationTreeNode"]:
         """Iterates over all conversation tree nodes (pre-order)"""
         yield self.entry
-        for child in self.children:
+        for child in self._children:
             yield from child
 
     def parent(self) -> Optional[ConversationNode]:
-        return self.parent
+        return self._parent
 
     def children(self) -> List[ConversationNode]:
-        return self.children
+        return self._children
 
     def root(self):
         return self

@@ -116,10 +116,6 @@ class AdhocRunDataset(Dataset):
     def _prepare(self, download=False) -> AdhocRun:
         return AdhocRun(id=self.fullid)
 
-    @property
-    def configtype(self):
-        return AdhocRun
-
 
 class Collection(Dataset):
     base = Adhoc
