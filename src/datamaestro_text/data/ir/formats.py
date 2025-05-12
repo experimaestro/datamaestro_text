@@ -99,14 +99,8 @@ class WapoDocument(TextItem):
     body_media: Tuple[WapoDocMedia, ...]
 
     @cached_property
-    def text(self):
-        list_paras = []
-        for para in self.body_paras_html:
-            list_paras.append(para)
-        body_paras_html = "\n".join(list_paras)
-        body_paras_html = body_paras_html.replace("\n", " ")
-        
-        return f"{self.title} {body_paras_html}"
+    def text(self):        
+        return f"{self.title} {self.body_paras_html}"
 
 
 @define
