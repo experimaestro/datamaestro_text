@@ -129,6 +129,7 @@ class ConversationNode:
 
 
 class ConversationTree(ABC):
+    """Represents a conversation tree"""
     @abstractmethod
     def root(self) -> ConversationNode:
         ...
