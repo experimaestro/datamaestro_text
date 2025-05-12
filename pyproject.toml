@@ -30,6 +30,7 @@ repository = "https://github.com/experimaestro/datamaestro_text"
 
 [project.optional-dependencies]
 dev = [
+    "pytest",
     "docutils",
     "sphobjinv",
     "flake8",
