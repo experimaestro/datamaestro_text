@@ -1,4 +1,3 @@
-from functools import cached_property
 from typing import Iterator, List, Optional
 from attr import define
 import json
