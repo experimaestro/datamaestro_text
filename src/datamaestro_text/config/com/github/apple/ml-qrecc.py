@@ -25,12 +25,11 @@ from datamaestro_text.datasets.irds.helpers import lz4docstore_builder
     checker=HashCheck("f88fcc7ef3678cd6312080389c8abd67"),
 )
 @dataset(
-    Supervised[QReCCDataset, None, QReCCDataset],
     url="https://github.com/apple/ml-qrecc",
     doi="https://doi.org/10.48550/arXiv.2010.04898",
     id="",
 )
-def main(data: Path):
+def main(data: Path) -> Supervised[QReCCDataset, None, QReCCDataset]:
     """Open-Domain Question Answering Goes Conversational via Question Rewriting
 
     We introduce QReCC (Question Rewriting in Conversational Context), an
@@ -40,10 +39,10 @@ def main(data: Path):
     answering that includes the individual subtasks of question rewriting,
     passage retrieval and reading comprehension
     """
-    return {
-        "train": QReCCDataset(path=data / "qrecc_train.json"),
-        "test": QReCCDataset(path=data / "qrecc_test.json"),
-    }
+    return Supervised(
+        train=QReCCDataset(path=data / "qrecc_train.json"),
+        test=QReCCDataset(path=data / "qrecc_test.json"),
+    )
 
 
 @dataset(
@@ -52,7 +51,6 @@ def main(data: Path):
 )
 class Content(LZ4JSONLDocumentStore):
     """QReCC mentionned URLs content"""
-
     @staticmethod
     def __create_dataset__(dataset, options=None):
         ds = reference(reference=main).setup(dataset, options)
@@ -67,7 +65,7 @@ class Content(LZ4JSONLDocumentStore):
             "id",
         ).setup(dataset, options)
 
-        return LZ4JSONLDocumentStore(jsonl_path=store_path)
+        return Content(jsonl_path=store_path)
 
     @staticmethod
     def _documents(path: Path):
