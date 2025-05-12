@@ -20,15 +20,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest docutils sphobjinv
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        SETUPTOOLS_SCM_PRETEND_VERSION="0.1-dev" pip install --no-dependencies -e .
+        SETUPTOOLS_SCM_PRETEND_VERSION="0.1-dev" pip install -e '.[dev]'
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

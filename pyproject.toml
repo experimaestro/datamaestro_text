@@ -27,6 +27,15 @@ homepage = "https://github.com/experimaestro/datamaestro_text"
 documentation = "https://datamaestro-text.readthedocs.io/en/latest/"
 repository = "https://github.com/experimaestro/datamaestro_text"
 
+
+[project.optional-dependencies]
+dev = [
+    "docutils",
+    "sphobjinv",
+    "flake8",
+    "sphinx"
+]
+
 [tool.setuptools_scm]
 write_to = "src/datamaestro_text/version.py"
 fallback_version = "0.0.0-dev"
