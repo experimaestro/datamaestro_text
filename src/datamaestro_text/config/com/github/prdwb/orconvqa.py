@@ -49,9 +49,9 @@ def preprocessed(train, dev, test):
     Each dataset is an instance of :class:`datamaestro_text.data.conversation.OrConvQADataset`
     """
     return {
-        "train": OrConvQADataset(path=train),
-        "validation": OrConvQADataset(path=dev),
-        "test": OrConvQADataset(path=test),
+        "train": OrConvQADataset.C(path=train),
+        "validation": OrConvQADataset.C(path=dev),
+        "test": OrConvQADataset.C(path=test),
     }
 
 

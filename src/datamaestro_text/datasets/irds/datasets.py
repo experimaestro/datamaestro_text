@@ -65,7 +65,7 @@ class QrelsDataset(Dataset):
         return True
 
     def _prepare(self, download=False) -> Documents:
-        return AdhocAssessments(id=self.fullid)
+        return AdhocAssessments.C(id=self.fullid)
 
 
 class QueriesDataset(Dataset):
@@ -78,7 +78,7 @@ class QueriesDataset(Dataset):
         return True
 
     def _prepare(self, download=False) -> Documents:
-        return Topics(id=self.fullid)
+        return Topics.C(id=self.fullid)
 
 
 # class ScoredDocuments(Dataset):
@@ -96,7 +96,7 @@ class DocumentsDataset(Dataset):
         return True
 
     def _prepare(self, download=False) -> Documents:
-        return Documents(id=self.fullid)
+        return Documents.C(id=self.fullid)
 
 
 class TrainingTripletsDataset(Dataset):
@@ -123,7 +123,7 @@ class Collection(Dataset):
     topics: QueriesDataset
 
     def _prepare(self, download=False) -> Documents:
-        return Adhoc(
+        return Adhoc.C(
             id=self.fullid,
             topics=self.topics.prepare(download),
             assessments=self.assessments.prepare(download),
