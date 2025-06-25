@@ -214,8 +214,8 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
 
     def __init__(self, entry):
         self.entry = entry
-        self.parent = None
-        self.children = []
+        self._parent = None
+        self._children = []
 
     def add(self, node: "ConversationTreeNode") -> "ConversationTreeNode":
         self._children.append(node)
@@ -224,10 +224,10 @@ class ConversationTreeNode(ConversationNode, ConversationTree):
 
     def conversation(self, skip_self: bool) -> ConversationHistory:
         def iterator():
-            current = self.parent if skip_self else self
+            current = self.parent() if skip_self else self
             while current is not None:
                 yield current.entry
-                current = current.parent
+                current = current.parent()
 
         return LazyList(FactoryIterable(iterator))
 
