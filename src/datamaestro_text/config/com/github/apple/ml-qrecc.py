@@ -39,9 +39,9 @@ def main(data: Path) -> Supervised[QReCCDataset, None, QReCCDataset]:
     answering that includes the individual subtasks of question rewriting,
     passage retrieval and reading comprehension
     """
-    return Supervised(
-        train=QReCCDataset(path=data / "qrecc_train.json"),
-        test=QReCCDataset(path=data / "qrecc_test.json"),
+    return Supervised.C(
+        train=QReCCDataset.C(path=data / "qrecc_train.json"),
+        test=QReCCDataset.C(path=data / "qrecc_test.json"),
     )
 
 
