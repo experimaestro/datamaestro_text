@@ -34,8 +34,12 @@ Contextual query reformulation
 .. autoclass:: ContextualizedRewrittenQuery
     :members:
 
+CANARD Dataset 
+
 .. autoxpmconfig:: datamaestro_text.data.conversation.canard.CanardDataset
     :members: iter
+
+OrConvQA Dataset
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.orconvqa.OrConvQADataset
     :members: iter
@@ -46,10 +50,22 @@ Contextual query reformulation
 .. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetHistoryEntry
     :members:
 
+QReCC Dataset 
 
-
-.. autoclass:: datamaestro_text.data.conversation.orconvqa.QReCCDatasetEntry
+.. autoclass:: datamaestro_text.data.conversation.qrecc.QReCCDatasetEntry
     :members:
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.qrecc.QReCCDataset
+    :members: iter
+
+
+iKAT Dataset
+
+.. autoclass:: datamaestro_text.data.conversation.ikat.IkatDatasetEntry
+    :members:
+
+.. autoclass:: datamaestro_text.data.conversation.ikat.IkatConversationEntry
+    :members:
+
+.. autoxpmconfig:: datamaestro_text.data.conversation.ikat.IkatDataset
     :members: iter
