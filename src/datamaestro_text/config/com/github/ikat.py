@@ -41,7 +41,7 @@ def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
 @filedownloader(
     "topics.json",
     "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2025/data/2025_test_topics.json",
-    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
+    checker=HashCheck("684fa0197cdec8c3cfb6a2e586ab83f6"),
 )
 @dataset(
     Adhoc,
@@ -69,12 +69,12 @@ def test_2025(topics, documents) -> IkatDataset.C:
 @filedownloader(
     "qrels",
     "https://trec.nist.gov/data/ikat/2023-qrels.all-turns.txt",
-    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
+    checker=HashCheck("79dc121bab25b2245e52a53263e5ad1f"),
 )
 @filedownloader(
     "topics.json",
     "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2023/data/2023_test_topics.json",
-    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
+    checker=HashCheck("684fa0197cdec8c3cfb6a2e586ab83f6"),
 )
 @dataset(
     Adhoc,
