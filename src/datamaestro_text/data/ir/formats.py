@@ -99,7 +99,7 @@ class WapoDocument(TextItem):
     body_media: Tuple[WapoDocMedia, ...]
 
     @cached_property
-    def text(self):        
+    def text(self):
         return f"{self.title} {self.body_paras_html}"
 
 
@@ -132,11 +132,15 @@ class DprW100Doc(TextItem):
     text: str
     title: str
 
-@define 
+
+@define
 class MsMarcoV2Passage(TextItem):
     text: str
     spans: Tuple[Tuple[int, int], ...]
     msmarco_document_id: str
+
+
+@define
 class Touche2020(TextItem):
     text: str
     title: str
@@ -204,10 +208,12 @@ class TrecTopic(SimpleTextItem):
 
 TrecTopicRecord = record_type(IDItem, TrecTopic)
 
+
 @define
 class DprW100Query(TextItem):
     text: str
     answers: Tuple[str]
+
 
 @define
 class TrecBackgroundLinkingQuery(IDItem):

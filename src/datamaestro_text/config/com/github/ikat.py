@@ -1,38 +1,90 @@
 # See documentation on https://datamaestro.readthedocs.io
 
+import bz2
+from datamaestro.download import reference
 from datamaestro.definitions import datatasks, datatags, dataset
-from datamaestro.data.ml import Supervised
-from datamaestro.data import Base
+from datamaestro_text.data.conversation.base import ConversationUserTopics
+from datamaestro_text.data.ir import Adhoc
 
 from datamaestro.utils import HashCheck
+from datamaestro.context import DatafolderPath
 from datamaestro.download.single import filedownloader
-from datamaestro_text.data.conversation.ikat import IkatDatasetEntry, IkatDataset
-from datamaestro_text.datasets.irds.data import (
-    SimpleJsonDocument,
-    LZ4JSONLDocumentStore,
-)
-import logging
+from datamaestro_text.data.conversation.ikat import IkatDataset
+from datamaestro.download.links import linkfolder
+
+from datamaestro_text.data.ir.stores import IKatClueWeb22DocumentStore
+from datamaestro_text.data.ir.trec import TrecAdhocAssessments
+from datamaestro_text.datasets.irds.helpers import lz4docstore_builder
+
+
+@dataset(as_prepare=True)
+def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
+    jsonl_folder = linkfolder(
+        "documents", [DatafolderPath("gov.nist.trec.ikat.clueweb22", "jsonl")]
+    ).setup(dataset, options)
+    store_path = lz4docstore_builder(
+        "store",
+        IKatClueWeb22DocumentStore.generator(
+            jsonl_folder, ".jsonl.bz2", opener=bz2.open
+        ),
+        IKatClueWeb22DocumentStore.Document,
+        "id",
+        count_hint=116_838_987,
+    ).setup(dataset, options)
+
+    return IKatClueWeb22DocumentStore.C(path=store_path, count=116_838_987)
+
 
 @datatags("conversation", "context", "query")
-@datatasks("query rewriting")
+@datatasks("conversational search", "query rewriting")
+@reference("documents", clueweb22)
 @filedownloader(
-    "test.json",
+    "topics.json",
     "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2025/data/2025_test_topics.json",
     checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
 )
-
 @dataset(
-    Base,
+    Adhoc,
+    id="2025",
     url="https://github.com/irlabamsterdam/iKAT/tree/main/2025",
 )
-
-def main(test) -> Supervised[IkatDataset, None, IkatDataset]:
+def test_2025(topics, documents) -> IkatDataset.C:
     """Question-in-context rewriting
 
-    iKAT is a test dataset for question-in-context rewriting that consists of 
+    iKAT is a test dataset for question-in-context rewriting that consists of
     questions each given in a dialog context together with a context-independent
-    rewriting of the question. 
-    One of the special features of iKAT is that it includes a Personal PKTB', 
+    rewriting of the question.
     """
-    logging.info("Creating iKAT dataset from %s", test)
-    return IkatDataset.C(path=test)
+    return Adhoc.C(
+        topics=IkatDataset.C(path=topics),
+        # TODO: add when available
+        assessments=TrecAdhocAssessments(path="/to/do"),
+        documents=documents,
+    )
+
+
+@datatags("conversation", "context", "query")
+@datatasks("conversational search", "query rewriting")
+@reference("documents", clueweb22)
+@filedownloader(
+    "qrels",
+    "https://trec.nist.gov/data/ikat/2023-qrels.all-turns.txt",
+    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
+)
+@filedownloader(
+    "topics.json",
+    "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2023/data/2023_test_topics.json",
+    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
+)
+@dataset(
+    Adhoc,
+    id="2023",
+    url="https://github.com/irlabamsterdam/iKAT/tree/main/2023",
+)
+def test_2023(topics, qrels, documents) -> Adhoc.C:
+    """iKAT 2023 dataset"""
+    return Adhoc.C(
+        topics=ConversationUserTopics.C(conversations=IkatDataset.C(path=topics)),
+        assessments=TrecAdhocAssessments.C(path=qrels),
+        documents=documents,
+    )

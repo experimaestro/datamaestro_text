@@ -17,7 +17,6 @@ of three CD-ROMs of SGML encoded documents distributed by LDC plus queries and a
 See also https://trec.nist.gov/data/docs_eng.html and https://trec.nist.gov/data/intro_eng.html
 """
 
-from datamaestro.data import Base
 from datamaestro_text.data.ir.trec import TipsterCollection
 from datamaestro.download.links import linkfolder
 from datamaestro.definitions import (

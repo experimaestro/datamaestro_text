@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
 from enum import Enum
+from datamaestro_text.data.ir.base import IDItem, SimpleTextItem
+from experimaestro import Param
 from typing import Dict, Generic, Iterator, List, Optional, Sequence, Tuple
 from attr import define
+from datamaestro.record import record_type
 from datamaestro.data import Base
 from datamaestro.record import Record, Item
-from datamaestro_text.data.ir import TopicRecord
+from datamaestro_text.data.ir import TopicRecord, Topics
 from datamaestro_text.utils.iter import FactoryIterable, LazyList, RangeView
 
 # ---- Basic types
@@ -255,3 +258,16 @@ class ConversationDataset(Base, ABC):
         """Return an iterator over conversations"""
         for i in range(len(self)):
             yield self.get(i)
+
+
+class ConversationUserTopics(Topics):
+    """Extract user topics from conversations"""
+
+    conversations: Param[ConversationDataset]
+
+    topic_recordtype = record_type(IDItem, SimpleTextItem)
+
+    def iter(self) -> Iterator[TopicRecord]:
+        """Returns an iterator over topics"""
+        for conversation in ConversationDataset:
+            raise NotImplementedError()

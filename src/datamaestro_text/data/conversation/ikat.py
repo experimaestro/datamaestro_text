@@ -1,10 +1,11 @@
-from typing import Iterator, List, Optional
+from typing import Iterator, List
 from attr import define, field
 import json
 import logging
 from datamaestro.data import File
 from datamaestro.record import Record
 
+from datamaestro_text.data.ir import Topics
 from datamaestro_text.data.ir.base import (
     IDItem,
     SimpleTextItem,
@@ -12,7 +13,6 @@ from datamaestro_text.data.ir.base import (
 
 
 from .base import (
-    AnswerDocumentURL,
     AnswerEntry,
     ConversationTree,
     EntryType,
@@ -20,7 +20,6 @@ from .base import (
     SingleConversationTree,
 )
 from . import ConversationDataset
-
 
 
 @define(kw_only=True)
@@ -60,13 +59,15 @@ class IkatDatasetEntry:
     """The personal knowledge base associated with the user"""
 
     responses: List[IkatConversationEntry] = field(
-        converter=lambda items: [IkatConversationEntry(**item) if isinstance(item, dict) else item for item in items]
+        converter=lambda items: [
+            IkatConversationEntry(**item) if isinstance(item, dict) else item
+            for item in items
+        ]
     )
     """The list of responses to the query"""
 
 
 class IkatDataset(ConversationDataset, File):
-
     def entries(self) -> Iterator[IkatDatasetEntry]:
         """Reads all conversation entries from the dataset file."""
         with self.path.open("rt") as fp:
@@ -77,7 +78,9 @@ class IkatDataset(ConversationDataset, File):
 
         processed_data = []
         for entry in raw_data:
-            processed_data.append(IkatDatasetEntry(**{key.lower(): value for key, value in entry.items()}))
+            processed_data.append(
+                IkatDatasetEntry(**{key.lower(): value for key, value in entry.items()})
+            )
 
         logging.debug(f"First parsed data sample: {processed_data[0]}")
         return iter(processed_data)
@@ -117,4 +120,3 @@ class IkatDataset(ConversationDataset, File):
             # Ensure reverse if needed for compatibility (optional)
             history.reverse()
             yield SingleConversationTree(entry.number, history)
-
