@@ -19,20 +19,27 @@ from datamaestro_text.datasets.irds.helpers import lz4docstore_builder
 
 @dataset(as_prepare=True)
 def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
+    # Number of documents in the dataset
+    count = 116_838_987
+
     jsonl_folder = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.ikat.clueweb22", "jsonl")]
     ).setup(dataset, options)
     store_path = lz4docstore_builder(
         "store",
         IKatClueWeb22DocumentStore.generator(
-            jsonl_folder, ".jsonl.bz2", opener=bz2.open
+            jsonl_folder,
+            ".jsonl.bz2",
+            opener=bz2.open,
+            num_files=16,
+            checker=HashCheck("70245f7ce292175c66f48eebb7b4a71d"),
         ),
         IKatClueWeb22DocumentStore.Document,
         "id",
-        count_hint=116_838_987,
+        count_hint=count,
     ).setup(dataset, options)
 
-    return IKatClueWeb22DocumentStore.C(path=store_path, count=116_838_987)
+    return IKatClueWeb22DocumentStore.C(path=store_path, count=count)
 
 
 @datatags("conversation", "context", "query")
@@ -44,11 +51,10 @@ def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
     checker=HashCheck("684fa0197cdec8c3cfb6a2e586ab83f6"),
 )
 @dataset(
-    Adhoc,
     id="2025",
     url="https://github.com/irlabamsterdam/iKAT/tree/main/2025",
 )
-def test_2025(topics, documents) -> IkatDataset.C:
+def test_2025(topics, documents) -> Adhoc.C:
     """Question-in-context rewriting
 
     iKAT is a test dataset for question-in-context rewriting that consists of

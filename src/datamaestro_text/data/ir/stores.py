@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import List, NamedTuple
 from experimaestro import Constant, Meta
-
+from datamaestro.utils import FileChecker
 from datamaestro.record import Record
 from datamaestro_text.data.ir.base import (
     DocumentRecord,
@@ -35,18 +35,58 @@ class OrConvQADocumentStore(LZ4DocumentStore):
         return Record(OrConvQADocument(**fields), IDItem(data.id))
 
 
-def jsonl_reader(path: Path, suffix: str, *, opener: open):
-    for path in path.glob(f"*{suffix}"):
+def jsonl_reader(
+    path: Path,
+    suffix: str,
+    *,
+    opener: open,
+    num_files: int | None = None,
+    checker: FileChecker | None = None,
+):
+    """Read a set of JSONL files
+
+    :param path: The path of the folder containing the files
+    :param suffix: The suffix for the files to process
+    :param opener: The opener (can be e.g. bz2.open to process bz2 files)
+    :param num_files: Check that the number of files is num_file if provided, defaults to None
+    :param checker: File content checker, defaults to None
+    :yield: objects corresponding to the JSON of each line
+    """
+    # Get the file paths (and check their number)
+    write = checker.write
+    paths = list(path.glob(f"*{suffix}"))
+    assert num_files is None or len(paths) == num_files, (
+        f"The number of files in {path} ({len(paths)})"
+        f" does not match what was expected ({num_files})"
+    )
+
+    # Process all the paths
+    for path in paths:
         with opener(path, "rt") as fp:
             for ix, line in enumerate(fp):
+                if checker is not None:
+                    write(line.encode("utf-8"))
                 yield json.loads(line)
+
+    # Close the checker if it was opened
+    if checker is not None:
+        checker.close()
 
 
 class IKatClueWeb22DocumentStore(LZ4DocumentStore):
     @staticmethod
-    def generator(path: Path, suffix: str, *, opener: open):
+    def generator(
+        path: Path,
+        suffix: str,
+        *,
+        opener: open,
+        num_files: int | None = None,
+        checker: FileChecker | None = None,
+    ):
         def __iter__():
-            iterator = jsonl_reader(path, suffix, opener=opener)
+            iterator = jsonl_reader(
+                path, suffix, opener=opener, checker=checker, num_files=num_files
+            )
             yield from map(
                 lambda data, *_: IKatClueWeb22DocumentStore.Document(**data), iterator
             )
