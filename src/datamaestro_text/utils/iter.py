@@ -82,3 +82,8 @@ class LazyList(Sequence):
         # Convert the iterable to a list if it hasn't been already
         if self.materialized_list is None:
             self.materialized_list = list(self.iterable)
+
+    def reverse(self):
+        """Reverse the list in place, materializing it if necessary"""
+        self._materialize()
+        self.materialized_list.reverse()
