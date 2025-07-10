@@ -62,7 +62,7 @@ def test_2025(topics, documents) -> Adhoc.C:
     rewriting of the question.
     """
     return Adhoc.C(
-        topics=IkatDataset.C(path=topics),
+        topics=ConversationUserTopics.C(conversations=IkatDataset.C(path=topics)),
         # TODO: add when available
         assessments=TrecAdhocAssessments(path="/to/do"),
         documents=documents,

@@ -36,11 +36,17 @@ Documents
 
 .. autoxpmconfig:: datamaestro_text.data.ir.Documents
     :members: iter_documents, iter_ids, documentcount
+.. autoxpmconfig:: datamaestro_text.data.ir.csv.Documents
+.. autoxpmconfig:: datamaestro_text.datasets.irds.data.LZ4DocumentStore
+
+
+Dataset-specific documents
+**************************
+
 .. autoxpmconfig:: datamaestro_text.data.ir.cord19.Documents
 .. autoxpmconfig:: datamaestro_text.data.ir.trec.TipsterCollection
-.. autoxpmconfig:: datamaestro_text.data.ir.csv.Documents
 .. autoxpmconfig:: datamaestro_text.data.ir.stores.OrConvQADocumentStore
-.. autoxpmconfig:: datamaestro_text.datasets.irds.data.LZ4DocumentStore
+.. autoxpmconfig:: datamaestro_text.data.ir.stores.IKatClueWeb22DocumentStore
 
 Assessments
 -----------

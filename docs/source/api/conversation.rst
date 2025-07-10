@@ -26,6 +26,12 @@ Data classes
 
 .. autoclass:: ConversationTopic
 
+Conversational IR
+-----------------
+
+.. autoxpmconfig:: datamaestro_text.data.conversation.base.ConversationUserTopics
+
+
 Contextual query reformulation
 ------------------------------
 
@@ -34,7 +40,7 @@ Contextual query reformulation
 .. autoclass:: ContextualizedRewrittenQuery
     :members:
 
-CANARD Dataset 
+CANARD Dataset
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.canard.CanardDataset
     :members: iter
@@ -50,7 +56,7 @@ OrConvQA Dataset
 .. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetHistoryEntry
     :members:
 
-QReCC Dataset 
+QReCC Dataset
 
 .. autoclass:: datamaestro_text.data.conversation.qrecc.QReCCDatasetEntry
     :members:
