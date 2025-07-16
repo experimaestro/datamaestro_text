@@ -64,7 +64,7 @@ def test_2025(topics, documents) -> Adhoc.C:
     return Adhoc.C(
         topics=ConversationUserTopics.C(conversations=IkatDataset.C(path=topics)),
         # TODO: add when available
-        assessments=TrecAdhocAssessments(path="/to/do"),
+        assessments=TrecAdhocAssessments.C(path="/to/do"),
         documents=documents,
     )
 
