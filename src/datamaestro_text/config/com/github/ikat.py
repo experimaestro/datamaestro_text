@@ -48,7 +48,7 @@ def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
 @filedownloader(
     "topics.json",
     "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2025/data/2025_test_topics.json",
-    checker=HashCheck("684fa0197cdec8c3cfb6a2e586ab83f6"),
+    checker=HashCheck("16f8444a8d0a8dfe0090f478f185a63c"),
 )
 @dataset(
     id="2025",
