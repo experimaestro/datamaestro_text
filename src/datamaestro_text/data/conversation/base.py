@@ -123,20 +123,17 @@ class ConversationNode:
         ...
 
     @abstractmethod
-    def parent(self) -> Optional["ConversationNode"]:
-        ...
+    def parent(self) -> Optional["ConversationNode"]: ...
 
     @abstractmethod
-    def children(self) -> List["ConversationNode"]:
-        ...
+    def children(self) -> List["ConversationNode"]: ...
 
 
 class ConversationTree(ABC):
     """Represents a conversation tree"""
 
     @abstractmethod
-    def root(self) -> ConversationNode:
-        ...
+    def root(self) -> ConversationNode: ...
 
     @abstractmethod
     def __iter__(self) -> Iterator[ConversationNode]:
@@ -256,8 +253,55 @@ class ConversationDataset(Base, ABC):
     @abstractmethod
     def __iter__(self) -> Iterator[ConversationTree]:
         """Return an iterator over conversations"""
-        for i in range(len(self)):
-            yield self.get(i)
+        ...
+
+
+class ConversationDatasetSubset(ConversationDataset):
+    """A subset of conversations from another ConversationDataset"""
+
+    original_dataset: Param[ConversationDataset]
+    """Optional reference to the original dataset"""
+
+    data_ids: Param[List[int]]
+    """IDs of the conversations in the original dataset"""
+
+    def __iter__(self) -> Iterator[ConversationTree]:
+        """Return an iterator over the subset of conversations"""
+        return iter(list(self.original_dataset)[i] for i in self.data_ids)
+
+
+def create_conversation_validation_split(
+    dataset: ConversationDataset, validation_ratio: float = 0.2, seed: int = 42
+) -> Tuple[ConversationDataset, ConversationDataset]:
+    """Create train/validation splits from a ConversationDataset
+
+    :param dataset: The original conversation dataset
+    :param validation_ratio: Fraction of conversations to use for validation (0.0-1.0)
+    :param seed: Random seed for reproducible splits
+    :return: Tuple of (train_dataset, validation_dataset)
+    """
+    import numpy as np
+
+    # Convert generator to list to get all conversations
+    all_conversations = list(dataset.__iter__())
+
+    # Shuffle conversations with fixed seed for reproducibility
+    rng = np.random.RandomState(seed)
+    ids = list(range(len(all_conversations)))
+    rng.shuffle(ids)
+
+    # Calculate split point
+    split_point = int(len(all_conversations) * (1 - validation_ratio))
+
+    # Create dataset subsets
+    train_dataset = ConversationDatasetSubset.C(
+        id=dataset.id + "_train", original_dataset=dataset, data_ids=ids[:split_point]
+    )
+    val_dataset = ConversationDatasetSubset.C(
+        id=dataset.id + "_val", original_dataset=dataset, data_ids=ids[split_point:]
+    )
+
+    return train_dataset, val_dataset
 
 
 class ConversationUserTopics(Topics):
