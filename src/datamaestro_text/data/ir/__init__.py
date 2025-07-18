@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from functools import cached_property
+import logging
 from pathlib import Path
 from attrs import define
 from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
@@ -44,6 +45,22 @@ class Documents(Base):
 
     def iter_documents(self) -> Iterator[DocumentRecord]:
         return self.iter()
+
+    def iter_documents_from(self, start=0) -> Iterator[DocumentRecord]:
+        """Iterate over a range of documents
+
+        Can be specialized in a subclass for faster access
+
+        :param start: The starting document, defaults to 0
+        :return: An iterator
+        """
+        iter = self.iter()
+        if start > 0:
+            logging.info("skipping %d documents", start + 1)
+            for _ in range(start + 1):
+                next(iter)
+
+        return iter
 
     def iter_ids(self) -> Iterator[str]:
         """Iterates over document ids
