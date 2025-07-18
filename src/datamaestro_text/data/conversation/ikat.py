@@ -21,6 +21,24 @@ from .base import (
 )
 from . import ConversationDataset
 
+# Keys to change in the dataset entries for compatibility across different years
+
+KEY_MAPPINGS = {
+    # Keys to replace: Target Key
+    "turns": "responses",
+    "utterance": "user_utterance",
+    "ptkb_provenance": "relevant_ptkbs",
+    "response_provenance": "citations",
+}
+
+def norm_dict(entry: dict) -> dict:
+    """Convert keys in the entry to match the expected format."""
+    normalized = {}
+    for k, v in entry.items():
+        # Check for direct mapping, then try lowercase mapping
+        new_key = KEY_MAPPINGS.get(k) or KEY_MAPPINGS.get(k.lower()) or k.lower()
+        normalized[new_key] = v
+    return normalized
 
 @define(kw_only=True)
 class IkatConversationEntry:
@@ -61,13 +79,17 @@ class IkatDatasetEntry:
     responses: List[IkatConversationEntry] = field(
         converter=lambda items: [
             IkatConversationEntry(**item) if isinstance(item, dict) else item
-            for item in items
+            for item in map(norm_dict, items)
         ]
     )
     """The list of responses to the query"""
 
 
 class IkatDataset(ConversationDataset, File):
+    """A dataset containing conversations from the IKAT project"""
+
+    """Keys to change in the dataset entries for compatibility across different years"""
+
     def entries(self) -> Iterator[IkatDatasetEntry]:
         """Reads all conversation entries from the dataset file."""
         with self.path.open("rt") as fp:
@@ -76,14 +98,13 @@ class IkatDataset(ConversationDataset, File):
         logging.debug("Loaded %d entries from %s", len(raw_data), self.path)
         logging.debug(f"raw data has keys {raw_data[0].keys()}")
 
-        processed_data = []
         for entry in raw_data:
-            processed_data.append(
-                IkatDatasetEntry(**{key.lower(): value for key, value in entry.items()})
-            )
-
-        logging.debug(f"First parsed data sample: {processed_data[0]}")
-        return iter(processed_data)
+            try:
+                normalized_entry = norm_dict(entry)
+                yield IkatDatasetEntry(**normalized_entry)
+            except Exception as e:
+                logging.warning(f"Failed to parse entry: {e}")
+                raise e
 
     def __iter__(self) -> Iterator[ConversationTree]:
         for entry in self.entries():
