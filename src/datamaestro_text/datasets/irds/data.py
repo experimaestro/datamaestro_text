@@ -122,7 +122,14 @@ class Documents(ir.DocumentStore, IRDSId):
             formats.Touche2020, "doc_id", "text", "title", "stance", "url"
         ),
         _irds.beir.BeirSciDoc: tuple_constructor(
-            formats.SciDocs, "doc_id", "text", "title", "authors", "year", "cited_by", "references"
+            formats.SciDocs,
+            "doc_id",
+            "text",
+            "title",
+            "authors",
+            "year",
+            "cited_by",
+            "references",
         ),
         _irds.msmarco_document.MsMarcoDocument: tuple_constructor(
             formats.MsMarcoDocument, "doc_id", "url", "title", "body"
@@ -198,6 +205,10 @@ class Documents(ir.DocumentStore, IRDSId):
         for doc in self.dataset.docs_iter():
             yield self.converter(self.document_recordtype, doc)
 
+    def iter_documents_from(self, start=0):
+        for doc in self.dataset.docs_iter()[start:]:
+            yield self.converter(self.document_recordtype, doc)
+
     @property
     def documentcount(self):
         return self.dataset.docs_count()
@@ -244,7 +255,7 @@ if hasattr(_irds, "miracl"):
     )
 
 
-class LZ4DocumentStore(ir.DocumentStore):
+class LZ4DocumentStore(ir.DocumentStore, ABC):
     """A LZ4-based document store"""
 
     path: Param[Path]
@@ -253,7 +264,7 @@ class LZ4DocumentStore(ir.DocumentStore):
     lookup_field: Param[str]
 
     # Extra indexed fields (e.g. URLs)
-    index_fields: List[str]
+    index_fields: List[str] = []
 
     @cached_property
     def store(self):
@@ -284,6 +295,9 @@ class LZ4DocumentStore(ir.DocumentStore):
     def iter(self) -> Iterator[DocumentRecord]:
         """Returns an iterator over documents"""
         return map(self.converter, self.store.__iter__())
+
+    def iter_documents_from(self, start=0):
+        return map(self.converter, self.store.__iter__()[start:])
 
     @cached_property
     def documentcount(self):
@@ -386,7 +400,13 @@ class Topics(ir.TopicsStore, IRDSId):
             formats.TrecTopic, "query_id", "text", "description", "narrative"
         ),
         _irds.beir.BeirSciQuery: tuple_constructor(
-            formats.SciDocsTopic, "query_id", "text", "authors", "year", "cited_by", "references"
+            formats.SciDocsTopic,
+            "query_id",
+            "text",
+            "authors",
+            "year",
+            "cited_by",
+            "references",
         ),
         _irds.tweets2013_ia.TrecMb13Query: tuple_constructor(
             formats.TrecMb13Query, "query_id", "query", "time", "tweet_time"
@@ -400,10 +420,7 @@ class Topics(ir.TopicsStore, IRDSId):
             "description",
         ),
         _irds.dpr_w100.DprW100Query: tuple_constructor(
-            formats.DprW100Query,
-            "query_id",
-            "text",
-            "answers"
+            formats.DprW100Query, "query_id", "text", "answers"
         ),
     }
 
@@ -435,11 +452,12 @@ class Topics(ir.TopicsStore, IRDSId):
     def iter(self) -> Iterator[TopicRecord]:
         """Returns an iterator over topics"""
         return self.handler.iter()
-    
+
+
 class TrecBackgroundLinkingTopicsHandler(TopicsHandler):
     def __init__(self, dataset):
         self.dataset = dataset
-    
+
     @cached_property
     def ext2records(self):
         return {record[IDItem].id: record for record in self.records}
@@ -462,10 +480,12 @@ class TrecBackgroundLinkingTopicsHandler(TopicsHandler):
             records = []
 
             for query in self.dataset.dataset.queries_iter():
-                topic =  Record(
+                topic = Record(
                     IDItem(query.query_id),
                     # Following BEIR documentation, we use title of documents as queries: https://github.com/beir-cellar/beir/blob/main/examples/dataset/README.md#queries-and-qrels
-                    SimpleTextItem(self.dataset.dataset.docs_store().get(query.doc_id).title), 
+                    SimpleTextItem(
+                        self.dataset.dataset.docs_store().get(query.doc_id).title
+                    ),
                     UrlItem(query.url),
                 )
                 records.append(topic)
@@ -477,10 +497,9 @@ class TrecBackgroundLinkingTopicsHandler(TopicsHandler):
 
 
 Topics.HANDLERS.update(
-    {
-        _irds.wapo.TrecBackgroundLinkingQuery: TrecBackgroundLinkingTopicsHandler
-    }
+    {_irds.wapo.TrecBackgroundLinkingQuery: TrecBackgroundLinkingTopicsHandler}
 )
+
 
 class CastTopicsHandler(TopicsHandler):
     def __init__(self, dataset):
