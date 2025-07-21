@@ -112,7 +112,7 @@ class IkatDataset(ConversationDataset, File):
 
             for turn in entry.responses:
                 turn: IkatConversationEntry = turn  # Ensure type is correct
-                query_id = f"{entry.number}#{turn.turn_id}"
+                query_id = f"{entry.number}_{turn.turn_id}"
 
                 # USER QUERY record
                 history.append(
