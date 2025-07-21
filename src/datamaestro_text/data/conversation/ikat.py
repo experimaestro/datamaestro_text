@@ -31,6 +31,7 @@ KEY_MAPPINGS = {
     "response_provenance": "citations",
 }
 
+
 def norm_dict(entry: dict) -> dict:
     """Convert keys in the entry to match the expected format."""
     normalized = {}
@@ -39,6 +40,7 @@ def norm_dict(entry: dict) -> dict:
         new_key = KEY_MAPPINGS.get(k) or KEY_MAPPINGS.get(k.lower()) or k.lower()
         normalized[new_key] = v
     return normalized
+
 
 @define(kw_only=True)
 class IkatConversationEntry:
@@ -64,7 +66,7 @@ class IkatConversationEntry:
 
 
 @define(kw_only=True)
-class IkatDatasetEntry:
+class IkatConversationTopic:
     """A query with past history"""
 
     number: str
@@ -85,12 +87,12 @@ class IkatDatasetEntry:
     """The list of responses to the query"""
 
 
-class IkatDataset(ConversationDataset, File):
+class IkatConversations(ConversationDataset, File):
     """A dataset containing conversations from the IKAT project"""
 
     """Keys to change in the dataset entries for compatibility across different years"""
 
-    def entries(self) -> Iterator[IkatDatasetEntry]:
+    def entries(self) -> Iterator[IkatConversationTopic]:
         """Reads all conversation entries from the dataset file."""
         with self.path.open("rt") as fp:
             raw_data = json.load(fp)
@@ -101,7 +103,7 @@ class IkatDataset(ConversationDataset, File):
         for entry in raw_data:
             try:
                 normalized_entry = norm_dict(entry)
-                yield IkatDatasetEntry(**normalized_entry)
+                yield IkatConversationTopic(**normalized_entry)
             except Exception as e:
                 logging.warning(f"Failed to parse entry: {e}")
                 raise e

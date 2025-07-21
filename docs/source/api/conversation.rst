@@ -67,11 +67,11 @@ QReCC Dataset
 
 iKAT Dataset
 
-.. autoclass:: datamaestro_text.data.conversation.ikat.IkatDatasetEntry
+.. autoclass:: datamaestro_text.data.conversation.ikat.IkatConversationTopic
     :members:
 
 .. autoclass:: datamaestro_text.data.conversation.ikat.IkatConversationEntry
     :members:
 
-.. autoxpmconfig:: datamaestro_text.data.conversation.ikat.IkatDataset
+.. autoxpmconfig:: datamaestro_text.data.conversation.ikat.IkatConversations
     :members: iter

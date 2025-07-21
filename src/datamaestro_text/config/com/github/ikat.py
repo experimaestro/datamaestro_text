@@ -9,7 +9,7 @@ from datamaestro_text.data.ir import Adhoc
 from datamaestro.utils import HashCheck
 from datamaestro.context import DatafolderPath
 from datamaestro.download.single import filedownloader
-from datamaestro_text.data.conversation.ikat import IkatDataset
+from datamaestro_text.data.conversation.ikat import IkatConversations
 from datamaestro.download.links import linkfolder
 
 from datamaestro_text.data.ir.stores import IKatClueWeb22DocumentStore
@@ -62,7 +62,7 @@ def test_2025(topics, documents) -> Adhoc.C:
     rewriting of the question.
     """
     return Adhoc.C(
-        topics=ConversationUserTopics.C(conversations=IkatDataset.C(path=topics)),
+        topics=ConversationUserTopics.C(conversations=IkatConversations.C(path=topics)),
         # TODO: add when available
         assessments=TrecAdhocAssessments.C(path="/to/do"),
         documents=documents,
@@ -90,7 +90,7 @@ def test_2025(topics, documents) -> Adhoc.C:
 def test_2023(topics, qrels, documents) -> Adhoc.C:
     """iKAT 2023 dataset"""
     return Adhoc.C(
-        topics=ConversationUserTopics.C(conversations=IkatDataset.C(path=topics)),
+        topics=ConversationUserTopics.C(conversations=IkatConversations.C(path=topics)),
         assessments=TrecAdhocAssessments.C(path=qrels),
         documents=documents,
     )
