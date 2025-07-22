@@ -69,6 +69,34 @@ def test_2025(topics, documents) -> Adhoc.C:
     )
 
 
+
+@datatags("conversation", "context", "query")
+@datatasks("conversational search", "query rewriting")
+@reference("documents", clueweb22)
+@filedownloader(
+    "qrels",
+    "https://trec.nist.gov/data/ikat/2024-qrels.txt",
+    checker=HashCheck("57f958903ed1c12bbac207f62800814f"),
+)
+@filedownloader(
+    "topics.json",
+    "https://raw.githubusercontent.com/irlabamsterdam/iKAT/refs/heads/main/2024/data/2024_test_topics.json",
+    checker=HashCheck("ad45bc6e7add2081d69ea60a0a4d1203"),
+)
+@dataset(
+    Adhoc,
+    id="2024",
+    url="https://github.com/irlabamsterdam/iKAT/tree/main/2024",
+)
+def test_2024(topics, qrels, documents) -> Adhoc.C:
+    """iKAT 2024 dataset"""
+    return Adhoc.C(
+        topics=ConversationUserTopics.C(conversations=IkatConversations.C(path=topics)),
+        assessments=TrecAdhocAssessments.C(path=qrels),
+        documents=documents,
+    )
+
+
 @datatags("conversation", "context", "query")
 @datatasks("conversational search", "query rewriting")
 @reference("documents", clueweb22)
