@@ -29,10 +29,8 @@ def clueweb22(dataset, options=None) -> IKatClueWeb22DocumentStore:
         "store",
         IKatClueWeb22DocumentStore.generator(
             jsonl_folder,
-            ".jsonl.bz2",
-            opener=bz2.open,
-            num_files=16,
-            checker=HashCheck("70245f7ce292175c66f48eebb7b4a71d"),
+            jsonl_folder / "ikat_2023_passages_jsonl.sha256sums",
+            jsonl_folder / "ikat_2023_passages_hashes.tsv.bz2",
         ),
         IKatClueWeb22DocumentStore.Document,
         "id",
@@ -67,7 +65,6 @@ def test_2025(topics, documents) -> Adhoc.C:
         assessments=TrecAdhocAssessments.C(path="/to/do"),
         documents=documents,
     )
-
 
 
 @datatags("conversation", "context", "query")

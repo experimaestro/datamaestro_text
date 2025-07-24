@@ -1,18 +1,21 @@
+import bz2
+from hashlib import md5, sha256
 import json
+import logging
 from pathlib import Path
 from typing import List, NamedTuple
-from experimaestro import Constant, Meta
-from datamaestro.utils import FileChecker
+from datamaestro_text.utils.files import TQDMFileReader
+from experimaestro import Constant
 from datamaestro.record import Record
 from datamaestro_text.data.ir.base import (
     DocumentRecord,
     IDItem,
     SimpleTextItem,
-    TextItem,
     UrlItem,
 )
 from datamaestro_text.datasets.irds.data import LZ4DocumentStore
 from datamaestro_text.data.ir.formats import OrConvQADocument
+from tqdm import tqdm
 
 
 class OrConvQADocumentStore(LZ4DocumentStore):
@@ -35,61 +38,74 @@ class OrConvQADocumentStore(LZ4DocumentStore):
         return Record(OrConvQADocument(**fields), IDItem(data.id))
 
 
-def jsonl_reader(
-    path: Path,
-    suffix: str,
-    *,
-    opener: open,
-    num_files: int | None = None,
-    checker: FileChecker | None = None,
-):
-    """Read a set of JSONL files
-
-    :param path: The path of the folder containing the files
-    :param suffix: The suffix for the files to process
-    :param opener: The opener (can be e.g. bz2.open to process bz2 files)
-    :param num_files: Check that the number of files is num_file if provided, defaults to None
-    :param checker: File content checker, defaults to None
-    :yield: objects corresponding to the JSON of each line
-    """
-    # Get the file paths (and check their number)
-    write = checker.write
-    paths = list(path.glob(f"*{suffix}"))
-    assert num_files is None or len(paths) == num_files, (
-        f"The number of files in {path} ({len(paths)})"
-        f" does not match what was expected ({num_files})"
-    )
-
-    # Process all the paths
-    for path in paths:
-        with opener(path, "rt") as fp:
-            for ix, line in enumerate(fp):
-                if checker is not None:
-                    write(line.encode("utf-8"))
-                yield json.loads(line)
-
-    # Close the checker if it was opened
-    if checker is not None:
-        checker.close()
-
-
 class IKatClueWeb22DocumentStore(LZ4DocumentStore):
     @staticmethod
-    def generator(
-        path: Path,
-        suffix: str,
-        *,
-        opener: open,
-        num_files: int | None = None,
-        checker: FileChecker | None = None,
-    ):
+    def generator(path: Path, checksums_file: Path, passages_hashes: Path):
+        """Returns an iterator over iKAT 2022-25 documents
+
+        :param path: The folder containing the files
+        """
+
         def __iter__():
-            iterator = jsonl_reader(
-                path, suffix, opener=opener, checker=checker, num_files=num_files
-            )
-            yield from map(
-                lambda data, *_: IKatClueWeb22DocumentStore.Document(**data), iterator
-            )
+            errors = False
+
+            assert checksums_file.is_file(), f"{checksums_file} does not exist"
+            assert passages_hashes.is_file(), f"{passages_hashes} does not exist"
+
+            # Get the list of files
+            with checksums_file.open("rt") as fp:
+                files = []
+                for line in fp:
+                    checksum, filename = line.strip().split()
+                    files.append((checksum, filename))
+                    if not (path / filename).is_file():
+                        logging.error("File %s does not exist", path / filename)
+                        errors = True
+
+            assert not errors, "Errors detected, stopping"
+
+            # Check the SHA256 sums
+            match checksums_file.suffix:
+                case ".sha256sums":
+                    hasher_factory = sha256
+                case _:
+                    raise NotImplementedError(
+                        f"Cannot handle {checksums_file.suffix} checksum files"
+                    )
+
+            for checksum, filename in tqdm(files):
+                logging.info("Checking %s", filename)
+                hasher = hasher_factory()
+                with (path / filename).open("rb") as fp:
+                    while data := fp.read(2**20):
+                        hasher.update(data)
+
+                file_checksum = hasher.hexdigest()
+                assert file_checksum == checksum, (
+                    f"Expected {checksum}, " f"got {file_checksum} for {filename}"
+                )
+
+            # Get the MD5 hashes of all the passages
+            logging.info("Reading the hashes of all passages")
+            with TQDMFileReader(passages_hashes, "rt", bz2.open) as fp:
+                passage_checksums = {}
+                for line in tqdm(fp):
+                    doc_id, passage_no, checksum = line.strip().split()
+                    passage_checksums[f"{doc_id}:{passage_no}"] = checksum  # noqa: E231
+
+            # Read the files
+            logging.info("Starting to read the files")
+            for _, filename in tqdm(files):
+                with TQDMFileReader(path / filename, "rt", bz2.open) as jsonl_fp:
+                    for line in jsonl_fp:
+                        data = json.loads(line)
+                        expected = passage_checksums[data["id"]]
+                        computed = md5(data["contents"].encode("utf-8")).hexdigest()
+                        assert expected == computed, (
+                            f"Expected {expected}, "
+                            f"got {computed} for passage {data['id']} in {filename}"
+                        )
+                        yield IKatClueWeb22DocumentStore.Document(**data)
 
         return __iter__
 
