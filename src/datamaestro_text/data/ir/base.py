@@ -71,7 +71,7 @@ class AdhocAssessedTopic:
     """List of assessments for this topic"""
 
 
-def create_record(*items: Item, id: str = None, text: str = None):
+def create_record(*items: Item, id: str = None, text: str = None) -> Record:
     """Easy creation of a text/id item"""
     extra_items = []
     if id is not None:

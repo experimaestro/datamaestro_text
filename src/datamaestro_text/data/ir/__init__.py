@@ -5,7 +5,7 @@ from functools import cached_property
 import logging
 from pathlib import Path
 from attrs import define
-from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
+from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type, TYPE_CHECKING
 import random
 from experimaestro import Config
 from datamaestro.definitions import datatasks, Param, Meta
@@ -28,6 +28,9 @@ from .base import (  # noqa: F401
     AdhocAssessment,
     AdhocAssessedTopic,
 )
+
+#: A adhoc run dictionary (query id -> doc id -> score)
+AdhocRunDict = dict[str, dict[str, float]]
 
 
 class Documents(Base):
@@ -185,7 +188,10 @@ class AdhocAssessments(Base, ABC):
 class AdhocRun(Base):
     """IR adhoc run"""
 
-    pass
+    @abstractmethod
+    def get_dict(self) -> "AdhocRunDict":
+        """Get the run as a dictionary query ID -> doc ID -> score"""
+        ...
 
 
 class AdhocResults(Base):

@@ -1,9 +1,9 @@
+import re
 from typing import Dict, List, Optional
-from datamaestro.data import Base
 from experimaestro import documentation, Param, Meta
 from pathlib import Path
-from datamaestro.record import Record
 from datamaestro_text.data.ir import (
+    AdhocRunDict,
     Documents,
     Topics,
     AdhocAssessments,
@@ -47,6 +47,11 @@ class TrecAdhocAssessments(AdhocAssessments):
 class TrecAdhocRun(AdhocRun):
     path: Param[Path]
 
+    def get_dict(self) -> AdhocRunDict:
+        import datamaestro_text.interfaces.trec as trec
+
+        return trec.parse_run(self.path)
+
 
 class TrecAdhocResults(AdhocResults):
     """Adhoc results (TREC format)"""
@@ -62,8 +67,6 @@ class TrecAdhocResults(AdhocResults):
 
     def get_results(self) -> Dict[str, float]:
         """Returns the results as a dictionary {metric_name: value}"""
-        import re
-
         re_spaces = re.compile(r"\s+")
 
         results = {}

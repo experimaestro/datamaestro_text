@@ -1,7 +1,7 @@
-from attrs import define
 from pathlib import Path
 from typing import Iterator, Optional
 import re
+from datamaestro_text.data.ir import AdhocRunDict
 from datamaestro_text.data.ir.base import (
     AdhocAssessedTopic,
     TopicRecord,
@@ -9,6 +9,33 @@ from datamaestro_text.data.ir.base import (
     IDItem,
 )
 from datamaestro_text.data.ir.formats import TrecTopicRecord, TrecTopic
+
+# --- Runs
+
+
+def parse_run(path: Path) -> AdhocRunDict:
+    results = {}
+    with path.open("rt") as f:
+        for line in f:
+            query_id, _q0, doc_id, _rank, score, _model_id = re.split(
+                r"\s+", line.strip()
+            )
+            results.setdefault(query_id, {})[doc_id] = score
+
+    return results
+
+
+def write_run_dict(run: AdhocRunDict, run_path: Path):
+    """Write run dict"""
+    with run_path.open("wt") as f:
+        for query_id, scored_documents in run.items():
+            scored_documents = list(
+                [(doc_id, score) for doc_id, score in scored_documents.items()]
+            )
+            scored_documents.sort(key=lambda x: x[1], reverse=True)
+            for ix, (doc_id, score) in enumerate(scored_documents):
+                f.write(f"{query_id} Q0 {doc_id} {ix + 1} {score} run\n")
+
 
 # --- Assessments
 
@@ -59,7 +86,7 @@ def parse_query_format(file, xml_prefix=None) -> Iterator[TopicRecord]:
                 num = line[len("<num>") :].replace("Number:", "").strip()
                 reading = None
             elif line.startswith(f"<{xml_prefix}title>"):
-                title = line[len(f"<{xml_prefix}title>") :].strip()
+                title = line[len(f"<{xml_prefix}title>") : ].strip()
                 if title == "":
                     reading = "title"
                 else:
