@@ -86,7 +86,7 @@ def parse_query_format(file, xml_prefix=None) -> Iterator[TopicRecord]:
                 num = line[len("<num>") :].replace("Number:", "").strip()
                 reading = None
             elif line.startswith(f"<{xml_prefix}title>"):
-                title = line[len(f"<{xml_prefix}title>") : ].strip()
+                title = line[len(f"<{xml_prefix}title>") :].strip()
                 if title == "":
                     reading = "title"
                 else:
