@@ -1,6 +1,7 @@
 """Generic data types for information retrieval"""
 
 from abc import ABC, abstractmethod
+from enum import Enum
 from functools import cached_property
 import logging
 from pathlib import Path
@@ -88,6 +89,19 @@ class Documents(Base):
         ...
 
 
+class FileAccess(Enum):
+    """Defines how to access files (e.g. for document stores)"""
+
+    FILE = 0
+    """Direct file access"""
+
+    MMAP = 1
+    """Use mmap"""
+
+    MEMORY = 2
+    """Use memory"""
+
+
 class DocumentStore(Documents):
     """A document store
 
@@ -96,6 +110,10 @@ class DocumentStore(Documents):
     - return the document content
     - return the number of documents
     """
+
+    file_access: Meta[FileAccess] = FileAccess.MMAP
+    """How to access the file collection (might not have any impact, depends on
+    the docstore)"""
 
     def docid_internal2external(self, docid: int):
         """Converts an internal collection ID (integer) to an external ID"""
@@ -327,5 +345,4 @@ class PairwiseSampleDataset(Base, ABC):
     """Datasets where each record is a query with positive and negative samples"""
 
     @abstractmethod
-    def iter(self) -> Iterator[PairwiseSample]:
-        ...
+    def iter(self) -> Iterator[PairwiseSample]: ...

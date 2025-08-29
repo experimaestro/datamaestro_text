@@ -215,7 +215,19 @@ class Documents(ir.DocumentStore, IRDSId):
 
     @cached_property
     def store(self):
-        return self.dataset.docs_store()
+        kwargs = {}
+        try:
+            # Translate to ir datasets docstore options
+            import ir_datasets.indices as ir_indices
+            file_access = {
+                ir.FileAccess.MMAP: ir_indices.FileAccess.MMAP,
+                ir.FileAccess.FILE: ir_indices.FileAccess.FILE,
+                ir.FileAccess.MEMORY: ir_indices.FileAccess.MEMORY
+            }[self.file_access]
+            kwargs = {"options": ir_indices.DocstoreOptions(file_access=file_access)}
+        except ImportError:
+            logging.warning("This version of ir-datasets cannot handle docstore options")
+        return self.dataset.docs_store(**kwargs)
 
     @cached_property
     def _docs(self):
