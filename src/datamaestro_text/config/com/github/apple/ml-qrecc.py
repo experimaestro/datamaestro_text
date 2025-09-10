@@ -51,6 +51,7 @@ def main(data: Path) -> Supervised[QReCCDataset, None, QReCCDataset]:
 )
 class Content(LZ4JSONLDocumentStore):
     """QReCC mentionned URLs content"""
+
     @staticmethod
     def __create_dataset__(dataset, options=None):
         ds = reference(reference=main).setup(dataset, options)
@@ -65,7 +66,7 @@ class Content(LZ4JSONLDocumentStore):
             "id",
         ).setup(dataset, options)
 
-        return Content(jsonl_path=store_path)
+        return Content.C(jsonl_path=store_path)
 
     @staticmethod
     def _documents(path: Path):

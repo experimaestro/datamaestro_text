@@ -37,7 +37,7 @@ def main(train, dev, test):
     Each dataset is an instance of :class:`datamaestro_text.data.conversation.CanardDataset`
     """
     return {
-        "train": CanardDataset(path=train),
-        "validation": CanardDataset(path=dev),
-        "test": CanardDataset(path=test),
+        "train": CanardDataset.C(path=train),
+        "validation": CanardDataset.C(path=dev),
+        "test": CanardDataset.C(path=test),
     }

@@ -47,7 +47,7 @@ http://www.msmarco.org/dataset.aspx""",
 @dataset(url="https://github.com/microsoft/MSMARCO-Passage-Ranking")
 def collection_etc(data) -> Folder:
     """Documents and some more files"""
-    return Folder(path=data)
+    return Folder.C(path=data)
 
 
 @lua

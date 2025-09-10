@@ -34,9 +34,9 @@ def gsd(ds) -> Supervised:
     is updated since 2015 independently from the previous source.
     """
     return {
-        "train": CoNLL_U(path=ds / "fr_gsd-ud-train.conllu"),
-        "test": CoNLL_U(path=ds / "fr_gsd-ud-dev.conllu"),
-        "validation": CoNLL_U(path=ds / "fr_gsd-ud-test.conllu"),
+        "train": CoNLL_U.C(path=ds / "fr_gsd-ud-train.conllu"),
+        "test": CoNLL_U.C(path=ds / "fr_gsd-ud-dev.conllu"),
+        "validation": CoNLL_U.C(path=ds / "fr_gsd-ud-test.conllu"),
     }
 
 
