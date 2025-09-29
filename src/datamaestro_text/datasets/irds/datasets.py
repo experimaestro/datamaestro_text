@@ -103,7 +103,7 @@ class TrainingTripletsDataset(Dataset):
     SUFFIX = "docpairs"
 
     def _prepare(self, download=False) -> Documents:
-        return TrainingTriplets(
+        return TrainingTriplets.C(
             id=self.fullid,
         )
 

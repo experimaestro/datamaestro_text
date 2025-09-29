@@ -150,7 +150,7 @@ class ShuffledTrainingTripletsLines(Task):
 
     def task_outputs(self, dep):
         return dep(
-            ir.TrainingTripletsLines(
+            ir.TrainingTripletsLines.C(
                 id="",
                 path=self.path,
                 topic_ids=self.topic_ids,
