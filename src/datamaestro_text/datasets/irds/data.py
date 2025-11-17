@@ -202,11 +202,11 @@ class Documents(ir.DocumentStore, IRDSId):
 
     def iter(self) -> Iterator[ir.DocumentRecord]:
         """Returns an iterator over adhoc documents"""
-        for doc in self.dataset.docs_iter():
+        for doc in self._docs:
             yield self.converter(self.document_recordtype, doc)
 
     def iter_documents_from(self, start=0):
-        for doc in self.dataset.docs_iter()[start:]:
+        for doc in self._docs[start:]:
             yield self.converter(self.document_recordtype, doc)
 
     @property
@@ -229,9 +229,9 @@ class Documents(ir.DocumentStore, IRDSId):
             logging.warning("This version of ir-datasets cannot handle docstore options")
         return self.dataset.docs_store(**kwargs)
 
-    @cached_property
+    @property
     def _docs(self):
-        return self.dataset.docs_iter()
+        return iter(self.store)
 
     def docid_internal2external(self, ix: int):
         return self._docs[ix].doc_id
