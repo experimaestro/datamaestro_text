@@ -112,6 +112,9 @@ class Documents(ir.DocumentStore, IRDSId):
         _irds.beir.BeirCordDoc: tuple_constructor(
             formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
         ),
+        _irds.miracl.MiraclDoc: tuple_constructor(
+            formats.TitleDocument, "doc_id", "text", "title"
+        ),
         _irds.beir.BeirTitleDoc: tuple_constructor(
             formats.TitleDocument, "doc_id", "text", "title"
         ),
