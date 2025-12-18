@@ -113,7 +113,7 @@ class Documents(ir.DocumentStore, IRDSId):
             formats.CordDocument, "doc_id", "text", "title", "url", "pubmed_id"
         ),
         _irds.miracl.MiraclDoc: tuple_constructor(
-            formats.TitleDocument, "doc_id", "text", "title"
+            formats.DocumentWithTitle, "doc_id", "title", "text"
         ),
         _irds.beir.BeirTitleDoc: tuple_constructor(
             formats.TitleDocument, "doc_id", "text", "title"
@@ -262,12 +262,6 @@ class Documents(ir.DocumentStore, IRDSId):
         converter = Documents.CONVERTERS[self.dataset.docs_cls()]
         converter.check(self.dataset.docs_cls())
         return converter
-
-
-if hasattr(_irds, "miracl"):
-    Documents.CONVERTERS[_irds.miracl.MiraclDoc] = tuple_constructor(
-        formats.DocumentWithTitle, "doc_id", "text", "title"
-    )
 
 
 class LZ4DocumentStore(ir.DocumentStore, ABC):
