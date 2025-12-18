@@ -10,10 +10,8 @@ from ir_datasets.datasets.cord19 import Cord19FullTextSection
 @define
 class DocumentWithTitle(TextItem):
     """Web document with title and body"""
-
-    body: str
-
     title: str
+    body: str
 
     @cached_property
     def text(self):
