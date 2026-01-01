@@ -267,7 +267,7 @@ class ConversationUserTopics(Topics):
         """Returns an iterator over topics"""
         # Extracts topics from conversations, Each user query is a topic (can perform retrieval on it)
         # TODO: merge with xpmir.learning.DatasetConversationBase -> same logic
-        
+
         records: List[TopicRecord] = []
         for conversation in self.conversations.__iter__():
             nodes = [

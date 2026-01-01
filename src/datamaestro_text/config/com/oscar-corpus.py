@@ -1,4 +1,4 @@
-from datamaestro.definitions import argument, datatasks, datatags, dataset
+from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.download.single import filedownloader
 from datamaestro_text.data.text import TextFile
 from datamaestro.utils import HashCheck

@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from functools import partial
+from functools import cached_property, partial
 from pathlib import Path
 from typing import Dict, Iterator, List, NamedTuple, Tuple, Type
 
@@ -9,7 +9,6 @@ import ir_datasets
 import ir_datasets.datasets as _irds
 from datamaestro.record import RecordType, record_type
 from experimaestro import Config, Meta, Option, Param
-from experimaestro.compat import cached_property
 from ir_datasets.formats import (
     GenericDoc,
     GenericDocPair,
@@ -222,14 +221,17 @@ class Documents(ir.DocumentStore, IRDSId):
         try:
             # Translate to ir datasets docstore options
             import ir_datasets.indices as ir_indices
+
             file_access = {
                 ir.FileAccess.MMAP: ir_indices.FileAccess.MMAP,
                 ir.FileAccess.FILE: ir_indices.FileAccess.FILE,
-                ir.FileAccess.MEMORY: ir_indices.FileAccess.MEMORY
+                ir.FileAccess.MEMORY: ir_indices.FileAccess.MEMORY,
             }[self.file_access]
             kwargs = {"options": ir_indices.DocstoreOptions(file_access=file_access)}
         except ImportError:
-            logging.warning("This version of ir-datasets cannot handle docstore options")
+            logging.warning(
+                "This version of ir-datasets cannot handle docstore options"
+            )
         return self.dataset.docs_store(**kwargs)
 
     @property

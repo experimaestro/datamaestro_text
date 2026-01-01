@@ -1,6 +1,6 @@
 # See documentation on https://datamaestro.readthedocs.io
 
-from datamaestro.definitions import argument, datatasks, datatags, dataset
+from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro_text.data.text import TextFolder
 from datamaestro.download.archive import tardownloader
 from datamaestro.utils import HashCheck
