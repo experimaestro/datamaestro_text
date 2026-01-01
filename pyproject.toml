@@ -26,7 +26,7 @@ classifiers = [
 requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
-    "datamaestro>=1.5.0",
+    "datamaestro>=1.6.2",
     "ir_datasets>=0.5.8",
     "attrs",
     "experimaestro",
