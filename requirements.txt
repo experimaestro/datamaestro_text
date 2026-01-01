@@ -1,3 +1,0 @@
-datamaestro>=1.5.0
-ir_datasets>=0.5.8
-attrs
