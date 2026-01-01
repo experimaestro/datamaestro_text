@@ -9,3 +9,4 @@ Datamaestro Text API
     embeddings
     recommendation
     nlp
+    debate
