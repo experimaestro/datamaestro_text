@@ -39,6 +39,14 @@ dev = [
     "sphobjinv",
     "sphinx<8",
 ]
+docs = [
+    "datamaestro>=0.8.5",
+    "myst-parser>=0.18.0",
+    "sphinx>=6,<8",
+    "sphinx-codeautolink>=0.15.0",
+    "sphinx-rtd-theme>=3.1.0",
+    "sphinx-toolbox>=4.1.2",
+]
 
 [project.urls]
 Homepage = "https://github.com/experimaestro/datamaestro_text"
