@@ -8,13 +8,9 @@ build:
   os: "ubuntu-22.04"
   tools:
     python: "3.11"
-
-sphinx:
-  configuration: docs/source/conf.py
-
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
+  commands:
+    - asdf plugin add uv
+    - asdf install uv latest
+    - asdf global uv latest
+    - uv sync --group docs
+    - .venv/bin/python -m sphinx -b html docs/source $READTHEDOCS_OUTPUT/html
