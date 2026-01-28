@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import ClassVar, Tuple, List
+from typing import Tuple, List
 from attrs import define
 from datamaestro.record import record_type
 from ir_datasets.datasets.wapo import WapoDocMedia
@@ -10,6 +10,7 @@ from ir_datasets.datasets.cord19 import Cord19FullTextSection
 @define
 class DocumentWithTitle(TextItem):
     """Web document with title and body"""
+
     title: str
     body: str
 

@@ -1,6 +1,5 @@
 # See documentation on https://datamaestro.readthedocs.io
 
-import bz2
 from datamaestro.download import reference
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro_text.data.conversation.base import ConversationUserTopics

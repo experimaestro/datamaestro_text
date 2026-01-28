@@ -50,7 +50,7 @@ def shuffle(
     *,
     memory=MEMORY,
     random=None,
-    tmp_path: Optional[Path] = None
+    tmp_path: Optional[Path] = None,
 ):
     """Shuffle using temporary file"""
     if random is None:

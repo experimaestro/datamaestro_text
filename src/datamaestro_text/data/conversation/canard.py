@@ -11,7 +11,6 @@ from datamaestro_text.data.conversation.base import (
     EntryType,
 )
 from datamaestro_text.data.ir import IDItem, SimpleTextItem
-import logging
 
 
 @define(kw_only=True)
@@ -82,9 +81,9 @@ class CanardDataset(ConversationDataset, File):
                 )
             else:
                 # The utterance before the last is the last user query
-                assert (
-                    entry.history[-2] == history[-1][SimpleTextItem].text
-                ), f"{entry.dialogue_id} {entry.history} / {history[-4:-1]}"
+                assert entry.history[-2] == history[-1][SimpleTextItem].text, (
+                    f"{entry.dialogue_id} {entry.history} / {history[-4:-1]}"
+                )
 
                 # The last utterance is the system side
                 history.append(

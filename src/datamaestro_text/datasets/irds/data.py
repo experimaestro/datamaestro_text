@@ -1,6 +1,5 @@
 import logging
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from functools import cached_property, partial
 from pathlib import Path
 from typing import Dict, Iterator, List, NamedTuple, Tuple, Type
@@ -613,11 +612,7 @@ class Cast2022TopicsHandler(CastTopicsHandler):
             records = []
             nodes: Dict[str, ConversationTreeNode] = {}
 
-            for (
-                query
-            ) in (
-                self.dataset.dataset.queries_iter()
-            ):  # type: _irds.trec_cast.Cast2022Query
+            for query in self.dataset.dataset.queries_iter():  # type: _irds.trec_cast.Cast2022Query
                 parent = nodes[query.parent_id] if query.parent_id else None
 
                 if query.participant == "User":

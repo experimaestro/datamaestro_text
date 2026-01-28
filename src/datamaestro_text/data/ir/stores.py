@@ -82,7 +82,7 @@ class IKatClueWeb22DocumentStore(LZ4DocumentStore):
 
                 file_checksum = hasher.hexdigest()
                 assert file_checksum == checksum, (
-                    f"Expected {checksum}, " f"got {file_checksum} for {filename}"
+                    f"Expected {checksum}, got {file_checksum} for {filename}"
                 )
 
             # Get the MD5 hashes of all the passages

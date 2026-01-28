@@ -6,7 +6,7 @@ from functools import cached_property
 import logging
 from pathlib import Path
 from attrs import define
-from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type, TYPE_CHECKING
+from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
 import random
 from experimaestro import Config
 from datamaestro.definitions import datatasks, Param, Meta

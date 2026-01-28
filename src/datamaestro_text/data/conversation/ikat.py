@@ -5,7 +5,6 @@ import logging
 from datamaestro.data import File
 from datamaestro.record import Record
 
-from datamaestro_text.data.ir import Topics
 from datamaestro_text.data.ir.base import (
     IDItem,
     SimpleTextItem,

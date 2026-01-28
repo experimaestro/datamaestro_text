@@ -1,4 +1,4 @@
-from datamaestro.data import Base, File
+from datamaestro.data import File
 from datamaestro.definitions import (
     datatasks,
     datatags,

@@ -20,6 +20,7 @@ class WordEmbeddings(Base):
 
 class WordEmbeddingsText(WordEmbeddings, File):
     """Word embeddings as a text word / values"""
+
     encoding: Meta[str] = "utf-8"
 
     def load(self):

@@ -2,7 +2,6 @@ import logging
 import gzip
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Type
 from experimaestro import Config, Task, Param, Annotated, pathgenerator, Option, tqdm
 import numpy as np
 from datamaestro.record import RecordType
@@ -131,22 +130,22 @@ class ShuffledTrainingTripletsLines(Task):
 
     def __validate__(self):
         if self.topic_ids:
-            assert self.data.topic_recordtype.has(
-                ir.IDItem
-            ), f"No topic ID in the source data ({self.data.topic_recordtype})"
+            assert self.data.topic_recordtype.has(ir.IDItem), (
+                f"No topic ID in the source data ({self.data.topic_recordtype})"
+            )
         else:
-            assert self.data.topic_recordtype.has(
-                ir.TextItem
-            ), f"No topic text in the source data ({self.data.topic_recordtype})"
+            assert self.data.topic_recordtype.has(ir.TextItem), (
+                f"No topic text in the source data ({self.data.topic_recordtype})"
+            )
 
         if self.doc_ids:
-            assert self.data.document_recordtype.has(
-                ir.IDItem
-            ), "No doc ID in the source data"
+            assert self.data.document_recordtype.has(ir.IDItem), (
+                "No doc ID in the source data"
+            )
         else:
-            assert self.data.document_recordtype.has(
-                ir.TextItem
-            ), "No doc text in the source data"
+            assert self.data.document_recordtype.has(ir.TextItem), (
+                "No doc text in the source data"
+            )
 
     def task_outputs(self, dep):
         return dep(

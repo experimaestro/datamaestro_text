@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from datamaestro_text.data.ir.base import IDItem, SimpleTextItem
 from experimaestro import Param
-from typing import Dict, Generic, Iterator, List, Optional, Sequence, Tuple
+from typing import Dict, Iterator, List, Optional, Sequence, Tuple
 from attr import define
 from datamaestro.record import record_type
 from datamaestro.data import Base
 from datamaestro.record import Record, Item
 from datamaestro_text.data.ir import TopicRecord, Topics
-from datamaestro_text.utils.iter import FactoryIterable, LazyList, RangeView
+from datamaestro_text.utils.iter import FactoryIterable, LazyList
 
 # ---- Basic types
 

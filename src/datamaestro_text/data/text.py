@@ -14,6 +14,7 @@ class TrainingText(Supervised):
 
 class TextFolder(Folder):
     "A folder composed of texts"
+
     pass
 
 

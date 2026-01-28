@@ -1,5 +1,4 @@
-"""CORD-19 dataset
-"""
+"""CORD-19 dataset"""
 
 from datamaestro.annotations.agreement import useragreement
 from datamaestro.definitions import datatasks, dataset

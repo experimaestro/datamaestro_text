@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from attrs import define
 from typing import List
-from datamaestro.record import Record, Item, record_type
+from datamaestro.record import Record, Item
 
 
 TopicRecord = DocumentRecord = Record

@@ -5,7 +5,6 @@ GloVe is an unsupervised learning algorithm for obtaining vector representations
 """
 
 from datamaestro.definitions import dataset
-from datamaestro.data import Base, Generic
 from datamaestro.download import reference
 from datamaestro.download.archive import zipdownloader
 from datamaestro.download.single import filedownloader

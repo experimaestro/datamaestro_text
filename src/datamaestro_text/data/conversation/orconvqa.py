@@ -113,9 +113,9 @@ class OrConvQADataset(ConversationDataset, File):
                 if relevance > 0:
                     relevances[rank] = (entry.answer.answer_start, None)
 
-            assert (
-                len(relevances) <= 1
-            ), f"Too many relevance labels ({len(relevances)}) for {entry.query_id}"
+            assert len(relevances) <= 1, (
+                f"Too many relevance labels ({len(relevances)}) for {entry.query_id}"
+            )
 
             history.append(
                 Record(

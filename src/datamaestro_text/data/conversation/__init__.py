@@ -1,8 +1,8 @@
 from .base import (
-    AnswerEntry,
-    ConversationDataset,
-    ConversationHistory,
-    ConversationHistoryItem,
-    DecontextualizedItem,
-    EntryType,
+    AnswerEntry as AnswerEntry,
+    ConversationDataset as ConversationDataset,
+    ConversationHistory as ConversationHistory,
+    ConversationHistoryItem as ConversationHistoryItem,
+    DecontextualizedItem as DecontextualizedItem,
+    EntryType as EntryType,
 )

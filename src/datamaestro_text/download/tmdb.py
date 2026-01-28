@@ -10,7 +10,6 @@ from collections import namedtuple
 
 from datamaestro.download import Download
 from datamaestro.definitions import AbstractDataset
-from datamaestro.utils import TemporaryDirectory
 
 APIKEY_KEY = "org.themoviedb.apikey"
 
