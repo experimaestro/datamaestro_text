@@ -1,20 +1,45 @@
-IR Datasets
-===========
+IR-Datasets Integration
+=======================
 
-XPMIR provides an interface to the `IR Datasets <https://ir-datasets.com/>`_ library.
-The list below is provided as a reference, but might not be up-to-date if your
-version of `ir-datasets` is more ancient or newer than the one used at generation time.
+Datamaestro-text provides an interface to the `ir-datasets <https://ir-datasets.com/>`_
+library, giving access to hundreds of IR benchmarks through a unified API.
 
-Data types
+Install ir-datasets:
+
+.. code-block:: bash
+
+   pip install ir-datasets
+
+Usage:
+
+.. code-block:: python
+
+   from datamaestro import prepare_dataset
+
+   # Load any ir-datasets collection via the irds namespace
+   dataset = prepare_dataset("irds.msmarco-passage")
+
+   # Same API as native datasets
+   for doc in dataset.documents.iter_documents():
+       print(doc)
+
+The list below is auto-generated and may not reflect the exact version
+of ir-datasets installed on your system.
+
+
+Data Types
 ----------
+
+These wrapper types provide the datamaestro interface for ir-datasets data:
 
 .. autoxpmconfig:: datamaestro_text.datasets.irds.data.Topics
 .. autoxpmconfig:: datamaestro_text.datasets.irds.data.Documents
 .. autoxpmconfig:: datamaestro_text.datasets.irds.data.AdhocAssessments
-.. autoxpmconfig:: datamaestro_text.datasets.irds.data.LZ4DocumentStore
+
+See also :class:`~datamaestro_text.datasets.irds.data.LZ4DocumentStore` in the :doc:`/api/ir` section.
 
 
-List of datasets
-----------------
+Available Datasets
+------------------
 
 .. dm:repository:: irds

@@ -35,10 +35,13 @@ extensions = [
     "datamaestro.sphinx",
     "sphinx_rtd_theme",
     "sphinx.ext.autosummary",
+    "sphinx.ext.autodoc",
     # Link to other documentations
     "sphinx.ext.intersphinx",
     # Google style docstrings
     "sphinx.ext.napoleon",
+    # Automatically link code in code blocks to API docs
+    "sphinx_codeautolink",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -81,3 +84,10 @@ intersphinx_mapping = {
 autodoc_default_options = {
     "show-inheritance": True,
 }
+
+# sphinx-codeautolink configuration
+codeautolink_autodoc_inject = False
+codeautolink_global_preface = """
+from datamaestro import prepare_dataset
+from datamaestro.record import IDItem, TextItem
+"""

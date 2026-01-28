@@ -2,4 +2,5 @@ sphinx>=6
 myst-parser>=0.18.0
 datamaestro>=0.8.5
 sphinx-toolbox
-sphinx-rtd-theme==1.2.2
+sphinx-rtd-theme
+sphinx-codeautolink>=0.15.0

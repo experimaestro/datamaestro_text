@@ -2,22 +2,19 @@
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
-# Required
 version: 2
+
+build:
+  os: "ubuntu-22.04"
+  tools:
+    python: "3.11"
 
 sphinx:
   configuration: docs/source/conf.py
 
-build:
-  os: ubuntu-20.04
-  tools:
-    python: "3.10"
-
-
-# Install the package
 python:
   install:
     - method: pip
       path: .
-    - requirements: docs/requirements.txt
-    - requirements: requirements.txt
+      extra_requirements:
+        - docs

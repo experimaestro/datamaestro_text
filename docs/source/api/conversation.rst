@@ -1,30 +1,37 @@
 Conversation API
 ================
 
-.. currentmodule:: datamaestro_text.data.conversation
+This module provides data types for conversational information retrieval
+and query understanding tasks.
 
-Data classes
-------------
+.. currentmodule:: datamaestro_text.data.conversation.base
 
-.. autoclass:: Entry
-    :members:
 
-.. autoclass:: DecontextualizedDictEntry
-    :members:
+Core Data Classes
+-----------------
+
+Entry types for conversation turns:
 
 .. autoclass:: AnswerEntry
-    :members:
+   :members:
 
 .. autoclass:: RetrievedEntry
-    :members:
+   :members:
 
 .. autoclass:: ClarifyingQuestionEntry
-    :members:
+   :members:
 
+.. autoclass:: DecontextualizedItem
+   :members:
 
-.. autoclass:: Conversation
+Conversation structures:
 
-.. autoclass:: ConversationTopic
+.. autoclass:: ConversationHistory
+   :members:
+
+.. autoclass:: ConversationHistoryItem
+   :members:
+
 
 Conversational IR
 -----------------
@@ -32,46 +39,33 @@ Conversational IR
 .. autoxpmconfig:: datamaestro_text.data.conversation.base.ConversationUserTopics
 
 
-Contextual query reformulation
+Contextual Query Reformulation
 ------------------------------
+
+Base class for conversation datasets:
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.base.ConversationDataset
 
-.. autoclass:: ContextualizedRewrittenQuery
-    :members:
 
 CANARD Dataset
+~~~~~~~~~~~~~~
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.canard.CanardDataset
-    :members: iter
+
 
 OrConvQA Dataset
+~~~~~~~~~~~~~~~~
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.orconvqa.OrConvQADataset
-    :members: iter
 
-.. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetAnswer
-    :members:
-
-.. autoclass:: datamaestro_text.data.conversation.orconvqa.OrConvQADatasetHistoryEntry
-    :members:
 
 QReCC Dataset
-
-.. autoclass:: datamaestro_text.data.conversation.qrecc.QReCCDatasetEntry
-    :members:
+~~~~~~~~~~~~~
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.qrecc.QReCCDataset
-    :members: iter
 
 
 iKAT Dataset
-
-.. autoclass:: datamaestro_text.data.conversation.ikat.IkatConversationTopic
-    :members:
-
-.. autoclass:: datamaestro_text.data.conversation.ikat.IkatConversationEntry
-    :members:
+~~~~~~~~~~~~
 
 .. autoxpmconfig:: datamaestro_text.data.conversation.ikat.IkatConversations
-    :members: iter
