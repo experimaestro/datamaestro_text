@@ -5,8 +5,17 @@ from datamaestro.definitions import (
     dataset,
     metadataset,
 )
-from datamaestro.download.archive import zipdownloader
+from datamaestro.download.archive import ZipDownloader
 from datamaestro_text.data.text import TrainingText
+
+
+def _wikitext(data, type):
+    """Helper to build a TrainingText from data path and type."""
+    return TrainingText.C(
+        train=File.C(path=data / ("wiki.train.%s" % type)),
+        validation=File.C(path=data / ("wiki.valid.%s" % type)),
+        test=File.C(path=data / ("wiki.test.%s" % type)),
+    )
 
 
 @datatags("text")
@@ -29,44 +38,56 @@ def WikiText(data, type):
 
     https://blog.einstein.ai/the-wikitext-long-term-dependency-language-modeling-dataset/
     """
-    return {
-        "train": File.C(path=data / ("wiki.train.%s" % type)),
-        "validation": File.C(path=data / ("wiki.valid.%s" % type)),
-        "test": File.C(path=data / ("wiki.test.%s" % type)),
-    }
+    return _wikitext(data, type)
 
 
-@zipdownloader(
-    "data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip"
-)
 @dataset(WikiText, id="2.tokens")
-def wikitext_2_words(data):
+class Wikitext2Words(TrainingText):
     """The small wikitext corpus, already tokenized"""
-    return WikiText(data, "tokens")
+
+    DATA = ZipDownloader(
+        "data",
+        "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip",
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return _wikitext(cls.DATA.path, "tokens")
 
 
-@zipdownloader(
-    "data",
-    "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-raw-v1.zip",
-)
 @dataset(WikiText, id="2.raw")
-def wikitext_2_raw(data):
+class Wikitext2Raw(TrainingText):
     """The small wikitext corpus (raw data)"""
-    return WikiText(data, "raw")
+
+    DATA = ZipDownloader(
+        "data",
+        "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-raw-v1.zip",
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return _wikitext(cls.DATA.path, "raw")
 
 
-@zipdownloader(
-    "data", "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip"
-)
 @dataset(WikiText, id="103.tokens")
-def wikitext_103_words(data):
-    return WikiText(data, "tokens")
+class Wikitext103Words(TrainingText):
+    DATA = ZipDownloader(
+        "data",
+        "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip",
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return _wikitext(cls.DATA.path, "tokens")
 
 
-@zipdownloader(
-    "data",
-    "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-raw-v1.zip",
-)
 @dataset(WikiText, id="103.raw")
-def wikitext_103_raw(data):
-    return WikiText(data, "raw")
+class Wikitext103Raw(TrainingText):
+    DATA = ZipDownloader(
+        "data",
+        "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-raw-v1.zip",
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return _wikitext(cls.DATA.path, "raw")

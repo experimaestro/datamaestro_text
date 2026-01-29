@@ -6,7 +6,7 @@ from pathlib import Path
 from datamaestro.definitions import datatasks, datatags, dataset
 from datamaestro.data.ml import Supervised
 from datamaestro.download import reference
-from datamaestro.download.archive import zipdownloader
+from datamaestro.download.archive import ZipDownloader
 from datamaestro.download.wayback import wayback_documents
 from datamaestro.utils import HashCheck
 from datamaestro_text.data.conversation.qrecc import QReCCDataset
@@ -19,17 +19,12 @@ from datamaestro_text.datasets.irds.helpers import lz4docstore_builder
 
 @datatags("conversation", "context", "query")
 @datatasks("query rewriting")
-@zipdownloader(
-    "data",
-    "https://github.com/apple/ml-qrecc/raw/main/dataset/qrecc_data.zip",
-    checker=HashCheck("f88fcc7ef3678cd6312080389c8abd67"),
-)
 @dataset(
     url="https://github.com/apple/ml-qrecc",
     doi="https://doi.org/10.48550/arXiv.2010.04898",
     id="",
 )
-def main(data: Path) -> Supervised[QReCCDataset, None, QReCCDataset]:
+class Main(Supervised):
     """Open-Domain Question Answering Goes Conversational via Question Rewriting
 
     We introduce QReCC (Question Rewriting in Conversational Context), an
@@ -39,10 +34,19 @@ def main(data: Path) -> Supervised[QReCCDataset, None, QReCCDataset]:
     answering that includes the individual subtasks of question rewriting,
     passage retrieval and reading comprehension
     """
-    return Supervised.C(
-        train=QReCCDataset.C(path=data / "qrecc_train.json"),
-        test=QReCCDataset.C(path=data / "qrecc_test.json"),
+
+    DATA = ZipDownloader(
+        "data",
+        "https://github.com/apple/ml-qrecc/raw/main/dataset/qrecc_data.zip",
+        checker=HashCheck("f88fcc7ef3678cd6312080389c8abd67"),
     )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return Supervised.C(
+            train=QReCCDataset.C(path=cls.DATA.path / "qrecc_train.json"),
+            test=QReCCDataset.C(path=cls.DATA.path / "qrecc_test.json"),
+        )
 
 
 @dataset(
@@ -54,7 +58,7 @@ class Content(LZ4JSONLDocumentStore):
 
     @staticmethod
     def __create_dataset__(dataset, options=None):
-        ds = reference(reference=main).setup(dataset, options)
+        ds = reference(reference=Main).setup(dataset, options)
         documents_path = wayback_documents(
             "20191127", lambda: Content._urls(ds), name="wayback.jsonl"
         ).setup(dataset, options)

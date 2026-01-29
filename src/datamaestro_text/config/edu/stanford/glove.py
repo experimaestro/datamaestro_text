@@ -6,8 +6,8 @@ GloVe is an unsupervised learning algorithm for obtaining vector representations
 
 from datamaestro.definitions import dataset
 from datamaestro.download import reference
-from datamaestro.download.archive import zipdownloader
-from datamaestro.download.single import filedownloader
+from datamaestro.download.archive import ZipDownloader
+from datamaestro.download.single import FileDownloader
 from datamaestro_text.data.embeddings import WordEmbeddingsText
 
 
@@ -16,65 +16,99 @@ from datamaestro_text.data.embeddings import WordEmbeddingsText
 #   tokens: 6G
 #   vocabulary: 400K
 #   cased: false
-@zipdownloader("embeddings", "http://nlp.stanford.edu/data/glove.6B.zip")
-@dataset(WordEmbeddingsText, id="6b")
-def glove_6b(embeddings):
+@dataset(id="6b")
+class Glove6B(WordEmbeddingsText):
     """Embeddings for 6B words in various dimensions"""
-    return {"path": embeddings}
+
+    EMBEDDINGS = ZipDownloader(
+        "embeddings", "http://nlp.stanford.edu/data/glove.6B.zip"
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.EMBEDDINGS.path)
 
 
-@reference("data_6b", glove_6b)
-@dataset(WordEmbeddingsText, id="6b.50")
-def glove_6b_50(data_6b):
+@dataset(id="6b.50")
+class Glove6B50(WordEmbeddingsText):
     """Glove 6B - dimension 50"""
-    return {"path": data_6b.path / "glove.6B.50d.txt"}
+
+    DATA_6B = reference(varname="data_6b", reference=Glove6B)
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DATA_6B.prepare().path / "glove.6B.50d.txt")
 
 
-@reference("data_6b", glove_6b)
-@dataset(WordEmbeddingsText, id="6b.100")
-def glove_6b_100(data_6b):
+@dataset(id="6b.100")
+class Glove6B100(WordEmbeddingsText):
     """Glove 6B - dimension 100"""
-    return {"path": data_6b.path / "glove.6B.100d.txt"}
+
+    DATA_6B = reference(varname="data_6b", reference=Glove6B)
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DATA_6B.prepare().path / "glove.6B.100d.txt")
 
 
-@reference("data_6b", glove_6b)
-@dataset(WordEmbeddingsText, id="6b.200")
-def glove_6b_200(data_6b):
+@dataset(id="6b.200")
+class Glove6B200(WordEmbeddingsText):
     """Glove 6B - dimension 200"""
-    return {"path": data_6b.path / "glove.6B.200d.txt"}
+
+    DATA_6B = reference(varname="data_6b", reference=Glove6B)
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DATA_6B.prepare().path / "glove.6B.200d.txt")
 
 
 ...
 
 
-@reference("data_6b", glove_6b)
-@dataset(WordEmbeddingsText, id="6b.300")
-def glove_6b_300(data_6b):
+@dataset(id="6b.300")
+class Glove6B300(WordEmbeddingsText):
     """Glove 6B - dimension 200"""
-    return {"path": data_6b.path / "glove.6B.200d.txt"}
+
+    DATA_6B = reference(varname="data_6b", reference=Glove6B)
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DATA_6B.prepare().path / "glove.6B.200d.txt")
 
 
-@filedownloader("embeddings", "http://nlp.stanford.edu/data/glove.42B.300d.zip")
-@dataset(WordEmbeddingsText, id="42b")
+@dataset(id="42b")
 # size: 2.03G
 # statistics:
 #   cased: true
 #   tokens: 42B
 #   vocabulary: 2.2M
 #   dimension: 300
-def glove_42b(embeddings):
+class Glove42B(WordEmbeddingsText):
     """Glove embeddings trained on Common Crawl with 42B tokens"""
-    return {"path": embeddings}
+
+    EMBEDDINGS = FileDownloader(
+        "embeddings", "http://nlp.stanford.edu/data/glove.42B.300d.zip"
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.EMBEDDINGS.path)
 
 
-@filedownloader("embeddings", "http://nlp.stanford.edu/data/glove.840B.300d.zip")
-@dataset(WordEmbeddingsText, id="840b")
+@dataset(id="840b")
 # size: 2.03G
 # statistics:
 #   cased: true
 #   tokens: 840G
 #   vocabulary: 2.2M
 #   dimension: 300
-def glove_840b(embeddings):
+class Glove840B(WordEmbeddingsText):
     """Glove embeddings trained on Common Crawl with 840B tokens"""
-    return {"path": embeddings}
+
+    EMBEDDINGS = FileDownloader(
+        "embeddings", "http://nlp.stanford.edu/data/glove.840B.300d.zip"
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.EMBEDDINGS.path)

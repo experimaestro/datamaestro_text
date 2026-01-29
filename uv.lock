@@ -321,7 +321,7 @@ wheels = [
 
 [[package]]
 name = "datamaestro"
-version = "1.6.2"
+version = "1.7.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bitmath" },
@@ -339,9 +339,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/68/1f/6fe327078e93e03c6d37eb7ba15802caff8d4201a0f78c08aee555cc3792/datamaestro-1.6.2.tar.gz", hash = "sha256:0459d4188c79cfc5388595b232d63a666d6e7b552777fda8cc5df37bfa07deaf", size = 129289, upload-time = "2026-01-01T12:29:10.362Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/91/af/a48819311b2fcf1f67ff4c6943e0097881006c92d27d851d7e4ebcdb36ca/datamaestro-1.7.2.tar.gz", hash = "sha256:5f43c3f282e0971db1fcdf51e8666e9c14212f9d31d2317c727a1ea6bdb24ce9", size = 189519, upload-time = "2026-01-29T14:16:15.246Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/35/5d/cfe3b4df03e17d363828e6a45e61ed9497bc1c97a573b4d397aabfd46c11/datamaestro-1.6.2-py3-none-any.whl", hash = "sha256:8142c15b7e9a2fbc575766a57f0ae61219aaefceefbf01a78504a2fbb9ad7084", size = 62872, upload-time = "2026-01-01T12:29:08.611Z" },
+    { url = "https://files.pythonhosted.org/packages/23/6f/592beb06f7a67abd152e35dbe99c1d68f7c1be2f87355231ca8646558960/datamaestro-1.7.2-py3-none-any.whl", hash = "sha256:71ed7965935baa2c32f88cf6b960b362444682442a8a004db7d8820ba707e314", size = 84265, upload-time = "2026-01-29T14:16:14.146Z" },
 ]
 
 [[package]]
@@ -352,14 +352,6 @@ dependencies = [
     { name = "datamaestro" },
     { name = "experimaestro" },
     { name = "ir-datasets" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "docutils" },
-    { name = "pytest" },
-    { name = "sphinx" },
-    { name = "sphobjinv" },
 ]
 
 [package.dev-dependencies]
@@ -384,15 +376,10 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "attrs" },
-    { name = "datamaestro", specifier = ">=1.6.2" },
-    { name = "docutils", marker = "extra == 'dev'" },
+    { name = "datamaestro", specifier = ">=1.7.2" },
     { name = "experimaestro" },
     { name = "ir-datasets", specifier = ">=0.5.8" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "sphinx", marker = "extra == 'dev'", specifier = "<8" },
-    { name = "sphobjinv", marker = "extra == 'dev'" },
 ]
-provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -407,7 +394,7 @@ docs = [
     { name = "datamaestro", specifier = ">=0.8.5" },
     { name = "experimaestro", specifier = ">=2.0.0b29" },
     { name = "myst-parser", specifier = ">=0.18.0" },
-    { name = "sphinx", specifier = ">=6" },
+    { name = "sphinx", specifier = ">=6,<8" },
     { name = "sphinx-codeautolink", specifier = ">=0.15.0" },
     { name = "sphinx-rtd-theme", specifier = ">=3.1.0" },
     { name = "sphinx-toolbox", specifier = ">=4.1.2" },

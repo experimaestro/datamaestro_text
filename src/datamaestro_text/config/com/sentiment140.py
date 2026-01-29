@@ -1,19 +1,14 @@
 from datamaestro.data.csv import Generic
 from datamaestro.definitions import datatasks, datatags, dataset
-from datamaestro.download.archive import zipdownloader
+from datamaestro.download.archive import ZipDownloader
 from datamaestro.data.ml import Supervised
 from datamaestro.utils import HashCheck
 
 
-@zipdownloader(
-    "dir",
-    "http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip",
-    checker=HashCheck("1647eb110dd2492512e27b9a70d5d1bc"),
-)
 @datatasks("sentiment analysis")
 @datatags("english", "sentiment", "text")
-@dataset(Supervised, url="http://help.sentiment140.com/for-students/", size="228M")
-def english(dir):
+@dataset(url="http://help.sentiment140.com/for-students/", size="228M")
+class English(Supervised):
     """Sentiment analysis dataset 140
 
     The data is a CSV with emoticons removed. Data file format has 6 fields:
@@ -26,7 +21,18 @@ def english(dir):
 
     If you use this data, please cite Sentiment140 as your source.
     """
-    return Supervised.C(
-        train=Generic.C(path=dir / "training.1600000.processed.noemoticon.csv"),
-        test=Generic.C(path=dir / "testdata.manual.2009.06.14.csv"),
+
+    DIR = ZipDownloader(
+        "dir",
+        "http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip",
+        checker=HashCheck("1647eb110dd2492512e27b9a70d5d1bc"),
     )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(
+            train=Generic.C(
+                path=cls.DIR.path / "training.1600000.processed.noemoticon.csv"
+            ),
+            test=Generic.C(path=cls.DIR.path / "testdata.manual.2009.06.14.csv"),
+        )

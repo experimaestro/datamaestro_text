@@ -1,20 +1,24 @@
 from datamaestro.definitions import dataset
-from datamaestro.download.single import filedownloader
+from datamaestro.download.single import FileDownloader
 from datamaestro_text.data.text import TextFile
 from datamaestro.utils import HashCheck
 
 
-@filedownloader(
-    "file",
-    "https://oscar-public.huma-num.fr/shuffled/en_dedup.txt.gz",
-    checker=HashCheck("5c906ede3c5265f8934b62c275a754bc"),
-)
-@dataset(TextFile, url="https://oscar-corpus.com/", size="2.3T")
-def english(file):
+@dataset(url="https://oscar-corpus.com/", size="2.3T")
+class English(TextFile):
     """Huge French corpus from INRIA
 
     OSCAR or Open Super-large Crawled ALMAnaCH coRpus is a huge multilingual corpus
     obtained by language classification and filtering of the Common Crawl corpus using
     the goclassy architecture.
     """
-    return {"path": file}
+
+    FILE = FileDownloader(
+        "file",
+        "https://oscar-public.huma-num.fr/shuffled/en_dedup.txt.gz",
+        checker=HashCheck("5c906ede3c5265f8934b62c275a754bc"),
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.FILE.path)

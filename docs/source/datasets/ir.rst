@@ -39,6 +39,23 @@ Example usage:
        neg_doc = triplet.negative
 
 
+TIPSTER Collections
+-------------------
+
+The TIPSTER document collections used in TREC evaluations, organized by source.
+
+.. dm:datasets:: gov.nist.trec.tipster text
+
+
+AQUAINT
+-------
+
+The AQUAINT Corpus consists of newswire text data in English from three sources:
+Xinhua News Service, New York Times, and Associated Press.
+
+.. dm:datasets:: edu.upenn.ldc.aquaint text
+
+
 TREC Ad Hoc
 -----------
 

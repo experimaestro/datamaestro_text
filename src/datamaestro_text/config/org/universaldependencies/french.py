@@ -1,7 +1,8 @@
 from datamaestro.definitions import dataset
 from datamaestro.data.ml import Supervised
 from datamaestro_text.data.tagging import CoNLL_U
-from datamaestro.download.archive import zipdownloader
+from datamaestro.download.archive import ZipDownloader
+
 
 # --- gsd
 
@@ -22,22 +23,27 @@ from datamaestro.download.archive import zipdownloader
 #     path: fr_gsd-ud-test.conllu
 
 
-@zipdownloader(
-    "ds", "https://codeload.github.com/UniversalDependencies/UD_French-GSD/zip/master"
-)
 @dataset(url="https://github.com/UniversalDependencies/UD_French-GSD")
-def gsd(ds) -> Supervised:
+class Gsd(Supervised):
     """French GSD
 
     The UD_French-GSD was converted in 2015 from the content head version of the
     universal dependency treebank v2.0 (https://github.com/ryanmcd/uni-dep-tb). It
     is updated since 2015 independently from the previous source.
     """
-    return {
-        "train": CoNLL_U.C(path=ds / "fr_gsd-ud-train.conllu"),
-        "test": CoNLL_U.C(path=ds / "fr_gsd-ud-dev.conllu"),
-        "validation": CoNLL_U.C(path=ds / "fr_gsd-ud-test.conllu"),
-    }
+
+    DS = ZipDownloader(
+        "ds",
+        "https://codeload.github.com/UniversalDependencies/UD_French-GSD/zip/master",
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(
+            train=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-train.conllu"),
+            test=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-dev.conllu"),
+            validation=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-test.conllu"),
+        )
 
 
 # --- partut

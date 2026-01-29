@@ -9,29 +9,51 @@ from datamaestro_text.data.ir.trec import TipsterCollection
 URL = "https://catalog.ldc.upenn.edu/LDC2002T31"
 
 
-@linkfolder("documents", [DatafolderPath("edu.upenn.ldc.aquaint", "APW")])
-@dataset(TipsterCollection, url=URL, id="apw")
-def apw(documents):
+@dataset(url=URL, id="apw")
+class Apw(TipsterCollection):
     """Associated Press (1998-2000)"""
-    return {"path": documents}
+
+    DOCUMENTS = linkfolder(
+        "documents", [DatafolderPath("edu.upenn.ldc.aquaint", "APW")]
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DOCUMENTS.path)
 
 
-@linkfolder("documents", [DatafolderPath("edu.upenn.ldc.aquaint", "NYT")])
-@dataset(TipsterCollection, url=URL, id="nyt")
-def nyt(documents):
+@dataset(url=URL, id="nyt")
+class Nyt(TipsterCollection):
     """New York Times (1998-2000)"""
-    return {"path": documents}
+
+    DOCUMENTS = linkfolder(
+        "documents", [DatafolderPath("edu.upenn.ldc.aquaint", "NYT")]
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DOCUMENTS.path)
 
 
-@linkfolder("documents", [DatafolderPath("edu.upenn.ldc.aquaint", "XIE")])
-@dataset(TipsterCollection, url=URL, id="xie")
-def xie(documents):
+@dataset(url=URL, id="xie")
+class Xie(TipsterCollection):
     """Xinhua News Agency newswires (1996-2000)"""
-    return {"path": documents}
+
+    DOCUMENTS = linkfolder(
+        "documents", [DatafolderPath("edu.upenn.ldc.aquaint", "XIE")]
+    )
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DOCUMENTS.path)
 
 
-@links("documents", apw=apw.path, nyt=nyt.path, xie=xie.path)
-@dataset(TipsterCollection, url=URL, id="")
-def aquaint(documents):
+@dataset(url=URL, id="")
+class Aquaint(TipsterCollection):
     """Aquaint documents"""
-    return {"path": documents}
+
+    DOCUMENTS = links("documents", apw=Apw, nyt=Nyt, xie=Xie)
+
+    @classmethod
+    def __create_dataset__(cls, dataset):
+        return cls.C(path=cls.DOCUMENTS.path)
