@@ -1,7 +1,7 @@
 """CORD-19 dataset"""
 
 from datamaestro.annotations.agreement import useragreement
-from datamaestro.definitions import datatasks, dataset
+from datamaestro.definitions import Dataset, datatasks, dataset
 from datamaestro.download import reference
 from datamaestro.download.single import FileDownloader
 from datamaestro.utils import HashCheck
@@ -37,7 +37,7 @@ sources, all of which are hereby incorporated by reference""",
 @dataset(
     url="https://ir.nist.gov/covidSubmit/index.html",
 )
-class Cord19Round5Metadata(d_cord19.Documents):
+class Cord19Round5Metadata(Dataset):
     """Cord 19 metadata (round 5)
 
     Released on 2020-07-16
@@ -49,10 +49,9 @@ class Cord19Round5Metadata(d_cord19.Documents):
         checker=HashCheck("80d664e496b8b7e50a39c6f6bb92e0ef"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            path=cls.DATA.path,
+    def config(self) -> d_cord19.Documents:
+        return d_cord19.Documents.C(
+            path=self.DATA.path,
             names_row=0,
             # Number of documents
             count=192509,
@@ -60,7 +59,7 @@ class Cord19Round5Metadata(d_cord19.Documents):
 
 
 @dataset()
-class Cord19Round5Topics(d_cord19.Topics):
+class Cord19Round5Topics(Dataset):
     """CORD-19 topics (round 5)"""
 
     DATA = FileDownloader(
@@ -69,13 +68,12 @@ class Cord19Round5Topics(d_cord19.Topics):
         checker=HashCheck("0307a37b6b9f1a5f233340a769d538ea"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DATA.path)
+    def config(self) -> d_cord19.Topics:
+        return d_cord19.Topics.C(path=self.DATA.path)
 
 
 @dataset()
-class Cord19Round5Assessments(TrecAdhocAssessments):
+class Cord19Round5Assessments(Dataset):
     """CORD19 assessments (round 5)"""
 
     DATA = FileDownloader(
@@ -84,14 +82,13 @@ class Cord19Round5Assessments(TrecAdhocAssessments):
         checker=HashCheck("8138424a59daea0aba751c8a891e5f54"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DATA.path)
+    def config(self) -> TrecAdhocAssessments:
+        return TrecAdhocAssessments.C(path=self.DATA.path)
 
 
 @datatasks("information retrieval", "passage retrieval")
 @dataset(url="https://ir.nist.gov/covidSubmit/data.html")
-class Cord19Round5(Adhoc):
+class Cord19Round5(Dataset):
     """CORD-19 IR collection (round 5)
 
     This is the primary test collection for ad hoc retrieval that is the outcome of all five rounds of TREC-COVID. The test set, called TREC-COVID Complete, consists of the Round 5 document set (July 16 release of CORD-19); the final set of 50 topics; and the cumulative judgments from all assessing rounds with CORD-UIDs mapped to July 16 ids if necessary, previously judged documents no longer in the July 16 release removed, and the last judgments for documents judged multiple times due to significant content changes between rounds. Note that no TREC-COVID submissions correspond to this collection since all TREC-COVID submissions were subject to residual collection evaluation.
@@ -101,10 +98,9 @@ class Cord19Round5(Adhoc):
     TOPICS = reference(varname="topics", reference=Cord19Round5Topics)
     QRELS = reference(varname="qrels", reference=Cord19Round5Assessments)
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            documents=cls.COLLECTION.prepare(),
-            topics=cls.TOPICS.prepare(),
-            assessments=cls.QRELS.prepare(),
+    def config(self) -> Adhoc:
+        return Adhoc.C(
+            documents=self.COLLECTION.prepare(),
+            topics=self.TOPICS.prepare(),
+            assessments=self.QRELS.prepare(),
         )

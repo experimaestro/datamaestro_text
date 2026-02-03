@@ -1,4 +1,4 @@
-from datamaestro.definitions import dataset
+from datamaestro.definitions import Dataset, dataset
 from datamaestro.data.ml import Supervised
 from datamaestro_text.data.tagging import CoNLL_U
 from datamaestro.download.archive import ZipDownloader
@@ -24,7 +24,7 @@ from datamaestro.download.archive import ZipDownloader
 
 
 @dataset(url="https://github.com/UniversalDependencies/UD_French-GSD")
-class Gsd(Supervised):
+class Gsd(Dataset):
     """French GSD
 
     The UD_French-GSD was converted in 2015 from the content head version of the
@@ -37,12 +37,11 @@ class Gsd(Supervised):
         "https://codeload.github.com/UniversalDependencies/UD_French-GSD/zip/master",
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            train=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-train.conllu"),
-            test=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-dev.conllu"),
-            validation=CoNLL_U.C(path=cls.DS.path / "fr_gsd-ud-test.conllu"),
+    def config(self) -> Supervised:
+        return Supervised.C(
+            train=CoNLL_U.C(path=self.DS.path / "fr_gsd-ud-train.conllu"),
+            test=CoNLL_U.C(path=self.DS.path / "fr_gsd-ud-dev.conllu"),
+            validation=CoNLL_U.C(path=self.DS.path / "fr_gsd-ud-test.conllu"),
         )
 
 

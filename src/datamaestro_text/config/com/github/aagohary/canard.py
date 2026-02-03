@@ -1,4 +1,4 @@
-from datamaestro.definitions import datatasks, datatags, dataset
+from datamaestro.definitions import Dataset, datatasks, datatags, dataset
 from datamaestro.download.single import FileDownloader
 from datamaestro.utils import HashCheck
 
@@ -9,7 +9,7 @@ from datamaestro_text.data.conversation.canard import CanardDataset
 @datatags("conversation", "context", "query")
 @datatasks("query rewriting")
 @dataset(url="https://sites.google.com/view/qanta/projects/canard", id="")
-class Main(Supervised):
+class Main(Dataset):
     """Question-in-context rewriting
 
     CANARD is a dataset for question-in-context rewriting that consists of
@@ -38,10 +38,9 @@ class Main(Supervised):
         checker=HashCheck("3fc14d0078e7a5056f5da571728f024e"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            train=CanardDataset.C(path=cls.TRAIN.path),
-            validation=CanardDataset.C(path=cls.DEV.path),
-            test=CanardDataset.C(path=cls.TEST.path),
+    def config(self) -> Supervised:
+        return Supervised.C(
+            train=CanardDataset.C(path=self.TRAIN.path),
+            validation=CanardDataset.C(path=self.DEV.path),
+            test=CanardDataset.C(path=self.TEST.path),
         )

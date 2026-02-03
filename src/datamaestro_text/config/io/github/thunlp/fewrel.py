@@ -2,7 +2,7 @@
 
 from datamaestro.data import File
 from datamaestro.data.ml import Supervised
-from datamaestro.definitions import datatasks, datatags, dataset
+from datamaestro.definitions import Dataset, datatasks, datatags, dataset
 from datamaestro.download.single import FileDownloader
 from datamaestro.utils import HashCheck
 
@@ -12,7 +12,7 @@ from datamaestro.utils import HashCheck
 @dataset(
     url="https://thunlp.github.io/1/fewrel1.html",
 )
-class V1(Supervised):
+class V1(Dataset):
     """FewRel 1.0 - a Few-shot Relation classification dataset
 
     FewRel is a Few-shot Relation classification dataset, which features 70, 000 natural
@@ -33,9 +33,8 @@ class V1(Supervised):
         checker=HashCheck("3f25573428c0332cb64b367a275ab0c7"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            train=File.C(path=cls.TRAIN.path),
-            validation=File.C(path=cls.VALIDATION.path),
+    def config(self) -> Supervised:
+        return Supervised.C(
+            train=File.C(path=self.TRAIN.path),
+            validation=File.C(path=self.VALIDATION.path),
         )

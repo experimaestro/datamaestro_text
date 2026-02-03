@@ -20,6 +20,7 @@ See also https://trec.nist.gov/data/docs_eng.html and https://trec.nist.gov/data
 from datamaestro_text.data.ir.trec import TipsterCollection
 from datamaestro.download.links import linkfolder
 from datamaestro.definitions import (
+    Dataset,
     dataset,
 )
 from datamaestro.context import DatafolderPath
@@ -29,282 +30,261 @@ TIPSTER = dataset(url="https://catalog.ldc.upenn.edu/LDC93T3A")
 
 
 @TIPSTER
-class Ap88(TipsterCollection):
+class Ap88(Dataset):
     """Associated Press document collection (1988)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/AP")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Ap89(TipsterCollection):
+class Ap89(Dataset):
     """Associated Press document collection (1989)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/AP")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Ap90(TipsterCollection):
+class Ap90(Dataset):
     """Associated Press document collection (1990)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk3/AP")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Doe1(TipsterCollection):
+class Doe1(Dataset):
     """Department of Energy documents"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/DOE")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 # --- Wall Street Journal (1987-92)
 
 
 @TIPSTER
-class Wsj87(TipsterCollection):
+class Wsj87(Dataset):
     """Wall Street Journal (1987)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/WSJ/1987")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Wsj88(TipsterCollection):
+class Wsj88(Dataset):
     """Wall Street Journal (1988)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/WSJ/1988")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Wsj89(TipsterCollection):
+class Wsj89(Dataset):
     """Wall Street Journal (1989)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/WSJ/1989")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Wsj90(TipsterCollection):
+class Wsj90(Dataset):
     """Wall Street Journal (1990)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/WSJ/1990")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Wsj91(TipsterCollection):
+class Wsj91(Dataset):
     """Wall Street Journal (1991)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/WSJ/1991")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Wsj92(TipsterCollection):
+class Wsj92(Dataset):
     """Wall Street Journal (1992)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/WSJ/1992")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 # --- Federal Register (1988-89)
 
 
 @TIPSTER
-class Fr88(TipsterCollection):
+class Fr88(Dataset):
     """Federal Register (1988)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/FR")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Fr89(TipsterCollection):
+class Fr89(Dataset):
     """Federal Register (1989)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/FR")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Fr94(TipsterCollection):
+class Fr94(Dataset):
     """Federal Register (1994)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk4/FR94")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 # # ZIFF (1988-92)
 
 
 @TIPSTER
-class Ziff1(TipsterCollection):
+class Ziff1(Dataset):
     """Information from the Computer Select disks (1989-90)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk1/ZIFF")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Ziff2(TipsterCollection):
+class Ziff2(Dataset):
     """Information from the Computer Select disks (1989-90)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk2/ZIFF")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Ziff3(TipsterCollection):
+class Ziff3(Dataset):
     """Information from the Computer Select disks (1990-91)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk3/ZIFF")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Sjm1(TipsterCollection):
+class Sjm1(Dataset):
     """San Jose Mercury News (1991)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk3/SJM")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Cr1(TipsterCollection):
+class Cr1(Dataset):
     """TODO"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk4/CR")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Ft1(TipsterCollection):
+class Ft1(Dataset):
     """Financial Times"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk4/FT")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class Fbis1(TipsterCollection):
+class Fbis1(Dataset):
     """Foreign Broadcast Information Service (1996)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk5/FBIS")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)
 
 
 @TIPSTER
-class La8990(TipsterCollection):
+class La8990(Dataset):
     """Los Angeles Times (1989-90)"""
 
     DOCUMENTS = linkfolder(
         "documents", [DatafolderPath("gov.nist.trec.tipster", "Disk5/LATIMES")]
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.DOCUMENTS.path)
+    def config(self) -> TipsterCollection:
+        return TipsterCollection.C(path=self.DOCUMENTS.path)

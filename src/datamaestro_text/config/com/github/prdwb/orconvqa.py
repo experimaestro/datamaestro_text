@@ -4,7 +4,7 @@ import gzip
 import json
 from pathlib import Path
 from typing import Iterator
-from datamaestro.definitions import datatasks, datatags, dataset
+from datamaestro.definitions import Dataset, datatasks, datatags, dataset
 from datamaestro.download.single import FileDownloader
 from datamaestro.utils import HashCheck
 
@@ -21,7 +21,7 @@ from datamaestro_text.datasets.irds.helpers import lz4docstore_downloader
 @dataset(
     url="https://github.com/prdwb/orconvqa-release",
 )
-class Preprocessed(Supervised):
+class Preprocessed(Dataset):
     """Open-Retrieval Conversational Question Answering datasets
 
     OrConvQA is an aggregation of three existing datasets:
@@ -49,12 +49,11 @@ class Preprocessed(Supervised):
         checker=HashCheck("0cf3a755f06297b9c02e7db45f8dc8be"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
-            train=OrConvQADataset.C(path=cls.TRAIN.path),
-            validation=OrConvQADataset.C(path=cls.DEV.path),
-            test=OrConvQADataset.C(path=cls.TEST.path),
+    def config(self) -> Supervised:
+        return Supervised.C(
+            train=OrConvQADataset.C(path=self.TRAIN.path),
+            validation=OrConvQADataset.C(path=self.DEV.path),
+            test=OrConvQADataset.C(path=self.TEST.path),
         )
 
 
@@ -69,7 +68,7 @@ def orConvQADocumentReader(source: Path) -> Iterator[OrConvQADocumentStore.NAMED
 @dataset(
     url="https://github.com/prdwb/orconvqa-release",
 )
-class Passages(OrConvQADocumentStore):
+class Passages(Dataset):
     """orConvQA wikipedia files
 
     OrConvQA is an aggregation of three existing datasets:
@@ -90,6 +89,5 @@ class Passages(OrConvQADocumentStore):
         count_hint=11_377_951,
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.ALL_BLOCKS.path, count=11_377_951)
+    def config(self) -> OrConvQADocumentStore:
+        return OrConvQADocumentStore.C(path=self.ALL_BLOCKS.path, count=11_377_951)

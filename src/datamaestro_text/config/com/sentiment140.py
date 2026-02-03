@@ -1,5 +1,5 @@
 from datamaestro.data.csv import Generic
-from datamaestro.definitions import datatasks, datatags, dataset
+from datamaestro.definitions import Dataset, datatasks, datatags, dataset
 from datamaestro.download.archive import ZipDownloader
 from datamaestro.data.ml import Supervised
 from datamaestro.utils import HashCheck
@@ -8,7 +8,7 @@ from datamaestro.utils import HashCheck
 @datatasks("sentiment analysis")
 @datatags("english", "sentiment", "text")
 @dataset(url="http://help.sentiment140.com/for-students/", size="228M")
-class English(Supervised):
+class English(Dataset):
     """Sentiment analysis dataset 140
 
     The data is a CSV with emoticons removed. Data file format has 6 fields:
@@ -28,11 +28,10 @@ class English(Supervised):
         checker=HashCheck("1647eb110dd2492512e27b9a70d5d1bc"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(
+    def config(self) -> Supervised:
+        return Supervised.C(
             train=Generic.C(
-                path=cls.DIR.path / "training.1600000.processed.noemoticon.csv"
+                path=self.DIR.path / "training.1600000.processed.noemoticon.csv"
             ),
-            test=Generic.C(path=cls.DIR.path / "testdata.manual.2009.06.14.csv"),
+            test=Generic.C(path=self.DIR.path / "testdata.manual.2009.06.14.csv"),
         )

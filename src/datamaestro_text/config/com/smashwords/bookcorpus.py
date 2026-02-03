@@ -1,6 +1,6 @@
 # See documentation on https://datamaestro.readthedocs.io
 
-from datamaestro.definitions import datatasks, datatags, dataset
+from datamaestro.definitions import Dataset, datatasks, datatags, dataset
 from datamaestro_text.data.text import TextFolder
 from datamaestro.download.archive import TarDownloader
 from datamaestro.utils import HashCheck
@@ -9,7 +9,7 @@ from datamaestro.utils import HashCheck
 @datatags("text", "books", "English")
 @datatasks("language modeling")
 @dataset(id="", url="https://yknzhu.wixsite.com/mbweb", size="4.3G")
-class Main(TextFolder):
+class Main(Dataset):
     """Unpublished books from Smashwords
 
     The books are concatened in two files hosted on huggingface NLP storage.
@@ -22,6 +22,5 @@ class Main(TextFolder):
         checker=HashCheck("5c906ede3c5265f8934b62c275a754bc"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FOLDER.path)
+    def config(self) -> TextFolder:
+        return TextFolder.C(path=self.FOLDER.path)

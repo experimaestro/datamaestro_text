@@ -1,5 +1,6 @@
 from datamaestro.data import File
 from datamaestro.definitions import (
+    Dataset,
     datatasks,
     datatags,
     dataset,
@@ -41,8 +42,8 @@ def WikiText(data, type):
     return _wikitext(data, type)
 
 
-@dataset(WikiText, id="2.tokens")
-class Wikitext2Words(TrainingText):
+@dataset(WikiText, id=".2.tokens")
+class Wikitext2Words(Dataset):
     """The small wikitext corpus, already tokenized"""
 
     DATA = ZipDownloader(
@@ -50,13 +51,12 @@ class Wikitext2Words(TrainingText):
         "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip",
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return _wikitext(cls.DATA.path, "tokens")
+    def config(self) -> TrainingText:
+        return _wikitext(self.DATA.path, "tokens")
 
 
-@dataset(WikiText, id="2.raw")
-class Wikitext2Raw(TrainingText):
+@dataset(WikiText, id=".2.raw")
+class Wikitext2Raw(Dataset):
     """The small wikitext corpus (raw data)"""
 
     DATA = ZipDownloader(
@@ -64,30 +64,27 @@ class Wikitext2Raw(TrainingText):
         "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-raw-v1.zip",
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return _wikitext(cls.DATA.path, "raw")
+    def config(self) -> TrainingText:
+        return _wikitext(self.DATA.path, "raw")
 
 
-@dataset(WikiText, id="103.tokens")
-class Wikitext103Words(TrainingText):
+@dataset(WikiText, id=".103.tokens")
+class Wikitext103Words(Dataset):
     DATA = ZipDownloader(
         "data",
         "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-v1.zip",
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return _wikitext(cls.DATA.path, "tokens")
+    def config(self) -> TrainingText:
+        return _wikitext(self.DATA.path, "tokens")
 
 
-@dataset(WikiText, id="103.raw")
-class Wikitext103Raw(TrainingText):
+@dataset(WikiText, id=".103.raw")
+class Wikitext103Raw(Dataset):
     DATA = ZipDownloader(
         "data",
         "https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-103-raw-v1.zip",
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return _wikitext(cls.DATA.path, "raw")
+    def config(self) -> TrainingText:
+        return _wikitext(self.DATA.path, "raw")

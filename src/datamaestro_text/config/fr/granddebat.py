@@ -1,6 +1,6 @@
 # See documentation on https://datamaestro.readthedocs.io
 
-from datamaestro.definitions import datatags, dataset
+from datamaestro.definitions import Dataset, datatags, dataset
 from datamaestro_text.data.debate import GrandDebatFile
 from datamaestro.download.single import FileDownloader
 from datamaestro.utils import HashCheck
@@ -49,7 +49,7 @@ class JsonToJsonl(Transform):
 @dataset(
     url="https://granddebat.fr",
 )
-class Transition(GrandDebatFile):
+class Transition(Dataset):
     """Grand Débat National (transition écologique)
 
     The *Grand Débat National* (GDN) is a country-wide citizen consultation held
@@ -71,16 +71,15 @@ class Transition(GrandDebatFile):
         transforms=JsonToJsonl(),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> GrandDebatFile:
+        return GrandDebatFile.C(path=self.FILE.path)
 
 
 @datatags("politics", "debate", "french")
 @dataset(
     url="https://granddebat.fr",
 )
-class Fiscalité(GrandDebatFile):
+class Fiscalité(Dataset):
     """Grand Débat National (fiscalité et dépenses publiques)
 
     The *Grand Débat National* (GDN) is a country-wide citizen consultation held
@@ -102,16 +101,15 @@ class Fiscalité(GrandDebatFile):
         transforms=JsonToJsonl(),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> GrandDebatFile:
+        return GrandDebatFile.C(path=self.FILE.path)
 
 
 @datatags("politics", "debate", "french")
 @dataset(
     url="https://granddebat.fr",
 )
-class Démocratie(GrandDebatFile):
+class Démocratie(Dataset):
     """Grand Débat National (démocratie et citoyenneté)
 
     The *Grand Débat National* (GDN) is a country-wide citizen consultation held
@@ -133,16 +131,15 @@ class Démocratie(GrandDebatFile):
         transforms=JsonToJsonl(),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> GrandDebatFile:
+        return GrandDebatFile.C(path=self.FILE.path)
 
 
 @datatags("politics", "debate", "french")
 @dataset(
     url="https://granddebat.fr",
 )
-class Organisation(GrandDebatFile):
+class Organisation(Dataset):
     """Grand Débat National (organisation de l'État et des services publics)
 
     The *Grand Débat National* (GDN) is a country-wide citizen consultation held
@@ -164,16 +161,15 @@ class Organisation(GrandDebatFile):
         transforms=JsonToJsonl(),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> GrandDebatFile:
+        return GrandDebatFile.C(path=self.FILE.path)
 
 
 @datatags("politics", "debate", "french")
 @dataset(
     url="https://granddebat.fr",
 )
-class Evenements(GrandDebatFile):
+class Evenements(Dataset):
     """Grand Débat National (événements)
 
     The *Grand Débat National* (GDN) is a country-wide citizen consultation held
@@ -195,6 +191,5 @@ class Evenements(GrandDebatFile):
         transforms=JsonToJsonl(),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> GrandDebatFile:
+        return GrandDebatFile.C(path=self.FILE.path)

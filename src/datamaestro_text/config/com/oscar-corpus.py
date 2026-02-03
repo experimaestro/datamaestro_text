@@ -1,11 +1,11 @@
-from datamaestro.definitions import dataset
+from datamaestro.definitions import Dataset, dataset
 from datamaestro.download.single import FileDownloader
 from datamaestro_text.data.text import TextFile
 from datamaestro.utils import HashCheck
 
 
 @dataset(url="https://oscar-corpus.com/", size="2.3T")
-class English(TextFile):
+class English(Dataset):
     """Huge French corpus from INRIA
 
     OSCAR or Open Super-large Crawled ALMAnaCH coRpus is a huge multilingual corpus
@@ -19,6 +19,5 @@ class English(TextFile):
         checker=HashCheck("5c906ede3c5265f8934b62c275a754bc"),
     )
 
-    @classmethod
-    def __create_dataset__(cls, dataset):
-        return cls.C(path=cls.FILE.path)
+    def config(self) -> TextFile:
+        return TextFile.C(path=self.FILE.path)
