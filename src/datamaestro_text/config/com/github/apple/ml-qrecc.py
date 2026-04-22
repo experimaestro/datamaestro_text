@@ -71,7 +71,7 @@ class Content(Dataset):
     )
 
     def config(self) -> LZ4JSONLDocumentStore:
-        return LZ4JSONLDocumentStore.C(jsonl_path=self.STORE.path)
+        return LZ4JSONLDocumentStore.C(path=self.STORE.path, lookup_field="id")
 
     @staticmethod
     def _documents(path: Path):

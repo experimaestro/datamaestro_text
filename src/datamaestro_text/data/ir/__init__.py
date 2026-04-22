@@ -8,7 +8,7 @@ from pathlib import Path
 from attrs import define
 from typing import Callable, Dict, Iterator, List, Optional, Tuple, Type
 import random
-from experimaestro import Config
+from experimaestro import Config, field
 from datamaestro.definitions import datatasks, Param, Meta
 from datamaestro.data import Base
 from datamaestro_text.utils.files import auto_open
@@ -288,13 +288,13 @@ class TrainingTriplets(Base, ABC):
 class TrainingTripletsLines(TrainingTriplets):
     """Training triplets with one line per triple (query texts)"""
 
-    sep: Meta[str]
+    sep: Meta[str] = field(ignore_default="\t")
     path: Param[Path]
 
-    doc_ids: Meta[bool]
+    doc_ids: Meta[bool] = field(ignore_default=False)
     """True if we have documents IDs"""
 
-    topic_ids: Meta[bool]
+    topic_ids: Meta[bool] = field(ignore_default=False)
     """True if we have query IDs"""
 
     def iter(self) -> Iterator[Triplets]:

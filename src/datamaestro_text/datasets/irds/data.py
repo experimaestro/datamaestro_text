@@ -7,7 +7,7 @@ from typing import Dict, Iterator, List, NamedTuple, Tuple, Type
 import ir_datasets
 import ir_datasets.datasets as _irds
 from datamaestro.record import RecordType, record_type
-from experimaestro import Config, Meta, Option, Param
+from experimaestro import Config, Option, Param
 from ir_datasets.formats import (
     GenericDoc,
     GenericDocPair,
@@ -322,7 +322,6 @@ class SimpleJsonDocument(NamedTuple):
 
 
 class LZ4JSONLDocumentStore(LZ4DocumentStore):
-    jsonl_path: Meta[Path]
     """json-l based document store
 
     Each line is of the form
