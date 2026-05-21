@@ -24,6 +24,22 @@ class TextFile(File):
     pass
 
 
+class MTEBBenchmarkCache(Folder):
+    """An HF datasets cache pre-populated for a chosen list of MTEB tasks.
+
+    Consumers point ``HF_DATASETS_CACHE`` (or :func:`datasets.load_dataset`'s
+    ``cache_dir``) at :attr:`path` and iterate the tasks named in
+    :attr:`task_names` via :func:`mteb.get_task` — every dataset
+    resolves locally without network access.
+
+    Attributes:
+        task_names: List of mteb task names (e.g.
+            ``["STS12", "STS13", ...]``) covered by this cache.
+    """
+
+    task_names: Param[list[str]]
+
+
 class StreamingTextDataset(Folder):
     """A text corpus organised for streaming consumption.
 
