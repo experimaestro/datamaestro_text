@@ -1,5 +1,5 @@
 from typing import Iterator, Optional
-from experimaestro import Param
+from experimaestro import Param, field
 from datamaestro.data import Base, Folder, File
 from datamaestro.data.ml import Supervised
 
@@ -49,8 +49,9 @@ class StreamingTextDataset(Folder):
     fixed-length chunk, depending on how the corpus was prepared).
 
     Subclass and override :meth:`iter_text` if a different on-disk
-    format is needed. The default implementation has only stdlib
-    dependencies (``json`` + ``tarfile``).
+    format is needed (see :class:`ParquetStreamingTextDataset` for the
+    parquet case used by FineWeb / FineWeb-Edu). The default
+    implementation has only stdlib dependencies (``json`` + ``tarfile``).
     """
 
     def iter_text(self) -> Iterator[str]:
@@ -74,3 +75,38 @@ class StreamingTextDataset(Folder):
                         text = record.get("text")
                         if text:
                             yield text
+
+
+class ParquetStreamingTextDataset(StreamingTextDataset):
+    """Streaming text corpus stored as parquet shards.
+
+    Used by web-scale corpora that ship as parquet — most notably
+    FineWeb / FineWeb-Edu. Each parquet file has a column (default
+    ``"text"``) holding one text record per row.
+
+    Streaming reads happen in row-batches via :mod:`pyarrow.parquet`,
+    so memory usage is bounded by the batch size regardless of total
+    file size.
+
+    Attributes:
+        text_column: Name of the parquet column carrying the text.
+            Default ``"text"`` — matches FineWeb / FineWeb-Edu.
+        batch_size: Rows per parquet batch (memory/throughput knob).
+    """
+
+    text_column: Param[str] = field(default="text", ignore_default=True)
+    batch_size: Param[int] = field(default=10_000, ignore_default=True)
+
+    def iter_text(self) -> Iterator[str]:
+        """Stream the configured text column across all parquet shards."""
+        import pyarrow.parquet as pq
+
+        for shard in sorted(self.path.glob("**/*.parquet")):
+            pf = pq.ParquetFile(shard)
+            for batch in pf.iter_batches(
+                batch_size=self.batch_size,
+                columns=[self.text_column],
+            ):
+                for text in batch.column(self.text_column).to_pylist():
+                    if text:
+                        yield text
